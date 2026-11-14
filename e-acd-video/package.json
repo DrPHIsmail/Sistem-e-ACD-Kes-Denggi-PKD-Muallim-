@@ -1,0 +1,23 @@
+{
+  "name": "e-acd-denggi-pitch-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "90-second product film for Sistem e-ACD Kes Denggi (PKD Muallim): offline HTML player + deterministic MP4 export.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "render": "node render-video.js",
+    "render:test": "node render-video.js --start 3600 --end 3899 --out test-clip.mp4",
+    "probe": "node render-video.js --probe e-ACD-Denggi-Pitch.mp4",
+    "check": "node tools/check-player.js",
+    "build:player": "node tools/build-player.js"
+  },
+  "dependencies": {
+    "playwright": "1.63.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

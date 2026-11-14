@@ -1,0 +1,25 @@
+{
+  "name": "nadi-muallim-120s-film",
+  "version": "7.0.0",
+  "private": true,
+  "description": "Filem pertandingan NADI Muallim + e-ACD Denggi (PKD Muallim), V7: 137 saat (cerita 120 s, babak manual diperlahankan, 14 s perkongsian WhatsApp), pembukaan glob peta, muzik latar; pemain HTML luar talian dan eksport MP4 deterministik. Data simulasi.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build:player": "node tools/build-player.js",
+    "docs": "node tools/make-docs.js",
+    "check": "node tools/check-player.js",
+    "render": "node render-video.js --out NADI-Muallim-Pitch-137s-v7.mp4",
+    "render:preview": "node render-video.js --start 0 --end 1799 --out NADI-Muallim-V7-pratonton-00-30s.mp4",
+    "render:v3": "node render-video.js --html video-showcase-v3.html --voiceover narration-bm.wav --out NADI-Muallim-Pitch-120s-v3.mp4",
+    "probe": "node render-video.js --probe NADI-Muallim-Pitch-137s-v7.mp4"
+  },
+  "dependencies": {
+    "playwright": "1.63.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

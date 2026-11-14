@@ -1,0 +1,118 @@
+1
+00:00:00,800 --> 00:00:02,900
+Apabila wabak denggi berlaku,
+
+2
+00:00:02,950 --> 00:00:06,600
+petugas perlu menyaring penduduk
+dari rumah ke rumah.
+
+3
+00:00:07,200 --> 00:00:10,500
+Borang kertas dan kiraan manual
+menambah langkah
+
+4
+00:00:10,550 --> 00:00:13,200
+sebelum dapatan boleh dirumuskan.
+
+5
+00:00:15,500 --> 00:00:18,100
+Pejabat Kesihatan Daerah Muallim
+
+6
+00:00:18,150 --> 00:00:20,750
+memperkenalkan Sistem e-ACD Kes Denggi
+
+7
+00:00:20,800 --> 00:00:22,700
+untuk pengesanan kes aktif.
+
+8
+00:00:23,300 --> 00:00:25,300
+Petugas boleh membuka sistem
+
+9
+00:00:25,350 --> 00:00:28,200
+melalui ikon di skrin utama telefon.
+
+10
+00:00:30,500 --> 00:00:32,300
+Petugas memilih pasukan,
+
+11
+00:00:32,350 --> 00:00:34,100
+merekod status lawatan
+
+12
+00:00:34,150 --> 00:00:36,100
+dan menyaring gejala denggi.
+
+13
+00:00:36,800 --> 00:00:40,400
+Rekod yang sama merangkumi
+semakan takungan Aedes,
+
+14
+00:00:40,450 --> 00:00:42,900
+tindakan Abate, edaran risalah
+
+15
+00:00:42,950 --> 00:00:45,100
+dan catatan rujukan ke klinik.
+
+16
+00:00:50,500 --> 00:00:54,700
+Sistem menjumlahkan dapatan
+enam pasukan secara automatik.
+
+17
+00:00:55,300 --> 00:00:57,300
+Dalam simulasi ini,
+
+18
+00:00:57,350 --> 00:01:01,700
+92 daripada 110 premis dilawati.
+
+19
+00:01:02,300 --> 00:01:04,900
+Liputannya 84 peratus,
+
+20
+00:01:04,950 --> 00:01:07,400
+melepasi sasaran yang dipaparkan.
+
+21
+00:01:10,250 --> 00:01:12,550
+Dapatan diselaraskan ke Google Sheets
+
+22
+00:01:12,600 --> 00:01:14,700
+apabila sambungan tersedia.
+
+23
+00:01:14,900 --> 00:01:16,800
+Pegawai merekod pengesahan,
+
+24
+00:01:16,850 --> 00:01:19,400
+kemudian menyalin ringkasan
+ke WhatsApp
+
+25
+00:01:19,450 --> 00:01:21,600
+atau memuat turun CSV.
+
+26
+00:01:22,200 --> 00:01:25,400
+Daripada rekod rumah
+kepada laporan operasi.
+
+27
+00:01:25,700 --> 00:01:27,400
+Sistem e-ACD Kes Denggi,
+
+28
+00:01:27,450 --> 00:01:29,700
+Pejabat Kesihatan Daerah Muallim.
+

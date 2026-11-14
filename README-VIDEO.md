@@ -1,4 +1,107 @@
-# NADI Muallim — Filem Pertandingan · V6 (134 saat, muzik latar)
+# NADI Muallim — Filem Pertandingan · V7 (137 saat, muzik latar)
+
+Filem 02:17.000 (1920 × 1080, 60 fps, 8,220 bingkai) untuk **Pejabat Kesihatan Daerah Muallim**. V7 ialah V6 dengan tiga perubahan yang diminta:
+- tahanan liputan pada 1:13–1:17 (V6) kini bergerak;
+- babak pengisian manual diperlahankan kepada ≈ 10 s (6.5–16.35 s);
+- susun atur nod "12 berkunci / kosong" dibetulkan.
+
+Setup V6 yang lain dikekalkan. Semua rekod, nama dan angka ialah **data simulasi**. Tiada panggilan ke aplikasi langsung, Google Sheets, peta atau WhatsApp.
+
+## Fail V7 (untuk dihantar)
+
+| Fail | Kegunaan |
+|---|---|
+| `NADI-Muallim-Pitch-137s-v7.mp4` | Filem akhir V7: H.264 High 1920 × 1080, CFR 60 fps, 8,220 bingkai, 137.000 s; AAC 48 kHz stereo; muzik latar dan kesan bunyi, tanpa narasi. Saiz 56.0 MB. |
+| `video-showcase-v7.html` | Pemain HTML kendiri, luar talian (WebGL untuk glob). Kekunci 1–9 dan 0 untuk 10 babak. |
+| `sari-kata-bm-v7.srt` | 21 baris: 18 teks kit + 3 sari kata WhatsApp, pada jam filem V7. |
+
+**Disimpan untuk perbandingan (tidak diubah):**
+- **V6:** `NADI-Muallim-Pitch-134s-v6.mp4`, `video-showcase-v6.html`, `sari-kata-bm-v6.srt`.
+- **V5–V2:** fail masing-masing, seperti dalam dokumentasi di bawah.
+- **Sumber:** `arkib/v6-sumber.tar.gz` (V6) dan `arkib/v7-sumber.tar.gz` (V7).
+
+**Masa V6 → V7.** Semua masa selepas babak manual beranjak **+3.0 s**.
+
+| Bahagian | V6 | V7 |
+|---|---|---|
+| Babak manual | 6.5–13.35 s | 6.5–16.35 s |
+| Hentakan tajuk NADI | 13.35 s | 16.35 s |
+| Telefon muncul | 24.30 s | 27.30 s |
+| Tahanan liputan | 1:11–1:18 | 1:14–1:21 |
+| WhatsApp | 1:24.95–1:38.95 | 1:27.95–1:41.95 |
+| Penutup | 2:06.35 | 2:09.35 |
+
+## Perubahan V7 berbanding V6
+
+### 1. Tahanan liputan kini bergerak (V7 1:14–1:21)
+
+- **Punca.** Dari 71.6 s hingga 77.5 s (masa cerita), kamera sengaja kekal pegun. Peraturan "close-up pegun untuk dibaca" diguna sejak V3. Yang berubah hanya sari kata, jadi ia kelihatan seperti dijeda.
+- **Sekarang:**
+  - **Kamera menolak perlahan** sebanyak 6% ke kad liputan sepanjang tahanan, dan monitor di belakang hanyut sedikit (paralaks). Tiada bingkai pegun.
+  - **Panel baharu "Liputan setiap pasukan".** Garis putus-putus sasaran KKM 80% dilukis, kemudian enam bar P1–P6 naik satu demi satu: 85 / 83 / 84 / 82 / 83 / 83%, semuanya di atas garis.
+    - Angka daripada rekod simulasi yang sama (`calcTeamPct`).
+    - Paksi penuh 0–100% (tidak dipotong), jadi perbezaan kecil tidak dibesar-besarkan.
+  - **Cahaya** menyapu pil "Capai Sasaran" pada penghujung tahanan.
+- Angka "84%", "92 daripada 110 premis dilawati" dan "Capai Sasaran" kekal di skrin selama V6.
+
+### 2. Babak pengisian manual diperlahankan (6.5–16.35 s)
+
+- Babak ini (cerita 6.5–13.35 s) kini dimainkan **1.44× lebih perlahan**, kira-kira 10 s:
+
+| Langkah | V6 | V7 |
+|---|---|---|
+| Tulisan tangan pada Borang ACD + Lampiran 1 | 2.05 s | 2.95 s |
+| Kiraan tally | 1.25 s | 1.80 s |
+| Sari kata c02 | 2.6 s | 3.7 s |
+| Sari kata c03 | 2.9 s | 4.2 s |
+
+- Pembukaan glob sebelum 6.5 s tidak berubah.
+- **Muzik.** Degupan jantung, detik dan dron kini membina ketegangan sehingga hentakan tajuk pada 16.35 s. Kord tajuk tetap jatuh tepat pada hentakan.
+- **Selepas babak ini**, semua bahagian beranjak +3.0 s tanpa perubahan rentak.
+
+### 3. Susun atur nod "12 berkunci / kosong"
+
+- **Punca.** Kotak 100 px; label dua baris "berkunci / kosong" (48 + 6 + 2 × 22 px) melebihi ruang dalam. Nombor terhimpit ke atas dan "kosong" terkeluar di bawah.
+- **Sekarang:**
+  - Nod baris kedua 120 px, dengan nombor sebaris dari atas (92 · 12 · 6).
+  - Nod tindakan "Semak semula status" dan "Rancang lawatan susulan" turut dilegakan (fon 17 px), kerana sebelum ini juga sesak.
+  - Garisan penyambung dan baris tindakan dianjak 20 px.
+
+### 4. Dikekalkan seperti V6
+
+Glob peta dan radius 200 m, sisipan WhatsApp, peralihan 1:01–1:03 yang licin (kini 1:04–1:06), dan semua bahagian lain.
+
+## Keputusan semakan V7
+
+`node tools/check-player.js` menjalankan 72 semakan dan **72/72 lulus** pada pemain akhir. Semua semakan V3–V6 dikekalkan pada jam filem V7. Semakan baharu atau yang dikemas kini:
+
+| Semakan | Bukti |
+|---|---|
+| P1 babak manual | Filem 6.5 s → hentakan tajuk 16.35 s (bunyi hentakan tepat 16.35 s). Tulisan tangan 2.95 s, tally 1.80 s, c02 3.74 s, c03 4.22 s. Pembukaan sebelum 6.5 s tidak berubah. |
+| K1 tahanan liputan | Setiap 0.25 s berbeza daripada sebelumnya (tiada regangan pegun). Enam bar 85/83/84/82/83/83% setinggi 84 px × peratus (paksi penuh), dan garis 80% dilukis. |
+| V8 (dikemas kini) | "84%", "92 daripada 110…" dan "Capai Sasaran" kekal pada 70.9–77.6 s (cerita) sementara kamera bergerak. Larian pegun terpanjang 0.000 s. |
+| L1 susun atur | Nombor dan label setiap nod susulan (92 · 12 · 6 · Semak semula · Rancang) berada dalam kotak. |
+| D1 / D2 | 16/16 dan 10/10 sama, termasuk bingkai babak manual, tahanan, sisipan dan penutup. |
+
+**Pengesahan MP4** (`NADI-Muallim-Pitch-137s-v7.mp4`):
+- **ffprobe:** H.264 High 1920 × 1080 yuv420p bt709, 60/1, 8,220 bingkai, 137.000 s; AAC 48 kHz 2 saluran, 137.000 s.
+- **Kenyaringan:** −16.0 LUFS, LRA 3.3 LU, puncak sebenar −1.1 dBFS (masih ≤ −1 dBTP).
+- **Ketiadaan narasi:** max |r| = 0.014 (had 0.15). Rangkaian: 0 permintaan.
+- **Analisis bingkai MP4:**
+  - Tiada bingkai tersekat.
+  - Tahanan liputan (73.8–81.05 s): larian pegun terpanjang hanya 2 bingkai (V6: ≈ 6 s).
+  - Lonjakan yang tinggal sama seperti V6 (perubahan butang serta-merta dan potongan keras yang disengajakan), beranjak +3 s.
+
+## Bina, semak dan render (V7)
+
+```bash
+TAILWIND_BIN=/path/to/tailwindcss node tools/build-player.js   # → video-showcase-v7.html (enggan menulis atas v2–v6)
+node tools/make-docs.js                                         # → sari-kata-bm-v7.srt
+node tools/check-player.js                                      # semakan automatik
+node render-video.js                                            # → NADI-Muallim-Pitch-137s-v7.mp4 (+ ffprobe, semakan ketiadaan narasi)
+```
+
+## Dokumentasi V6 (134 s, disimpan untuk perbandingan)
 
 Filem 02:14.000 (1920 × 1080, 60 fps, 8,040 bingkai) untuk **Pejabat Kesihatan Daerah Muallim**. V6 ialah V5 dengan tiga permintaan:
 - latar peta glob dengan radius ACD 200 m pada pembukaan;
@@ -7,7 +110,7 @@ Filem 02:14.000 (1920 × 1080, 60 fps, 8,040 bingkai) untuk **Pejabat Kesihatan 
 
 Setup V5 yang lain dikekalkan. Semua rekod, nama dan angka ialah **data simulasi**. Tiada panggilan ke aplikasi langsung, Google Sheets, peta atau WhatsApp.
 
-## Fail V6 (untuk dihantar)
+### Fail V6 (untuk dihantar)
 
 | Fail | Kegunaan |
 |---|---|
@@ -22,9 +125,9 @@ Nama fail kini **134s** kerana filem bukan lagi 120 saat.
 - **V4, V3, V2:** fail masing-masing, seperti dalam dokumentasi di bawah.
 - **Sumber:** `arkib/v2-…`, `v3-…`, `v4-…`, `v5-sumber.tar.gz`, dan `arkib/v6-sumber.tar.gz`.
 
-## Perubahan V6 berbanding V5
+### Perubahan V6 berbanding V5
 
-### 1. Pembukaan: peta satelit sebagai glob, dengan radius ACD 200 m (0–6.6 s)
+#### 1. Pembukaan: peta satelit sebagai glob, dengan radius ACD 200 m (0–6.6 s)
 
 - **Imej.** Tangkapan skrin Google Maps tanpa label (imej ketiga yang diberi).
   - Hanya UI Google Maps dibuang: butang Layers, zum, lokasi, logo, bar atribusi dan skala. Imejan satelit tidak diubah.
@@ -44,7 +147,7 @@ Nama fail kini **134s** kerana filem bukan lagi 120 saat.
 - **Tiada pin rumah kes**, sama ada sebenar atau fiktif.
 - **Kredit pada skrin:** "Imejan ©2026 Airbus, CNES / Airbus, Maxar Technologies · Data peta ©2026 Google".
 
-### 2. Segmen baharu: salin–tampal ringkasan ACD ke WhatsApp (84.95–98.95 s, babak 7 "Kongsi")
+#### 2. Segmen baharu: salin–tampal ringkasan ACD ke WhatsApp (84.95–98.95 s, babak 7 "Kongsi")
 
 - **Garis masa.**
   - Cerita V5 ditahan pada 84.95 s, tepat selepas kad "Ringkasan sedia dikongsi".
@@ -85,7 +188,7 @@ Nama fail kini **134s** kerana filem bukan lagi 120 saat.
   - Denyut, hi-hat dan arpeggio diteruskan tanpa putus.
   - Kesan bunyi untuk ketik, salin, tampal, hantar, zum dan tanda dibaca.
 
-### 3. Peralihan 1:01–1:03 dan kelicinan gerakan
+#### 3. Peralihan 1:01–1:03 dan kelicinan gerakan
 
 Punca yang ditemui, diukur bingkai demi bingkai:
 1. **Lompatan kamera satu bingkai** pada 62.017 s (bingkai 3721): zum 1.0 → 1.12 sekali gus. Beza bingkai 13.18 berbanding jiran 0.07.
@@ -100,11 +203,11 @@ Hasil: tiada lonjakan; beza bingkai maksimum 5.7 dalam satu lengkung licin.
 
 Pembaikan tambahan: semua skala transform sebelum ini dibundarkan kepada 0.001. Akibatnya zum perlahan bergerak dalam lompatan 1–2 px, contohnya zum keluar pembukaan dan tolakan kamera NADI. Ketepatan kini 0.00001.
 
-### 4. Dikekalkan seperti V5
+#### 4. Dikekalkan seperti V5
 
 Borang manual, isian rekod, penyelarasan Sheets, kiraan naik, sasaran KKM, aliran susulan, kad manfaat, penutup, dan muzik latar tanpa narasi.
 
-## Keputusan semakan V6
+### Keputusan semakan V6
 
 `node tools/check-player.js` menjalankan 69 semakan dan **69/69 lulus**. Semua semakan V3–V5 dikekalkan; masa cerita dipetakan ke masa filem melalui `filmTime()`. Semakan baharu:
 
@@ -128,7 +231,7 @@ Borang manual, isian rekod, penyelarasan Sheets, kiraan naik, sasaran KKM, alira
   - Tetingkap 1:00–1:05 tanpa lonjakan (beza maksimum 4.65, satu lengkung licin).
   - Lonjakan yang tinggal ialah peristiwa yang disengajakan (hentakan tajuk 13.35 s, potongan keras ke Bahagian D 78.05 s) dan perubahan butang serta-merta semasa ketikan.
 
-## Privasi
+### Privasi
 
 - **Peta.** Hanya imejan satelit dan bulatan kawasan 200 m. Tiada pin, label atau garisan rumah kes. Pautan Google Sites MOH yang diberi tidak dibuka, dan tiada URL dalam mana-mana fail.
 - **WhatsApp.**
@@ -139,14 +242,14 @@ Borang manual, isian rekod, penyelarasan Sheets, kiraan naik, sasaran KKM, alira
 - **Pengawal binaan dan semakan (A2, W3).** ID spreadsheet sebenar, koordinat peta sumber, nama kakitangan sebenar aplikasi sumber dan nama dalam tangkapan skrin WhatsApp kini disimpan sebagai cincang SHA-256 sahaja, bukan teks biasa. Diuji: pengesan menangkap 22/22 sampel, dan output V6 kekal sama bait demi bait.
   - Arkib lama `arkib/v2…v5-sumber.tar.gz` masih mengandungi senarai pengawal versi lama dalam teks biasa. Ia tidak diubah kerana disimpan untuk perbandingan, jadi **jangan kongsi folder `arkib/` di luar pasukan**.
 
-## Perkara untuk perhatian (V6)
+### Perkara untuk perhatian (V6)
 
 - **Hak imej peta.** Imejan Google (Airbus/CNES/Maxar) dengan atribusi dikekalkan pada skrin. Penggunaan awam, contohnya dimuat naik untuk pertandingan, tertakluk kepada syarat Google Maps/Earth. **Ini perlu disahkan.**
 - **Pusat bulatan 200 m** diambil daripada pusat bulatan wabak peta GIS. Untuk privasi, pusat tidak diletakkan pada mana-mana rumah kes.
 - **Sari kata c10** "Ini menjimatkan masa menyediakan ringkasan" (daripada kit asal) ialah dakwaan penjimatan masa tanpa ukuran dalam filem. Ia dikekalkan kerana tidak diminta diubah; pertimbangkan untuk menyemaknya.
 - **WebGL.** Pemain memerlukan WebGL untuk glob. Tanpa WebGL, peta rata ditunjukkan. MP4 sentiasa menggunakan glob.
 
-## Bina, semak dan render (V6)
+### Bina, semak dan render (V6)
 
 ```bash
 TAILWIND_BIN=/path/to/tailwindcss node tools/build-player.js   # → video-showcase-v6.html (enggan menulis atas v2–v5)

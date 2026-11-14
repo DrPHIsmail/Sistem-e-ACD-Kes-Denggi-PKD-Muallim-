@@ -1,0 +1,18 @@
+Letakkan rakaman narasi di folder ini, satu fail bagi setiap babak:
+
+  babak-1.wav  babak-2.wav  babak-3.wav  babak-4.wav  babak-5.wav  babak-6.wav  babak-7.wav
+
+(.m4a, .mp3, .flac dan .ogg juga diterima.) Teks dan panduan bacaan: ../skrip-narasi-bm.md
+
+Kemudian, dari folder projek:
+
+  node tools/sync-narration.js
+  node tools/build-player.js && node tools/make-docs.js
+  node render-video.js --voiceover narasi/narasi-penuh.wav
+
+Untuk mencuba aliran kerja sebelum rakaman sebenar (nada sintetik, bukan suara):
+
+  node tools/sync-narration.js --demo-takes narasi-demo
+  node tools/sync-narration.js --dir narasi-demo
+  node tools/sync-narration.js --clear && node tools/build-player.js && node tools/make-docs.js
+      (kembali ke masa dirancang selepas mencuba)
