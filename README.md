@@ -32,6 +32,7 @@ Projek filem pertandingan **NADI Muallim + e-ACD Denggi** untuk Pejabat Kesihata
 | `arkib/` | Sumber setiap versi (v2–v7) dan README V2 |
 | `e-acd-video/` | Projek filem e-ACD Denggi yang terdahulu (asas filem ini) |
 | `rujukan/` | Borang ACD dan Lampiran 1 (PDF kosong), brief V3, tangkapan skrin maklum balas |
+| `rujukan/sumber-sebenar/` | **Data sebenar:** peta GIS wabak, tangkapan skrin WhatsApp, tangkapan skrin Google Maps, fail aplikasi e-ACD operasi (HTML dan Apps Script) |
 
 ## Bina semula
 
@@ -43,11 +44,17 @@ npm run check           # semakan automatik
 npm run render          # → NADI-Muallim-Pitch-137s-v7.mp4 (perlukan FFmpeg)
 ```
 
-## Privasi
+## Privasi: repositori ini mesti kekal PERIBADI
 
-- **Salinan dibersihkan.** Dalam `arkib/v2–v5-sumber.tar.gz` dan `e-acd-video/tools/`, baris pengawal lama yang menyenaraikan pengecam sebenar (nama kakitangan, ID spreadsheet, koordinat) telah dibuang. Fungsi lain tidak berubah. Salinan asal disimpan secara setempat.
-- **Tidak dimuat naik:**
-  - tangkapan skrin peta GIS (data kes sebenar);
-  - tangkapan skrin WhatsApp (nama sebenar);
-  - fail aplikasi e-ACD operasi (HTML dan Apps Script).
-- **Imej peta glob** menggunakan imejan Google (Airbus/CNES/Maxar) dengan atribusi pada skrin. Penggunaan awam tertakluk kepada syarat Google.
+Filem dan pemainnya hanya menggunakan data simulasi. Tetapi repositori ini juga menyimpan bahan sumber dengan **data sebenar**:
+
+| Lokasi | Kandungan sebenar |
+|---|---|
+| `rujukan/sumber-sebenar/peta-gis-wabak-kg-ketoyong.webp` | Nombor wabak, nombor rumah kes, tarikh onset, keputusan serologi dan jentik |
+| `rujukan/sumber-sebenar/tangkapan-whatsapp-laporan-acd.jpg` | Nama ahli kumpulan, nama kumpulan dan angka laporan sebenar |
+| `rujukan/sumber-sebenar/sistem_e_acd_denggi_pkd_muallim.html`, `code_appsscript_2.js` | Aplikasi e-ACD operasi, termasuk ID spreadsheet sebenar |
+| `arkib/v2–v5-sumber.tar.gz`, `e-acd-video/tools/` | Senarai pengawal privasi dengan nama kakitangan sebenar, ID spreadsheet dan koordinat |
+
+Jangan jadikan repositori ini awam dan jangan kongsi fail di atas di luar pasukan. Hanya fail filem (MP4, pemain HTML, sari kata) yang selamat untuk dikongsi.
+
+Imej peta glob menggunakan imejan Google (Airbus/CNES/Maxar) dengan atribusi pada skrin. Penggunaan awam tertakluk kepada syarat Google.

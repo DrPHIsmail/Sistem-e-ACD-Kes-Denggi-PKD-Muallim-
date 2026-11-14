@@ -37,7 +37,7 @@ const shot = async X => sha(Buffer.from((await X.cdp.send('Page.captureScreensho
     const R = await open(browser, '?render=1');
     const html = fs.readFileSync(HTML, 'utf8');
     check('A1 opens from file:// with every network request blocked', R.blocked.length === 0, R.blocked.length + ' request(s) attempted');
-    check('A2 no live URL / spreadsheet ID / map coordinates in the file', /* [pengecam sebenar dibuang dalam salinan repositori awam] */ !/https?:\/\//i.test(html));
+    check('A2 no live URL / spreadsheet ID / map coordinates in the file', !/https?:\/\/|1w9P5Ikuv3gI312b|3\.6993145/i.test(html));
     const T = await R.page.evaluate(() => window.ACD.TOTALS);
     check('B1 totals 110 / 92 / 12 / 337 / 3 / 3', T.locality === 110 && T.visited === 92 && T.locked === 12 && T.pop === 337 && T.symp === 3 && T.ref === 3, JSON.stringify(T));
     check('B2 coverage ROUND(92/110×100) = 84%', T.pct === 84 && Math.round(92 / 110 * 100) === 84, (92 / 110 * 100).toFixed(3) + '% → ' + T.pct + '%');

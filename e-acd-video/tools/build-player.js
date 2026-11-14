@@ -45,9 +45,9 @@ html = html.replace('/*__CSS__*/', () => css).replace('/*__JS__*/', () => js);
 
 // privacy / offline guards
 const forbidden = [
-  /https?:\/\//i, /script\.google/i, /google\.com\/maps/i, /* koordinat sumber dibuang */
-  // [pengecam sebenar dibuang dalam salinan repositori awam]
-  // [pengecam sebenar dibuang dalam salinan repositori awam]
+  /https?:\/\//i, /script\.google/i, /google\.com\/maps/i, /3\.6993145/, /101\.510945/,
+  /1w9P5Ikuv3gI312b_LhnG2Ko6VbHJr6j2NZEHVmpr8t8/,
+  /LOGESVARAN|KUMARASAMY|SHAHIRAN|KHAIRULLAH|SOMUSUNDARAM|NAZREEN|SAIFUL BIN|HARTINI|IRDAWATY|SURYANI|AFZAN|NURUL DIANA|SAFIYYAH|HAPIZAH|AZLIN BINTI|AZRI A\/L/i
 ];
 for (const re of forbidden) {
   const m = html.match(re);
