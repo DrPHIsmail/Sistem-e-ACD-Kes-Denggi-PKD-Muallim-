@@ -45,6 +45,7 @@ const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 const R = name => ' data-ref="' + name + '"';
 const JATA_SRC = '__JATA__'; // replaced by the build with the Jata Negara PNG embedded in the e-ACD source
 const PETA_SRC = '__PETA__'; // V6: replaced by the build with assets/peta-glob.jpg (globe texture, tools/make-map-globe.py)
+const UDARA_SRC = '__UDARA__'; // V9 (draft 3): replaced by the build with assets/udara-3d.jpg (Google Earth view, src/kampung3d.js)
 
 function simBadge(extra) { return '<div class="sim-badge ' + (extra || '') + '"><span class="sim-dot"></span>DATA SIMULASI</div>'; }
 function protoBadge(extra) { return '<div class="proto-badge ' + (extra || '') + '"><span class="proto-dot"></span>PROTOTAIP INTEGRASI</div>'; }
@@ -129,6 +130,12 @@ function nadiApp() {
         '<span><i class="dot sq" style="background:#0284c7"></i>Satu Kes</span><span><i class="dot" style="background:#dc2626"></i>WTK / Hotspot</span><span class="na-mode">Mod Paparan: Penanda Kes &amp; Lokaliti</span></div>' +
     '</div>' +
     '<div class="na-map"' + R('na.map') + '><svg class="na-map-svg" viewBox="0 0 1280 556" width="1280" height="556"' + R('na.mapSvg') + '></svg>' +
+      // V9 (draft 3): the Google Earth view in 3D for the NADI introduction (src/kampung3d.js), under the card
+      '<canvas class="k3d"' + R('k3d') + '></canvas>' +
+      '<img class="k3d-src" src="' + UDARA_SRC + '" alt="" aria-hidden="true"' + R('k3d.img') + '/>' +
+      '<div class="k3d-credit"' + R('k3d.credit') + '>Imej: Google Earth · ©2026 Airbus, CNES / Airbus, Maxar Technologies</div>' +
+      '<div class="k3d-tag"' + R('k3d.name') + '><i></i>Kg. Ketoyong · ' + NADI_CARD.cumulativeCases + ' kes</div>' +
+      '<div class="k3d-tag rad"' + R('k3d.rad') + '>Kawasan wabak · radius 200 m</div>' +
       '<div class="na-demo-chip"><b>Paparan Demonstrasi</b> · peta ilustrasi, bukan berskala' + simBadge('na-sim') + '</div>' +
       nadiCard() +
       '<div class="cursor"' + R('na.cursor') + '>' + ICON.cursor + '<i class="ripple"' + R('na.ripple') + '></i></div>' +
@@ -575,8 +582,13 @@ function overlays() {
     '<div class="bloom"' + R('ov.bloom') + '></div>' +
     '<div class="sys-tag"' + R('ov.sys') + '><span class="sys-name"' + R('ov.sysName') + '>NADI Muallim</span><span class="sys-view"' + R('ov.sysView') + '>Peta lokaliti</span>' + simBadge('sys-sim') + '</div>' +
     '<div class="opener"' + R('ov.title') + '><div class="cl-jata"><img src="' + JATA_SRC + '" alt="Jata Negara"/></div>' +
-      '<div class="cl-title"><span class="cl-nadi">NADI</span> Muallim</div><div class="cl-tag">Dari Survelan ke Respons Denggi</div></div>' +
-    '<div class="ov-one"' + R('ov.one') + '><span class="ov-one-h">Cukup satu telefon<br>untuk rekod ACD</span></div>' +
+      '<div class="cl-title"><span class="cl-nadi">NADI</span> Muallim<span class="cl-sheen"' + R('ov.sheen') + ' aria-hidden="true">NADI Muallim</span></div><div class="cl-tag">Dari Survelan ke Respons Denggi</div></div>' +
+    '<div class="ov-one"' + R('ov.one') + '><span class="ov-one-h">Rekod ACD pada<br><span class="nw">telefon masing-masing</span></span></div>' +
+    // V9: two officers of Pasukan 1, each on their own phone, each on a different premise (roles only, fictional premises)
+    '<div class="ov-team2"' + R('ov.team2') + '><div class="t2-h"><i>' + ICON.users + '</i>Pasukan 1 · contoh dua petugas</div><div class="t2-cards">' +
+      [['Petugas 1', HOUSE_DEMO.address, 'sedang direkod'], ['Petugas 2', 'Premis Contoh 027', 'direkod serentak']].map(([who, prem, st], i) =>
+        '<div class="t2-card"' + R('ov.t2c' + i) + '><span class="t2-phone">' + ICON.phone + '</span><div><b>' + who + '</b><span class="t2-prem">' + esc(prem) + '</span><em>' + st + '</em></div></div>').join('') +
+    '</div></div>' +
     '<div class="ov-rec"' + R('ov.rec') + '><div class="rec-k"><span>Rekod premis contoh · Lampiran 1</span><em' + R('ov.recSaved') + '>Disimpan</em></div>' +
       rec.map(([ph, v, c], i) => '<div class="rec-line ' + c + '"' + R('ov.rl' + i) + '><i>' + ICON.check + '</i><span class="rl-ph"' + R('ov.rlp' + i) + '>' + esc(ph) + '</span><span class="rl-v"' + R('ov.rlv' + i) + '>' + esc(v) + '</span></div>').join('') + '</div>' +
     '<div class="ov-saved"' + R('ov.saved') + '><div class="sv-ico">' + ICON.check + '</div><div><b>Rekod disimpan</b><span>Pasukan 1 kini <em class="tnum"' + R('ov.savedCount') + '>16 / 19</em> premis dilawati</span></div></div>' +
@@ -698,5 +710,5 @@ function buildStage() {
     '<div class="world"' + R('w.desk') + '>' + desktop() + '</div>' +
     '<div class="world"' + R('w.phone') + '>' + phone() + '</div>' +
     overlays() + waSet() +
-    '<div class="sub-shade"' + R('subShade') + '></div><div class="subs"' + R('subs') + '><div class="subs-box"' + R('subsBox') + '></div></div><div class="vignette"></div>';
+    '<div class="vignette"></div>';   // V9: no caption box or caption shade (captions removed from the film)
 }

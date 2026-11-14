@@ -7,7 +7,9 @@
  *                    the 90-second film's opening: tension drone, paired
  *                    accelerating heartbeat, clock ticks and a riser, with the
  *                    impact moved onto the title at 00:13.35.
- *   narration        the supplied narration-bm.wav, embedded losslessly as
+ *   narration        V8: narasi-v8/narasi-v8.wav (ElevenLabs voice "Ahmad",
+ *                    placed on the FILM clock by tools/place-narration-v8.py;
+ *                    V3: the supplied narration-bm.wav), embedded losslessly as
  *                    FLAC by tools/build-player.js (or injected as PCM by
  *                    render-video.js --voiceover), decoded at 48 kHz.
  *   mix              ITU-R BS.1770 loudness: narration at NARR_LUFS, score at
@@ -20,9 +22,12 @@
 
 const AUDIO = (function () {
   const SR = 48000;
-  const N = Math.round(DURATION * SR);            // V7: 6,576,000 samples = 137.000 s
+  const N = Math.round(DURATION * SR);            // V9: 6,787,200 samples = 141.400 s
   const TAU = Math.PI * 2;
-  const NARR_LUFS = -15.6, BED_LUFS = -19.5, PROGRAM_LUFS = -16.0, DUCK_DB = -12, CEILING = 0.84;   // 0.84 ≈ −1.5 dBFS
+  // V8: the score is ducked 10 dB under the voice (V3: 12 dB), so the music stays present between and under lines;
+  // 14 dB over the manual-scene build-up (heartbeat, ticks and riser before the title impact), where it is loudest
+  // V9: only 9 dB under the opening lines (0–9 s), so the tension music of the flow chart stays present
+  const NARR_LUFS = -15.6, BED_LUFS = -19.5, PROGRAM_LUFS = -16.0, DUCK_DB = -10, DUCK_BUILD_DB = -14, DUCK_OPEN_DB = -9, CEILING = 0.84;   // 0.84 ≈ −1.5 dBFS
   const mtof = m => 440 * Math.pow(2, (m - 69) / 12);
   const TABN = 8192, SIN = new Float32Array(TABN + 1);
   for (let i = 0; i <= TABN; i++) SIN[i] = Math.sin((i / TABN) * TAU);
@@ -358,7 +363,7 @@ const AUDIO = (function () {
   }
 
   /* ---- ducking gain from narration activity (10 ms frames above −50 dBFS RMS) */
-  const DUCK = { thresholdDb: -50, lookahead: 0.08, hold: 0.25, attack: 0.04, release: 0.6 };
+  const DUCK = { thresholdDb: -50, lookahead: 0.08, hold: 0.25, attack: 0.04, release: 0.6, impactFence: 0.25 };
   function duckGain(narr) {
     const fr = SR / 100, nf = Math.ceil(N / fr), thr = fromDb(DUCK.thresholdDb);
     const act = new Uint8Array(nf), gate = new Uint8Array(nf);
@@ -369,12 +374,22 @@ const AUDIO = (function () {
     }
     const LA = Math.round(DUCK.lookahead * 100), HOLD = Math.round(DUCK.hold * 100);
     for (let k = 0; k < nf; k++) if (act[k]) for (let j = Math.max(0, k - LA); j <= Math.min(nf - 1, k + HOLD); j++) gate[j] = 1;
-    const g = new Float32Array(N), depth = fromDb(DUCK_DB);
+    const g = new Float32Array(N), depth = fromDb(DUCK_DB), depthBuild = fromDb(DUCK_BUILD_DB), depthOpen = fromDb(DUCK_OPEN_DB);
+    const iOpen = Math.round((filmTime(6.5) + 1.5) * SR);   // the opening flow chart and its last line (ends before c02)
     const ca = Math.exp(-1 / (DUCK.attack * SR)), cr = Math.exp(-1 / (DUCK.release * SR));
-    let v = 1;
-    for (let i = 0; i < N; i++) { const target = gate[(i / fr) | 0] ? depth : 1; v = target + (v - target) * (target < v ? ca : cr); g[i] = v; }
+    // V8: the title impact must land on the full score — once the voice is silent, any remaining ducking is
+    // ramped out linearly over the 0.25 s before the impact (the normal 0.6 s release would leave it ~5 dB low)
+    const iImp = Math.round(filmTime(T.d.impact) * SR), r0 = iImp - Math.round(DUCK.impactFence * SR);
+    let v = 1, g0 = 1;
+    for (let i = 0; i < N; i++) {
+      const on = gate[(i / fr) | 0], target = on ? (i < iOpen ? depthOpen : i < iImp ? depthBuild : depth) : 1;
+      v = target + (v - target) * (target < v ? ca : cr);
+      if (i === r0) g0 = v;
+      if (!on && i >= r0 && i <= iImp) { const want = g0 + (1 - g0) * (i - r0) / (iImp - r0); if (v < want) v = want; }
+      g[i] = v;
+    }
     let actSec = 0; for (let k = 0; k < nf; k++) actSec += act[k];
-    return { g, speechSec: actSec / 100 };
+    return { g, speechSec: actSec / 100, impactGainDb: +dB(g[iImp]).toFixed(2) };
   }
 
   /* ---- look-ahead peak limiter: linear gain ramps over 5 ms before each over, 80 ms release */
@@ -402,7 +417,7 @@ const AUDIO = (function () {
 
   /* ---- the one resolved mix */
   function master(bed, nar, onProgress) {
-    const L = bed.L, R = bed.R, info = { version: 'V3', sampleRate: SR, samples: N, bed: {}, narration: null, mix: {} };
+    const L = bed.L, R = bed.R, info = { version: 'V9', sampleRate: SR, samples: N, bed: {}, narration: null, mix: {} };
     // 1. score + effects to BED_LUFS, soft knee on its own transients (title impact)
     // V4: without narration the score is the programme, so it goes straight to PROGRAM_LUFS before the soft knee
     const bedTarget = nar ? BED_LUFS : PROGRAM_LUFS;
@@ -427,7 +442,7 @@ const AUDIO = (function () {
       });
       for (let i = 0; i < N; i++) { const v = d[i] * gn; L[i] += v; R[i] += v; }
       info.narration = { label: nar.label, meta: nar.meta, lufsMono: +lm.toFixed(2), peakDb: +dB(peakOf([d])).toFixed(2), gainDb: +dB(gn).toFixed(2),
-        target: NARR_LUFS, duckDb: DUCK_DB, speechSec: dk.speechSec, duck: DUCK, balance };
+        target: NARR_LUFS, duckDb: DUCK_DB, duckBuildDb: DUCK_BUILD_DB, duckOpenDb: DUCK_OPEN_DB, impactGainDb: dk.impactGainDb, speechSec: dk.speechSec, duck: DUCK, balance };
     }
     onProgress && onProgress(0.95);
     // 3. programme loudness, look-ahead limiter, fades
@@ -495,6 +510,6 @@ const AUDIO = (function () {
     setNarration, disableNarration, narrationBegin, narrationChunk, narrationEnd,
     hasEmbeddedNarration: () => !!embeddedNarration(),
     get info() { return cache ? cache.info : null; },
-    settings: { NARR_LUFS, BED_LUFS, PROGRAM_LUFS, DUCK_DB, CEILING, DUCK }
+    settings: { NARR_LUFS, BED_LUFS, PROGRAM_LUFS, DUCK_DB, DUCK_BUILD_DB, DUCK_OPEN_DB, CEILING, DUCK }
   };
 })();

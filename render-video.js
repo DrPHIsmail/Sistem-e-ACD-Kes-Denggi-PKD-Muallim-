@@ -2,13 +2,13 @@
 /* ==========================================================================
  * render-video.js (V3/V4) — deterministic MP4 export of the film player
  *
- *   node render-video.js                                   # V7: music + effects → NADI-Muallim-Pitch-137s-v7.mp4
+ *   node render-video.js                                   # V9: narration (ElevenLabs "Ahmad") + ducked score → NADI-Muallim-Pitch-141s-v9.mp4
  *   node render-video.js --start 0 --end 1799 --out pratonton-0-30s.mp4     # partial (frames)
  *   node render-video.js --voiceover narasi.wav --out filem-bernarasi.mp4   # add a narration WAV (ducked mix)
- *   node render-video.js --probe NADI-Muallim-Pitch-137s-v7.mp4             # verify an MP4
+ *   node render-video.js --probe NADI-Muallim-Pitch-141s-v9.mp4             # verify an MP4
  *   node render-video.js --audio-only campuran.wav                          # the final mix as WAV
  *
- * Options: --out <file>  --html <file> (video-showcase-v7.html)  --voiceover <wav>
+ * Options: --out <file>  --html <file> (video-showcase-v9.html)  --voiceover <wav>
  *          --no-narration  --workers <n>  --start <frame>  --end <frame>
  *          --crf <n> (17)  --preset <x264 preset> (medium)  --fast (JPEG frames)
  *          --keep-temp  --probe <file>  --audio-only <wav>
@@ -34,16 +34,16 @@ const { spawn, execFileSync } = require('child_process');
 const { pathToFileURL } = require('url');
 
 const ROOT = __dirname;
-// film length comes from the timeline itself (src/data.js): V7 137 s × 60 fps = 8,220 frames
+// film length comes from the timeline itself (src/data.js): V9 141.4 s × 60 fps = 8,484 frames
 const DATA = require(path.join(ROOT, 'src', 'data.js'));
 const FPS = DATA.FPS, TOTAL = DATA.TOTAL_FRAMES, DUR = DATA.DURATION, W = 1920, H = 1080, SR = 48000;
-let HTML = path.join(ROOT, 'video-showcase-v7.html');
+let HTML = path.join(ROOT, 'video-showcase-v9.html');
 const FFMPEG = process.env.FFMPEG_PATH || 'ffmpeg';
 const FFPROBE = process.env.FFPROBE_PATH || 'ffprobe';
 
 /* ---------------------------------------------------------------- args */
 function parseArgs(argv) {
-  const o = { out: path.join(ROOT, 'NADI-Muallim-Pitch-137s-v7.mp4'), html: HTML, voiceover: null, noNarration: false, workers: Math.max(1, Math.min(4, os.cpus().length)),
+  const o = { out: path.join(ROOT, 'NADI-Muallim-Pitch-141s-v9.mp4'), html: HTML, voiceover: null, noNarration: false, workers: Math.max(1, Math.min(4, os.cpus().length)),
     start: 0, end: TOTAL - 1, crf: 17, preset: 'medium', fast: false, keepTemp: false, probe: null, audioOnly: null };
   for (let i = 2; i < argv.length; i++) {
     const a = argv[i], v = () => { if (i + 1 >= argv.length) throw new Error('missing value for ' + a); return argv[++i]; };
@@ -223,10 +223,11 @@ async function verifyNarration(mp4, narrWav, fromSec, toSec) {
   const nb = fs.readFileSync(narrWav).subarray(44), nv = new Float32Array(nb.length >> 1);
   for (let i = 0; i < nv.length; i++) { const v = nb.readInt16LE(2 * i); nv[i] = v > 0 ? v / 32767 : v / 32768; }
   const off = Math.round(fromSec * SR);
-  // V6/V7: cue windows are in FILM time; the narration WAV runs on the 120 s STORY clock (storyTime), and
-  // only the kit cues (cNN) were ever spoken — the WhatsApp captions (wN) have no narration
-  const story = DATA.storyTime || (x => x);
-  const cues = DATA.CUES.filter(c => /^c\d\d$/.test(c.id) && c.start >= fromSec && c.end <= toSec + 0.001 && story(c.end) * SR <= nv.length);
+  // cue windows are in FILM time. V8: the narration WAV runs on the film clock and every caption (kit cues and
+  // the WhatsApp captions) is spoken. V6/V7: the kit narration ran on the 120 s STORY clock, kit cues only.
+  const filmClock = DATA.NARR_CLOCK === 'film';
+  const story = filmClock ? (x => x) : (DATA.storyTime || (x => x));
+  const cues = DATA.CUES.filter(c => (filmClock || /^c\d\d$/.test(c.id)) && c.start >= fromSec && c.end <= toSec + 0.001 && story(c.end) * SR <= nv.length);
   const corr = (f0, f1, n0, lag) => { let sm = 0, sv = 0, smv = 0; for (let k = 0; k < f1 - f0; k++) { const j = f0 + k - off + lag, i = n0 + k; if (j < 0 || j >= m.length || i >= nv.length) continue; const x = m[j], y = nv[i]; sm += x * x; sv += y * y; smv += x * y; } return { r: smv / Math.sqrt(sm * sv + 1e-30), a: smv / (sv + 1e-30) }; };
   if (!cues.length) return { cues: [], ok: true, note: 'no complete narration cue inside the rendered range' };
   const win = c => [Math.round(c.start * SR), Math.round(c.end * SR), Math.round(story(c.start) * SR)];
@@ -359,7 +360,7 @@ async function main() {
 }
 function describeMix(info) {
   const n = info.narration, m = info.mix;
-  return (n ? 'narration ' + n.label + ' ' + n.lufsMono.toFixed(1) + ' LUFS (mono) ' + (n.gainDb >= 0 ? '+' : '') + n.gainDb.toFixed(2) + ' dB, score ducked ' + n.duckDb + ' dB under speech' : 'no narration') +
+  return (n ? 'narration ' + n.label + ' ' + n.lufsMono.toFixed(1) + ' LUFS (mono) ' + (n.gainDb >= 0 ? '+' : '') + n.gainDb.toFixed(2) + ' dB, score ducked ' + n.duckDb + ' dB under speech' + (n.duckBuildDb != null ? ' (' + n.duckBuildDb + ' dB over the build-up)' : '') : 'no narration') +
     ' · programme ' + m.lufs.toFixed(1) + ' LUFS, peak ' + m.peakDb.toFixed(1) + ' dBFS, limiter max ' + m.limiter.maxReductionDb.toFixed(1) + ' dB';
 }
 

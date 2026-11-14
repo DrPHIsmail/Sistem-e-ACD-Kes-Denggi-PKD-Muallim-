@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-/* Builds the self-contained V7 player video-showcase-v7.html from src/ (music and effects,
- * no narration; the V2–V6 players are left untouched for comparison):
+/* Builds the self-contained V9 player video-showcase-v9.html from src/ (141.4 s; music and effects
+ * + the ElevenLabs narration narasi-v9/narasi-v9.wav; the V2–V8 players are left untouched):
  *   1. compiles Tailwind 3.4.17 utilities used by the mockups (offline),
  *   2. inlines Inter, Plus Jakarta Sans, JetBrains Mono, Caveat (woff2, OFL), the
  *      Jata Negara PNG and the opening map background (JPEG) as data URIs,
@@ -11,8 +11,8 @@
  *   5. refuses to write the file if live URLs, the spreadsheet ID, map
  *      coordinates or real staff names from the source apps leak into it
  *      (V6: those identifiers are checked by hash, not stored in clear).
- * Usage: node tools/build-player.js [--voiceover narration.wav] [--out video-showcase-v7.html]
- *        (needs tailwindcss: npm install, or TAILWIND_BIN=/path/to/tailwindcss; ffmpeg only with --voiceover)
+ * Usage: node tools/build-player.js [--voiceover narasi.wav | --no-narration] [--out video-showcase-v9.html]
+ *        (needs tailwindcss: npm install, or TAILWIND_BIN=/path/to/tailwindcss; ffmpeg for the narration)
  */
 'use strict';
 const fs = require('fs');
@@ -25,11 +25,11 @@ const SRC = path.join(ROOT, 'src');
 const ASSETS = path.join(ROOT, 'assets');
 const ARGS = process.argv.slice(2);
 const argVal = (k, d) => { const i = ARGS.indexOf(k); return i >= 0 && i + 1 < ARGS.length ? ARGS[i + 1] : d; };
-const OUT = path.resolve(ROOT, argVal('--out', 'video-showcase-v7.html'));
-// V4 (music only): narration is embedded only when --voiceover <wav> is given
-const VOICE = ARGS.includes('--voiceover') ? path.resolve(ROOT, argVal('--voiceover', 'narration-bm.wav')) : null;
+const OUT = path.resolve(ROOT, argVal('--out', 'video-showcase-v9.html'));
+// V8: the ElevenLabs narration (film clock) is embedded by default; --no-narration builds a music-only player
+const VOICE = ARGS.includes('--no-narration') ? null : path.resolve(ROOT, argVal('--voiceover', path.join('narasi-v9', 'narasi-v9.wav')));
 const FFMPEG = process.env.FFMPEG_PATH || 'ffmpeg';
-if (['video-showcase.html', 'video-showcase-v3.html', 'video-showcase-v4.html', 'video-showcase-v5.html', 'video-showcase-v6.html'].includes(path.basename(OUT))) throw new Error(path.basename(OUT) + ' is an earlier export kept for comparison; choose another --out name');
+if (['video-showcase.html', 'video-showcase-v3.html', 'video-showcase-v4.html', 'video-showcase-v5.html', 'video-showcase-v6.html', 'video-showcase-v7.html', 'video-showcase-v8.html'].includes(path.basename(OUT))) throw new Error(path.basename(OUT) + ' is an earlier export kept for comparison; choose another --out name');
 
 function tailwindBin() {
   const cands = [process.env.TAILWIND_BIN, path.join(ROOT, 'node_modules', '.bin', 'tailwindcss')].filter(Boolean);
@@ -55,10 +55,25 @@ for (const [ph, f] of Object.entries(fonts)) {
 }
 if (/__(FONT|PJS|JBM|CAV)_\d+__/.test(css)) throw new Error('font placeholder left in CSS');
 
-const order = ['data.js', 'markup.js', 'engine.js', 'audio.js', 'player.js'];
-let js = order.map(f => '/* ---- ' + f + ' ---- */\n' + fs.readFileSync(path.join(SRC, f), 'utf8')).join('\n');
-// V3: caption cues are the 19 kit cues in src/data.js (no recording-sync override)
-console.log('cues: 19 from src/data.js (kit-suara/subtitles-bm.srt; c05/c06 split at the 25.66 s pause)');
+/* V9 (draft 3): three.js r158 (MIT licence, banner kept) for the hypothetical 3D kampung, inlined so the player still
+ * loads nothing. Its three URL strings are defanged for the offline guard below: the deprecation notice is dropped,
+ * the forum link loses its scheme, and the XHTML namespace that createElementNS needs is written as two joined
+ * strings (the same value at run time). */
+function threeSource() {
+  const f = [process.env.THREE_JS, path.join(ROOT, 'node_modules', 'three', 'build', 'three.min.js')].filter(Boolean).find(c => fs.existsSync(c));
+  if (!f) throw new Error('three.min.js (r158) not found. Run "npm install" (devDependency three@0.158.0) or set THREE_JS.');
+  let s = fs.readFileSync(f, 'utf8');
+  s = s.replace(/^console\.warn\('Scripts "build\/three\.js"[^']*'\),/, 'void 0,');
+  s = s.split('https://discourse.threejs.org').join('discourse.threejs.org');
+  s = s.split('"http://www.w3.org/1999/xhtml"').join('"http:"+"//www.w3.org/1999/xhtml"');
+  if (/https?:\/\//i.test(s)) throw new Error('three.js still contains a URL after patching (' + f + ')');
+  if (!/\* @license/.test(s)) throw new Error('three.js licence banner missing');
+  return s;
+}
+const order = ['data.js', 'markup.js', 'kampung3d.js', 'engine.js', 'audio.js', 'player.js'];
+let js = '/* ---- three.min.js (r158, MIT) ---- */\n' + threeSource() + '\n' + order.map(f => '/* ---- ' + f + ' ---- */\n' + fs.readFileSync(path.join(SRC, f), 'utf8')).join('\n');
+// V9: 29 captions timed to the narration (src/data.js NARR_CAPTIONS)
+console.log('cues: ' + (js.match(/\{ id: '[a-z]\d+'/g) || []).length + ' from src/data.js (NARR_CAPTIONS, timed to narasi-v9/narasi-v9.wav)');
 const jata = 'data:image/png;base64,' + fs.readFileSync(path.join(ASSETS, 'jata-negara.png')).toString('base64');
 if ((js.match(/__JATA__/g) || []).length !== 1) throw new Error('expected exactly one __JATA__ placeholder');
 js = js.replace('__JATA__', jata);
@@ -66,6 +81,10 @@ js = js.replace('__JATA__', jata);
 const peta = 'data:image/jpeg;base64,' + fs.readFileSync(path.join(ASSETS, 'peta-glob.jpg')).toString('base64');
 if ((js.match(/__PETA__/g) || []).length !== 1) throw new Error('expected exactly one __PETA__ placeholder');
 js = js.replace('__PETA__', peta);
+// V9 (draft 3): the Google Earth view behind the NADI introduction (src/kampung3d.js)
+const udara = 'data:image/jpeg;base64,' + fs.readFileSync(path.join(ASSETS, 'udara-3d.jpg')).toString('base64');
+if ((js.match(/__UDARA__/g) || []).length !== 1) throw new Error('expected exactly one __UDARA__ placeholder');
+js = js.replace('__UDARA__', udara);
 
 let html = fs.readFileSync(path.join(SRC, 'template.html'), 'utf8');
 html = html.replace('/*__CSS__*/', () => css).replace('/*__JS__*/', () => js);
@@ -73,7 +92,7 @@ html = html.replace('/*__CSS__*/', () => css).replace('/*__JS__*/', () => js);
 // narration: the supplied WAV, losslessly re-packed as FLAC (no metadata)
 let voiceBlock = '';
 if (VOICE) {
-  if (!fs.existsSync(VOICE)) throw new Error('Narration file not found: ' + VOICE + '\n  Put narration-bm.wav (mono/stereo PCM WAV, 120.000 s) in the project folder, pass --voiceover <file>, or build a silent-narration player with --no-narration.');
+  if (!fs.existsSync(VOICE)) throw new Error('Narration file not found: ' + VOICE + '\n  Make it with: python3 -I tools/place-narration-v9.py . (needs narasi-v9/takes), pass --voiceover <file>, or build a music-only player with --no-narration.');
   const wav = fs.readFileSync(VOICE);
   if (wav.toString('ascii', 0, 4) !== 'RIFF' || wav.toString('ascii', 8, 12) !== 'WAVE') throw new Error('Narration file is not a RIFF/WAVE file: ' + VOICE);
   const sha = require('crypto').createHash('sha256').update(wav).digest('hex');

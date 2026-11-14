@@ -1,5 +1,9 @@
 /* ==========================================================================
- * data.js — single source of truth for the NADI Muallim film (V3–V7; V7 runs 137 s).
+ * data.js — single source of truth for the NADI Muallim film (V3–V8; V7 and V8 run 137 s).
+ * V8 = V7 picture + an ElevenLabs narration (voice "Ahmad") of the 21 V7 captions; the captions
+ * follow the voice (NARR_CAPTIONS below), the picture and the story clock are unchanged.
+ * V9 adds 8 spoken lines (opening x4, "Inilah NADI Muallim", the two-phone line, the benefits x2),
+ * re-voices c02, c03, c07, c09 and c10 (29 captions), and changes the phone title and the summary panel.
  * Every beat of the V5 story (engine.js T) keeps its STORY time (0–120 s). The FILM clock differs
  * in two places (TIMEMAP): V7 plays the manual scene (story 6.5–13.35 s) 1.44× slower, over film
  * 6.5–16.35 s, and V6 holds the story at 84.95 s for the 14-second WhatsApp segment.
@@ -13,13 +17,19 @@
  * ========================================================================== */
 
 const FPS = 60;
-const DURATION = 137;                // 02:17.000 (V7: 120 s story, manual scene +3.0 s, WhatsApp +14 s)
-const TOTAL_FRAMES = FPS * DURATION; // 8220 frames: 0 .. 8219
+const DURATION = 141.4;              // 02:21.400 (V9: 120 s story, longer opening/manual scene/benefit cards for the narration, WhatsApp +14 s)
+const TOTAL_FRAMES = Math.round(FPS * DURATION); // 8484 frames: 0 .. 8483
 /* V7 clock map: breakpoints [film, story], linear in between.
  *   film 6.5–16.35  ↔ story 6.5–13.35  the manual scene, played 1.438× slower (V7)
  *   film 87.95–101.95 ↔ story 84.95     the WhatsApp segment; the story is held (V6) */
-const TIMEMAP = [[0, 0], [6.5, 6.5], [16.35, 13.35], [87.95, 84.95], [101.95, 84.95], [137, 120]];
-const INSERT = { at: 84.95, len: 14, atF: 87.95 };   // story time, length, film start of the WhatsApp segment
+/* V9 clock map (the narration gets the room it needs):
+ *   film 0–7.5        ↔ story 0–6.5      the opening flow chart, 1.15× slower (one line per step)
+ *   film 7.5–18.85    ↔ story 6.5–13.35  the manual scene, 1.66× slower (V7: 1.44×); title impact 18.85 s
+ *   film 90.45–104.45 ↔ story 84.95      the WhatsApp segment (held story)
+ *   film 124.7–133.75 ↔ story 105.2–112.35  the benefit cards, 1.27× slower (the benefits line is read in full)
+ * V7/V8 map: [[0,0],[6.5,6.5],[16.35,13.35],[87.95,84.95],[101.95,84.95],[137,120]]. */
+const TIMEMAP = [[0, 0], [7.5, 6.5], [18.85, 13.35], [90.45, 84.95], [104.45, 84.95], [124.7, 105.2], [133.75, 112.35], [141.4, 120]];
+const INSERT = { at: 84.95, len: 14, atF: 90.45 };   // story time, length, film start of the WhatsApp segment
 function storyTime(tf) {
   for (let i = 1; i < TIMEMAP.length; i++) {
     const [f0, s0] = TIMEMAP[i - 1], [f1, s1] = TIMEMAP[i];
@@ -90,6 +100,13 @@ const BENEFITS = [
   { icon: 'shield', title: 'Pengesahan dan ringkasan', text: 'Bahagian D dan ringkasan sedia dikongsi' },
   { icon: 'calendar', title: 'Perancangan lawatan susulan', text: 'Premis belum dilawati dipaparkan di NADI', proto: true }
 ];
+/* V9: the benefit cards come into focus one by one on the narration. Onsets (film s) of "Rekod di telefon",
+ * "kiraan liputan automatik", "pengesahan dan ringkasan" and "Sistem membantu merancang…" in narasi-v9.wav, read from
+ * 20 ms band energies: "Rekod" voiced at 124.95; the "k" of "kiraan" at 126.51 after the comma pause; "pengesahan"
+ * voiced at 128.34; the "S" of "Sistem" at 130.57 — the voice takes a breath first (130.18–130.46). */
+const BENEFIT_BEATS = [124.95, 126.51, 128.33, 130.57];
+/* V9: no captions in the film (the user's request); the cue timings stay for the audio balance and the SRT file */
+const CAPTIONS_IN_FILM = false;
 const FOLLOW_UP = ['Premis Contoh 018', 'Premis Contoh 033', 'Premis Contoh 061', 'Premis Contoh 074', 'Premis Contoh 096', 'Premis Contoh 105'];
 
 /* ---- calculations copied from the e-ACD source (computeTotals / calcTeamPct) */
@@ -146,15 +163,25 @@ function buildWhatsappSummary(meta, totals) {
 /* V7: kit cues are written in STORY time (s) and WhatsApp captions relative to the segment start (u);
  * start/end below are the resulting FILM times, used by the captions, the SRT and the checks. */
 const CUES = [
+  // V9 · 00:00–00:08 the opening flow chart: one short line per step; the last one runs into the paper forms
+  { id: 'a1', scene: 1, s: [0.15, 2.3],      say: 'Notifikasi denggi diterima.', sub: 'Notifikasi denggi diterima.' },
+  { id: 'a2', scene: 1, s: [2.4, 3.8],       say: 'Kes bertambah.', sub: 'Kes bertambah.' },
+  { id: 'a3', scene: 1, s: [3.9, 5.8],       say: 'Wabak diisytiharkan.', sub: 'Wabak diisytiharkan.' },
+  { id: 'a4', scene: 1, s: [5.9, 6.6],       say: 'Pasukan turun untuk pengesanan kes aktif.', sub: 'Pasukan turun untuk\npengesanan kes aktif.' },
   { id: 'c02', scene: 1, s: [6.6, 9.2],      say: 'Dalam operasi denggi, borang kertas dan fail perlu dibawa ke lapangan.', sub: 'Dalam operasi denggi, borang kertas\ndan fail perlu dibawa ke lapangan.' },
   { id: 'c03', scene: 1, s: [9.39, 12.33],   say: 'Dapatan lawatan kemudian dikira dan ditaip semula.', sub: 'Dapatan lawatan kemudian dikira\ndan ditaip semula.' },
+  // V9 · the title card has settled: a moment for the reveal music, then the name
+  { id: 'n1', scene: 2, s: [14.5, 16.8],     say: 'Inilah Nadi Muallim.', sub: 'Inilah NADI Muallim.' },
   { id: 'c04', scene: 2, s: [16.94, 20.54],  say: 'Nadi Muallim memaparkan situasi denggi mengikut lokaliti.', sub: 'NADI Muallim memaparkan situasi\ndenggi mengikut lokaliti.' },
   { id: 'c05', scene: 2, s: [21.22, 25.66],  say: 'Dalam prototaip ini, penyelia membuka operasi pengesanan kes aktif', sub: 'Dalam prototaip ini, penyelia membuka\noperasi pengesanan kes aktif' },
   { id: 'c06', scene: 3, s: [25.69, 27.02],  say: 'di Kampung Ketoyong.', sub: 'di Kampung Ketoyong.' },
-  { id: 'c07', scene: 3, s: [33.92, 38.95],  say: 'Petugas merekod status premis, saringan gejala dan rujukan dengan satu telefon.', sub: 'Petugas merekod status premis, saringan\ngejala dan rujukan dengan satu telefon.' },
+  // V9 · every officer records on their own phone (two officers of Pasukan 1, two premises on screen)
+  { id: 'p1', scene: 3, s: [27.9, 32.7],     say: 'Setiap petugas boleh merekod dapatan pada telefon masing-masing.', sub: 'Setiap petugas boleh merekod dapatan\npada telefon masing-masing.' },
+  { id: 'c07', scene: 3, s: [33.92, 38.95],  say: 'Bagi premis yang ditugaskan, petugas merekod status lawatan, gejala dan rujukan.', sub: 'Bagi premis yang ditugaskan, petugas merekod\nstatus lawatan, gejala dan rujukan.' },
   { id: 'c08', scene: 3, s: [40.73, 44.02],  say: 'Borang kertas tidak perlu dibawa untuk tugas ini.', sub: 'Borang kertas tidak perlu dibawa\nuntuk tugas ini.' },
-  { id: 'c09', scene: 4, s: [49.32, 53.63],  say: 'Selepas rekod disimpan, sistem mengira dapatan secara automatik.', sub: 'Selepas rekod disimpan, sistem\nmengira dapatan secara automatik.' },
-  { id: 'c10', scene: 4, s: [56.34, 59.08],  say: 'Ini menjimatkan masa menyediakan ringkasan.', sub: 'Ini menjimatkan masa\nmenyediakan ringkasan.' },
+  // V9: on the Save tap, then when the table fills (where the time saving comes from)
+  { id: 'c09', scene: 4, s: [49.32, 53.63],  say: 'Selepas rekod disimpan, sistem mengira dapatan pasukan secara automatik.', sub: 'Selepas rekod disimpan, sistem mengira\ndapatan pasukan secara automatik.' },
+  { id: 'c10', scene: 4, s: [57.35, 61.2],   say: 'Ringkasan dijana terus daripada rekod yang sama.', sub: 'Ringkasan dijana terus daripada\nrekod yang sama.' },
   { id: 'c11', scene: 5, s: [64.93, 70.69],  say: 'Dalam simulasi ini, enam pasukan melawati sembilan puluh dua daripada seratus sepuluh premis.', sub: 'Dalam simulasi ini, enam pasukan\nmelawati 92 daripada 110 premis.' },
   { id: 'c12', scene: 5, s: [72.38, 74.86],  say: 'Liputannya lapan puluh empat peratus.', sub: 'Liputannya 84 peratus.' },
   { id: 'c13', scene: 6, s: [78.92, 81.25],  say: 'Pegawai merekodkan pengesahan dapatan.', sub: 'Pegawai merekodkan pengesahan dapatan.' },
@@ -162,13 +189,28 @@ const CUES = [
   { id: 'w1', scene: 7, u: [0.6, 3.2],       say: 'Ringkasan laporan disalin dengan satu ketikan.', sub: 'Ringkasan laporan disalin\ndengan satu ketikan.' },
   { id: 'w2', scene: 7, u: [4.05, 6.95],     say: 'Ringkasan ditampal ke kumpulan WhatsApp pasukan.', sub: 'Ringkasan ditampal ke kumpulan\nWhatsApp pasukan.' },
   { id: 'w3', scene: 7, u: [8.05, 11.65],    say: 'Angka dalam mesej datang terus daripada rekod yang disimpan.', sub: 'Angka dalam mesej datang terus\ndaripada rekod yang disimpan.' },
-  { id: 'c14', scene: 8, s: [86.9, 88.9],    say: 'Enam premis belum dilawati.', sub: 'Enam premis belum dilawati.' },
-  { id: 'c15', scene: 8, s: [90.42, 93.28],  say: 'Dua belas direkodkan berkunci atau kosong.', sub: 'Dua belas direkodkan berkunci\natau kosong.' },
+  // V8 (1:44): reworded at the user's request; spoken as one sentence, numbers in words for the voice, digits on screen
+  { id: 'c14', scene: 8, s: [86.9, 88.9],    say: 'Daripada analisa automatik sistem, enam premis belum dilawati,', sub: 'Daripada analisa automatik sistem,\n6 premis belum dilawati,' },
+  { id: 'c15', scene: 8, s: [90.42, 93.28],  say: 'dua belas direkodkan berkunci atau kosong.', sub: '12 direkodkan berkunci\natau kosong.' },
   { id: 'c16', scene: 8, s: [95.0, 97.7],    say: 'Penyelia menjadualkan lawatan ke enam premis itu', sub: 'Penyelia menjadualkan lawatan\nke enam premis itu' },
   { id: 'c17', scene: 8, s: [97.9, 100.6],   say: 'dan menyemak status premis yang selebihnya.', sub: 'dan menyemak status premis\nyang selebihnya.' },
+  // V9 · 02:02 the benefit cards
+  { id: 'b1', scene: 9, s: [105.0, 110.0],   say: 'Rekod di telefon, kiraan liputan automatik, pengesahan dan ringkasan.', sub: 'Rekod di telefon, kiraan liputan automatik,\npengesahan dan ringkasan.' },
+  { id: 'b2', scene: 9, s: [110.05, 112.3],  say: 'Sistem membantu merancang lawatan susulan.', sub: 'Sistem membantu merancang\nlawatan susulan.' },
   { id: 'c18', scene: 10, s: [112.90, 114.02], say: 'Nadi Muallim.', sub: 'NADI Muallim.' },
   { id: 'c19', scene: 10, s: [114.68, 118.16], say: 'Dari survelan denggi kepada tindakan susulan di lapangan.', sub: 'Dari survelan denggi kepada\ntindakan susulan di lapangan.' }
 ].map(c => Object.assign(c, c.s ? { start: ft2(c.s[0]), end: ft2(c.s[1]) } : { start: +(INSERT.atF + c.u[0]).toFixed(2), end: +(INSERT.atF + c.u[1]).toFixed(2) }));
+/* V8: every caption (kit cues and the three WhatsApp captions) is spoken by the ElevenLabs voice "Ahmad"
+ * (narasi-v8/narasi-v8.wav, FILM clock). tools/place-narration-v8.py placed each line at its V7 caption
+ * start, later only where the previous line was still speaking (c03 +1.29 s, c05 +0.31 s, w2 +0.18 s),
+ * and wrote these caption times: 0.10 s before the voice, 0.40 s after it, never past the segment end.
+ * 1:44 rewording: c14 + c15 are one new sentence ("Daripada analisa automatik sistem, …"), 8.2 s long; it starts
+ * 0.45 s before its V7 beat (103.45 s) so that "Penyelia menjadualkan…" keeps its 112.00 s beat and the click.
+ * The V7 film-clock times stay in V7_CUE_TIMES for the audit trail. */
+const V7_CUE_TIMES = Object.fromEntries(CUES.map(c => [c.id, [c.start, c.end]]));
+const NARR_CAPTIONS = {a1: [0.20, 2.48], a2: [2.52, 3.97], a3: [4.01, 5.94], a4: [5.98, 8.91], c02: [8.95, 14.22], c03: [14.26, 18.57], n1: [20.20, 22.54], c04: [22.58, 27.13], c05: [27.17, 32.09], c06: [32.11, 33.49], p1: [33.53, 38.36], c07: [39.40, 46.09], c08: [46.13, 49.77], c09: [54.82, 60.54], c10: [62.85, 66.72], c11: [70.33, 77.71], c12: [77.78, 80.98], c13: [84.32, 87.48], w1: [90.95, 94.54], w2: [94.58, 98.21], w3: [98.40, 103.13], c14: [105.85, 110.92], c15: [110.94, 114.36], c16: [114.40, 117.83], c17: [117.85, 120.84], b1: [124.85, 130.15], b2: [130.17, 133.69], c18: [134.20, 135.78], c19: [135.80, 139.89]};
+for (const c of CUES) [c.start, c.end] = NARR_CAPTIONS[c.id];
+const NARR_CLOCK = 'film';   // V8: the narration WAV runs on the film clock (V3: story clock)
 /* cue times exactly as supplied in kit-suara/subtitles-bm.srt (for the audit trail) */
 const SRT_SUPPLIED = { c05: [21.22, 24.03], c06: [24.03, 27.02] };
 const PLANNED = CUES.map(c => ({ id: c.id, start: c.start, end: c.end }));
@@ -206,7 +248,7 @@ const NARRATION = SCENES.filter(s => CUES.some(c => c.scene === s.id)).map(s => 
 });
 
 if (typeof module !== 'undefined') {
-  module.exports = { FPS, DURATION, TOTAL_FRAMES, TIMEMAP, INSERT, filmTime, storyTime, SCENES, SRT_SUPPLIED, BENEFITS, PAPER_FORM, PAPER_ROWS, FLOW_STEPS, META, TEAMS, TEAM1_BEFORE, TOTALS, TARGET_PCT, HOUSE_DEMO, SYMPTOMS, STATUS_CODES,
-    VERIFICATION, NADI_CARD, FOLLOW_UP, CUES, PLANNED, NARRATION, calcTeamPct, computeTotals, buildWhatsappSummary,
+  module.exports = { FPS, DURATION, TOTAL_FRAMES, TIMEMAP, INSERT, filmTime, storyTime, SCENES, SRT_SUPPLIED, BENEFITS, BENEFIT_BEATS, CAPTIONS_IN_FILM, PAPER_FORM, PAPER_ROWS, FLOW_STEPS, META, TEAMS, TEAM1_BEFORE, TOTALS, TARGET_PCT, HOUSE_DEMO, SYMPTOMS, STATUS_CODES,
+    VERIFICATION, NADI_CARD, FOLLOW_UP, CUES, PLANNED, NARRATION, V7_CUE_TIMES, NARR_CAPTIONS, NARR_CLOCK, calcTeamPct, computeTotals, buildWhatsappSummary,
     get NARRATION_SOURCE() { return NARRATION_SOURCE; } };
 }

@@ -103,7 +103,7 @@ const T = {
   // 5 · 00:16.8–00:24.3 NADI locality card; prototype action, activated 24.10
   e: { in: [16.75, 17.1], open: [21.3, 21.75], cursor: [22.95, 23.85], click: 24.1, out: [24.16, 24.34] },
   // 6 · 00:24.3–00:33 phone gate 24.30 (frame 1458), settled 25.6, "Cukup satu telefon"
-  f: { gate: 24.3, rise: [24.3, 25.6], splash: [24.3, 24.4, 24.95, 25.35], one: [25.75, 26.15, 32.45, 32.85], tapTeam: 28.6, pickTeam: 29.2, tapAddr: 29.75, type: [29.85, 30.95], front: [32.45, 33.35] },
+  f: { gate: 24.3, rise: [24.3, 25.6], splash: [24.3, 24.4, 24.95, 25.35], one: [25.75, 26.15, 32.45, 32.85], team2: [28.0, 28.4, 32.45, 32.85], tapTeam: 28.6, pickTeam: 29.2, tapAddr: 29.75, type: [29.85, 30.95], front: [32.45, 33.35] },
   // 7 · 00:33–00:49 the record (cue 7 33.92–38.95, cue 8 40.73–44.02), Bahagian C in the pause
   // V5: one step at a time, evenly over 33–49 s (status → occupants → symptoms and referral → Bahagian C → action → save)
   g: { tapStatus: 34.3, hlStatus: [34.4, 35.7], hlOcc: [35.8, 38.0], occ: [36.0, 36.45, 36.9, 37.35], toB: [38.2, 38.8], toggle: 39.3, chips: [40.0, 40.7], hlSymp: 41.0, hlRef: 41.9,
@@ -121,7 +121,7 @@ const T = {
   k: { cut: 78.05, tapName: 78.45, type: [78.55, 79.3], tapVerify: 80.35, ver: [80.5, 80.75, 84.55, 84.85], summary: [81.4, 81.8, 84.55, 84.85] },
   // 12 · 01:25–01:45 NADI follow-up (cue 14 85.92, cue 15 90.42, cue 16 99.01)
   // V5: a step flow — question → 110 → 92 / 12 / 6 → the 6 and the 12 on the map → plan the follow-up → route and re-check
-  l: { in: [84.85, 85.25], expand: [85.15, 85.6], left: [85.2, 85.6, 104.6, 104.95], q: 85.3, n110: 86.0, branch: [86.5, 87.0], n92: 86.85, n12: 87.05, n6: 87.25, red: [87.6, 89.4],
+  l: { in: [84.85, 85.25], expand: [85.15, 85.95], left: [85.2, 85.6, 104.6, 104.95], q: 85.3, n110: 86.0, branch: [86.5, 87.0], n92: 86.85, n12: 87.05, n6: 87.25, red: [87.6, 89.4],
        hl12: [90.3, 92.8], amber: [90.5, 92.3], cursor: [93.2, 94.9], click: 95.2, planned: [95.35, 95.65], plan: [95.3, 95.6], marks: 95.7, route: [96.0, 97.4], check: [97.9, 98.2],
        rings: [98.2, 98.9], recheck: 98.4, dot: [100.6, 104.0], push: [99.5, 104.6], out: [104.6, 105.0] },
   // 13 · 01:45–01:52.35 benefit cards (in over ~1 s, full row held ≥ 5 s)
@@ -216,7 +216,7 @@ const NCUR = [
 const SYS = [
   [0.25, 6.2, 'Aliran wabak denggi', 'ilustrasi'],
   [6.5, 12.9, 'Proses manual', 'ilustrasi situasi semasa'],
-  [17.3, 24.25, 'NADI Muallim', 'Kad lokaliti · peta ilustrasi'],
+  [17.3, 24.25, 'NADI Muallim', 'Kad lokaliti · imej udara'],   // V9 (draft 3): the Google Earth view (src/kampung3d.js)
   [24.7, 54.8, 'e-ACD Denggi', 'Telefon petugas'],
   [55.7, 61.9, 'e-ACD → Google Sheets', 'Simulasi penyelarasan'],
   [78.3, 84.8, 'e-ACD Denggi', 'Bahagian D · pengesahan'],
@@ -341,6 +341,7 @@ function measure() {
   $['na.plannedWrap'].style.height = 'auto';
   M.na.plannedH = $['na.plannedWrap'].offsetHeight;
   M.na.protoTop = offsetWithin($['na.proto'], $['na.cardScroll']).y;
+  M.na.protoFullH = parseFloat(getComputedStyle($['na.proto']).height);   // V9: exact used height (fractional, no transforms)
   M.na.decBtn = offsetWithin($['na.decBtn'], $['na.map']);
   $['na.proto'].style.height = ''; $['na.plannedWrap'].style.height = '';
   /* sheet: the C8:H13 selection */
@@ -431,7 +432,10 @@ function computeCameras() {
   // NADI: a clean crop on the locality card (little browser chrome, light GIS detail); same frame in both NADI shots
   const c0 = nadiWorld(M.na.card0.x, M.na.card0.y), c1 = nadiWorld(M.na.card0.x + M.na.card0.w, M.na.card0.y);
   CAM_F.FC = { sx: 1360, sy: 470, fx: (c0.x + c1.x) / 2, fy: c0.y + (470 - 70) / 1.34, z: 1.34 };
-  CAMS.nadi = [[0, CAM_F.FC], [T.l.push[0], CAM_F.FC], [T.l.push[1], Object.assign({}, CAM_F.FC, { z: CAM_F.FC.z * 1.05 }), E.inOutSine]];
+  /* V9: no slow push at the end of the follow-up scene (was 5% over T.l.push). The push moved the panel's text by
+   * sub-pixel steps, so in the MP4 lines of text jumped one pixel on different frames: a shimmer on the
+   * "Ringkasan e-ACD" panel exactly while it should be read. The view now holds still; the team dot keeps moving. */
+  CAMS.nadi = [[0, CAM_F.FC]];
 }
 function camAt(layer, t) { return kf(t, CAMS[layer]); }
 function camLayer(el, c) { tf(el, 'translate(' + px(c.sx) + ',' + px(c.sy) + ') scale(' + r5(c.z) + ') translate(' + px(-c.fx) + ',' + px(-c.fy) + ')'); }
@@ -441,8 +445,10 @@ function layerOps(t) {
   return {
     open: 0,   // V5: the dark map opening is replaced by the flow chart
     flow: t < T.a.out[1] + 0.02 ? d(0, 0.35) * (1 - d(T.a.out[0], T.a.out[1])) : 0,
-    man: d(T.b.paper2 - 0.15, T.b.paper2 + 0.1) * (1 - d(T.c.clear[0], T.c.clear[1])),
-    nadi: t < 60 ? d(T.e.in[0], T.e.in[1]) * (1 - d(T.e.out[0], T.e.out[1])) : d(T.l.in[0], T.l.in[1]) * (1 - d(T.l.out[0], T.l.out[1])),
+    // V9 (draft 3): dissolve on the film clock (the story clock changes speed at the impact), finishing on the beat
+    man: d(T.b.paper2 - 0.15, T.b.paper2 + 0.1) * (1 - seg(filmTime(t), filmTime(T.d.impact) - 0.45, filmTime(T.d.impact), E.inOutSine)),
+    // V9 (draft 3): the map starts 0.2 s earlier, so it crossfades with the title instead of following a dip to black
+    nadi: t < 60 ? d(T.e.in[0] - 0.2, T.e.in[1]) * (1 - d(T.e.out[0], T.e.out[1])) : d(T.l.in[0], T.l.in[1]) * (1 - d(T.l.out[0], T.l.out[1])),
     phone: t < T.f.gate ? 0 : t < 70 ? seg(t, T.f.gate, T.f.gate + 0.25, E.inOutSine) : (t < 85.2 ? 1 - d(84.6, 84.95) : 0),
     sync: d(T.i.actorsIn[0], T.i.actorsIn[1]) * (1 - d(T.i.out[0], T.i.out[1])),
     desk: t < T.k.cut ? d(T.j.reveal[0], T.j.reveal[0] + 0.35) * (1 - 0.68 * d(T.j.zoom[0], T.j.zoom[1])) : 0
@@ -695,7 +701,13 @@ function buildBackground() {
  * RENDERERS
  * ========================================================================== */
 function renderBg(t) {
-  op($['bg.end'], Math.max(win(t, 13.28, 13.45, 16.6, 16.9, E.outCubic, E.inOutSine), seg(t, 104.7, 105.25, E.inOutSine)));
+  // V9 (draft 3): the teal title background is in before the manual scene has gone (no dark gap), on the film clock
+  const fi = filmTime(T.d.impact), ft = filmTime(t);
+  // (in 0.85–0.4 s before the impact, under the manual scene; out only once the NADI map is almost fully in)
+  op($['bg.end'], Math.max(t < 60 ? seg(ft, fi - 0.85, fi - 0.4, E.inOutSine) * (1 - seg(t, T.e.in[1] - 0.15, T.e.in[1] + 0.15, E.inOutSine)) : 0, seg(t, 104.7, 105.25, E.inOutSine)));
+  // V9 (draft 3): during the title the light behind it drifts slowly, so the card is never a frozen frame
+  if (t > 13 && t < 17.2) css($['bg.end'], 'background', 'radial-gradient(ellipse 90% 80% at ' + r2(50 + 4 * Math.sin(ft * 0.6)) + '% ' + r2(40 + 3 * Math.cos(ft * 0.45)) + '%, #0f766e 0%, #115e59 32%, #0b3b37 64%, #031b1a 100%)');
+  else css($['bg.end'], 'background', 'radial-gradient(ellipse 90% 80% at 50% 40%, #0f766e 0%, #115e59 32%, #0b3b37 64%, #031b1a 100%)');
   op($['bg.grid'], 1 - seg(t, 0, 0.01) * (t < 4 ? 1 : 0));
   op($['bg.g1'], 0.85); op($['bg.g2'], 0.75);
   tf($['bg.g1'], 'translate(' + px(560 + Math.sin(t * 0.11) * 220) + ',' + px(-760 + Math.cos(t * 0.09) * 120) + ')');
@@ -756,14 +768,14 @@ const GLOBE = {
 const GLOBE_FS = [
   'precision highp float;',
   'uniform sampler2D uTex; uniform vec2 uBox; uniform vec2 uC; uniform float uR; uniform float uLon; uniform vec2 uA; uniform float uK;',
-  'uniform vec2 uZone; uniform float uZoneR; uniform vec4 uRing; uniform float uPing; uniform float uMapA; uniform vec4 uR0; uniform vec4 uR1; uniform vec2 uTexScale;',
+  'uniform vec2 uZone; uniform float uZoneR; uniform vec4 uRing; uniform float uPing; uniform float uMapA; uniform vec4 uR0; uniform vec4 uR1; uniform vec2 uTexScale; uniform float uPR;',
   'float rectA(vec2 p, vec4 r) { vec2 d = min(p - r.xy, r.zw - p); return clamp(min(d.x, d.y) / 110.0, 0.0, 1.0); }',
   'float grid(float a, float step) { float f = abs(fract(a / step + 0.5) - 0.5) * step; return 1.0 - smoothstep(0.0, 0.006, f); }',
   'void main() {',
-  '  vec2 p = vec2(gl_FragCoord.x, uBox.y - gl_FragCoord.y);',
+  '  vec2 p = vec2(gl_FragCoord.x, uBox.y - gl_FragCoord.y) / uPR;',   // V9 (HD): device px → stage px
   '  vec2 d = (p - uC) / uR; float r2 = dot(d, d);',
   '  vec3 teal = vec3(0.176, 0.831, 0.749);',
-  '  float aa = clamp((1.0 - sqrt(r2)) * uR + 0.5, 0.0, 1.0);',
+  '  float aa = clamp((1.0 - sqrt(r2)) * uR * uPR + 0.5, 0.0, 1.0);',
   '  float rr = sqrt(r2); float halo = exp(-max(rr - 1.0, 0.0) * 22.0) * 0.5 * (1.0 - smoothstep(1.05, 1.095, rr));',   // fades out inside the canvas box
   '  if (r2 > 1.0) { gl_FragColor = vec4(teal * halo, halo) * uMapA; return; }',
   '  float z = sqrt(1.0 - r2); vec3 n = vec3(d.x, -d.y, z);',
@@ -818,8 +830,9 @@ function initGlobe() {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    for (const n of ['uTex', 'uBox', 'uC', 'uR', 'uLon', 'uA', 'uK', 'uZone', 'uZoneR', 'uRing', 'uPing', 'uMapA', 'uR0', 'uR1', 'uTexScale']) GLOBE.u[n] = gl.getUniformLocation(prog, n);
+    for (const n of ['uTex', 'uBox', 'uC', 'uR', 'uLon', 'uA', 'uK', 'uZone', 'uZoneR', 'uRing', 'uPing', 'uMapA', 'uR0', 'uR1', 'uTexScale', 'uPR']) GLOBE.u[n] = gl.getUniformLocation(prog, n);
     GLOBE.gl = gl; GLOBE.prog = prog; GLOBE.ok = true;
+    cv.width = Math.round(GLOBE.box[2] * RENDER_SCALE); cv.height = Math.round(GLOBE.box[3] * RENDER_SCALE);   // V9 (HD)
   } catch (e) { cls($['fc.map'], 'no-gl', true); GLOBE.ok = false; }
 }
 /* time-dependent globe state (shared by the shader uniforms and the ring label) */
@@ -856,11 +869,11 @@ function renderGlobe(t) {
     tf($['fc.globeFb'], 'translate(' + px(-gs.lon * G.R) + ',' + px(gs.cy - G.cy) + ')');
     return;
   }
-  const gl = G.gl, u = G.u, B = G.box;
-  gl.viewport(0, 0, B[2], B[3]);
+  const gl = G.gl, u = G.u, B = G.box, cv = $['fc.globe'];
+  gl.viewport(0, 0, cv.width, cv.height);
   gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
   gl.uniform1i(u.uTex, 0);
-  gl.uniform2f(u.uBox, B[2], B[3]);
+  gl.uniform2f(u.uBox, cv.width, cv.height); gl.uniform1f(u.uPR, cv.width / B[2]);
   gl.uniform2f(u.uC, G.cx - B[0], gs.cy - B[1]);
   gl.uniform1f(u.uR, gs.R);
   gl.uniform1f(u.uLon, gs.lon);
@@ -998,10 +1011,58 @@ function renderManual(t, o) {
 }
 
 /* ---------------------------------------------------------------- 5, 12 · NADI */
-function cardScroll(t) { return t > 60 ? M.na.protoTop * seg(t, T.l.expand[0], T.l.expand[1], E.inOutCubic) : 0; }
+/* V9: KPI-card highlight as a fade (k = 0..1) from the base card style to the .hl look */
+const KPI_GLOW = { warn: { ring: [245, 158, 11, 0.9], bg: [255, 251, 235], bd: [245, 158, 11] },
+                   left: { ring: [225, 29, 72, 0.85], bg: [255, 241, 242], bd: [251, 113, 133] } };
+function kpiGlow(el, k, kind) {
+  const g = KPI_GLOW[kind], mix = (a, b) => Math.round(a + (b - a) * k), rgb = (a, b) => 'rgb(' + mix(a[0], b[0]) + ',' + mix(a[1], b[1]) + ',' + mix(a[2], b[2]) + ')';
+  const [r, gg, b, al] = g.ring;
+  css(el, 'background', k > 0 ? rgb([255, 255, 255], g.bg) : '');
+  css(el, 'border-color', k > 0 ? rgb([221, 229, 236], g.bd) : '');
+  css(el, 'box-shadow', k > 0 ? '0 0 0 ' + r5(2.5 * k) + 'px rgba(' + r + ',' + gg + ',' + b + ',' + r5(al * k) + '), 0 0 0 ' + r5(6 * k) + 'px rgba(' + r + ',' + gg + ',' + b + ',' + r5(0.18 * k) + ')' : '');
+}
+/* V9: the follow-up flow nodes on the left fade their highlight in and out over 0.3 s instead of switching in
+ * one frame; the end state is the V8 .hl look as rendered (amber ring 3 + 7 px, tinted fill, no drop shadow). */
+const FU_TINT = { warn: [120, 53, 15, 0.55], bad: [136, 19, 55, 0.5] };
+function fuGlow(el, k, kind) {
+  const c = FU_TINT[kind], m = (a, b) => a + (b - a) * k;
+  css(el, 'background', k > 0 ? 'rgba(' + Math.round(m(2, c[0])) + ',' + Math.round(m(6, c[1])) + ',' + Math.round(m(23, c[2])) + ',' + r5(m(0.94, c[3])) + ')' : '');
+  css(el, 'box-shadow', k > 0 ? '0 0 0 ' + r5(3 * k) + 'px rgba(251,191,36,' + r5(0.95 * k) + '), 0 0 0 ' + r5(7 * k) + 'px rgba(251,191,36,' + r5(0.28 * k) + '), 0 20px 44px -18px rgba(0,0,0,' + r5(0.75 * (1 - k)) + ')' : '');
+  css(el, 'z-index', k > 0 ? '5' : '');
+}
+/* V9: the expand moves every block of the card in one direction only. The card scrolls by a layout offset (top), not a
+ * transform, so scroll and growth are snapped once; both advance in whole CSS px (growth floored) and the growth ends
+ * on the measured height. V8 rounded them separately and switched to 'auto' at the end: blocks under the summary
+ * stepped back 0.85 px and then jumped 1.84 px as the panel settled. */
+function cardScroll(t) { return t > 60 ? Math.round(M.na.protoTop * seg(t, T.l.expand[0], T.l.expand[1], E.inOutCubic)) : 0; }
+function protoHeight(t, ex) { return ex >= 1 ? M.na.protoFullH : cardScroll(t) + Math.floor((M.na.protoFullH - M.na.protoTop) * ex); }
 function btnMap(ref, t, ax) {
   const b = ref === 'na.openBtn' ? M.na.openBtn : M.na.decBtn;
   return { x: b.x + b.w * ax, y: b.y - (ref === 'na.decBtn' ? cardScroll(t) : 0) + b.h * 0.55 };
+}
+/* V9 (draft 3): the Google Earth view in 3D (src/kampung3d.js) fills the map panel during the NADI introduction
+ * (film K3D.win); the 2D map is hidden meanwhile and returns for the follow-up scene. The canvas covers the visible part
+ * of the panel at the stage's own pixel size (measured once; the NADI camera holds still in the introduction). */
+function renderK3dLayer(t) {
+  const ft = filmTime(t), on = t < 60 && ft >= K3D.win[0] && ft <= K3D.win[1], cv = $['k3d'];
+  if (on && !K3D.ok && !K3D.failed) {
+    const st = document.getElementById('stage').getBoundingClientRect(), ss = st.width / 1920, mr = $['na.map'].getBoundingClientRect(), sc = mr.width / 1280;
+    if (ss > 0 && sc > 0) {   // measured only once the panel is laid out
+      const leftCss = Math.max(0, (st.left - mr.left) / sc), wCss = 1280 - leftCss;
+      css(cv, 'left', px(leftCss)); css(cv, 'width', px(wCss)); css(cv, 'height', '556px');
+      K3D.left = leftCss; K3D.scale = sc / ss;
+      initKampung(cv, $['k3d.img'], Math.round(wCss * K3D.scale), Math.round(556 * K3D.scale));
+    }
+  }
+  const show = on && K3D.ok;
+  vis(cv, show); vis($['k3d.name'], show); vis($['k3d.rad'], show); vis($['k3d.credit'], show); op($['na.mapSvg'], show ? 0 : 1);
+  if (!show) return;
+  const lab = renderKampung(ft), a = [K3D.left + lab.name[0] / K3D.scale, lab.name[1] / K3D.scale], b = [K3D.left + lab.radius[0] / K3D.scale, lab.radius[1] / K3D.scale];
+  const fade = seg(ft, K3D.win[0] + 0.5, K3D.win[0] + 1.1, E.outCubic);
+  op($['k3d.name'], fade); op($['k3d.rad'], seg(ft, K3D.win[0] + 0.9, K3D.win[0] + 1.5, E.outCubic));
+  tf($['k3d.name'], 'translate(' + px(a[0]) + ',' + px(a[1]) + ') translate(-50%,-100%)');
+  tf($['k3d.rad'], 'translate(' + px(b[0]) + ',' + px(b[1]) + ') translate(-50%,7px)');
+  tf($['k3d.credit'], 'translate(' + px(K3D.left + 9) + ',' + px(556 - 15) + ')');   // imagery credit, bottom left of the view
 }
 function renderNadi(t, o) {
   const L = $['w.nadi'];
@@ -1020,14 +1081,18 @@ function renderNadi(t, o) {
   txt($['na.openText'], !late && t >= T.e.click + 0.05 ? 'Membuka e-ACD…' : 'Buka Operasi ACD');
   // e-ACD summary (segment 12)
   const ex = late ? seg(t, T.l.expand[0], T.l.expand[1], E.inOutCubic) : 0;
-  css($['na.proto'], 'height', ex >= 1 ? 'auto' : px(M.na.protoBaseH * ex));
+  // V9: the follow-up list's space is part of the expanded section from the start, so nothing moves when it appears
+  css($['na.proto'], 'height', late ? px(protoHeight(t, ex)) : '0px');
   op($['na.protoIn'], late ? seg(t, T.l.expand[0] + 0.2, T.l.expand[1]) : 0);
-  tf($['na.cardScroll'], 'translateY(' + px(-cardScroll(t)) + ')');
-  cls($['na.kLeft'], 'hl', late && t >= T.l.n6);
-  cls($['na.kLocked'], 'hl', late && ((t >= T.l.hl12[0] && t < T.l.hl12[1]) || (t >= T.l.recheck - 0.1 && t < T.l.left[2])));
-  const pl = late ? seg(t, T.l.planned[0], T.l.planned[1], E.outCubic) : 0;
-  css($['na.plannedWrap'], 'height', pl >= 1 ? 'auto' : px(M.na.plannedH * pl));
-  op($['na.planned'], pl);
+  css($['na.cardScroll'], 'top', px(-cardScroll(t)));
+  // V9: each highlight runs once — a 0.3 s fade-in on its beat, then held to the end of the scene (V8 switched
+  // the 12-card highlight on, off and on again, and both switched in a single frame)
+  kpiGlow($['na.kLeft'], late ? seg(t, T.l.n6, T.l.n6 + 0.3, E.outCubic) : 0, 'left');
+  kpiGlow($['na.kLocked'], late ? seg(t, T.l.hl12[0], T.l.hl12[0] + 0.3, E.outCubic) : 0, 'warn');
+  // V9: the list fades in over its reserved space (V8 grew its height by 252 px in 0.25 s and pushed the panel)
+  const pl = late ? seg(t, T.l.planned[0], T.l.planned[1] + 0.25, E.outCubic) : 0;
+  css($['na.plannedWrap'], 'height', late ? 'auto' : '0px');
+  op($['na.planned'], pl);   // V9: fades in place (the 8 px slide rendered as one-pixel steps in the MP4)
   op($['na.recheck'], late ? seg(t, T.l.recheck, T.l.recheck + 0.3) : 0);
   cls($['na.decBtn'], 'press', late && t >= T.l.click - 0.02 && t < T.l.click + 0.14);
   cls($['na.decBtn'], 'done', late && t >= T.l.planned[0]);
@@ -1288,16 +1353,25 @@ function renderOverlays(t) {
   op($['ov.sys'], sw); txt($['ov.sysName'], sv[2]); txt($['ov.sysView'], sv[3]);
   tf($['ov.sys'], 'translate(64px,40px)');
   op($['ov.scrim'], win(t, T.l.left[0] - 0.2, T.l.left[1], T.l.left[2], T.l.left[3] + 0.2));
-  // 4 · title: one controlled impact at 13.35, settled by 13.8
-  const D = T.d, ti = $['ov.title'];
-  op(ti, win(t, D.impact - 0.1, D.impact, D.out[0], D.out[1], E.outCubic, E.inOutSine));
-  const sc = t < D.impact ? lerp(1.13, 1.07, seg(t, D.impact - 0.1, D.impact, E.outCubic)) : lerp(1.07, 1, seg(t, D.impact, D.settle, E.springSoft));
+  // 4 · title. V9 (draft 3): it rises out of the dissolving manual scene in one continuous move on the film clock — no
+  // pre-roll on black, no single-frame jump at the impact (13.35) — fully in on the beat and settled by 13.8; a soft
+  // glow marks the beat instead of the old one-frame flash.
+  const D = T.d, ti = $['ov.title'], fiT = filmTime(D.impact), ftT = filmTime(t);
+  op(ti, seg(ftT, fiT - 0.45, fiT - 0.02, E.inOutSine) * (1 - seg(t, D.out[0], D.out[1], E.inOutSine)));
+  const sc = lerp(1.045, 1, seg(ftT, fiT - 0.32, filmTime(D.settle), E.outCubic));
   tf(ti, 'translate(0px,' + px(330) + ') translate(960px,0) scale(' + r5(sc) + ') translate(-960px,0)');
-  TITLE.forEach((el, i) => { const t0 = D.impact - 0.1 + i * 0.04, a = seg(t, t0, t0 + 0.12 + i * 0.1, E.outCubic); op(el, a); tf(el, 'translateY(' + px(12 * (1 - a)) + ')'); });
-  op($['ov.bloom'], t >= D.impact ? 0.9 * (1 - seg(t, D.impact, D.impact + 0.9, E.outCubic)) : 0);
+  TITLE.forEach((el, i) => { const t0 = fiT - 0.3 + i * 0.08, a = seg(ftT, t0, t0 + 0.45 + i * 0.05, E.outCubic); op(el, a); tf(el, 'translateY(' + px(14 * (1 - a)) + ')'); });
+  op($['ov.bloom'], 0.35 * Math.min(seg(ftT, fiT - 0.06, fiT + 0.02, E.outQuad), 1 - seg(ftT, fiT + 0.02, fiT + 0.85, E.outCubic)));
+  // V9 (draft 3): the light sweeps over "NADI Muallim" from 0.5 s into the line "Inilah NADI Muallim" (1.1 s, left to right)
+  const sheenP = seg(ftT, NARR_CAPTIONS.n1[0] + 0.5, NARR_CAPTIONS.n1[0] + 1.6, E.inOutSine);
+  css($['ov.sheen'], 'background-position', r2(120 - 140 * sheenP) + '% 0');
   // 6 · one phone
   const w1 = ovWin($['ov.one'], t, T.f.one);
   tf($['ov.one'], 'translate(130px,' + px(370 + 22 * (1 - w1)) + ')');
+  // V9 · two officers of Pasukan 1, each on their own phone and premise (with "Setiap petugas boleh merekod…")
+  const w2 = ovWin($['ov.team2'], t, T.f.team2);
+  tf($['ov.team2'], 'translate(130px,' + px(612 + 18 * (1 - w2)) + ')');
+  [0, 1].forEach(i => { const a = seg(t, T.f.team2[0] + 0.15 + i * 0.4, T.f.team2[0] + 0.6 + i * 0.4, E.outCubic); op($['ov.t2c' + i], a); tf($['ov.t2c' + i], 'translateY(' + px(12 * (1 - a)) + ')'); });
   // 7–8 · the record, then saved (≥ 4 s) with the automatic count
   const G = T.g;
   const rw = ovWin($['ov.rec'], t, G.recWin);
@@ -1353,15 +1427,12 @@ function renderOverlays(t) {
   for (let i = 0; i < 3; i++) attr($['ov.fl' + i], 'stroke-dashoffset', String(r2(1 - seg(t, L5.branch[0] + i * 0.08, L5.branch[1] + i * 0.08, E.inOutCubic))));
   attr($['ov.fl4'], 'stroke-dashoffset', String(r2(1 - seg(t, L5.plan[0], L5.plan[1], E.inOutCubic))));
   attr($['ov.fl3'], 'stroke-dashoffset', String(r2(1 - seg(t, L5.check[0], L5.check[1], E.inOutCubic))));
-  cls($['ov.f6'], 'hl', t >= L5.red[0] && t < L5.marks);
-  cls($['ov.lf12'], 'hl', (t >= L5.hl12[0] && t < L5.hl12[1]) || (t >= L5.check[1] && t < L5.check[1] + 1.6));
-  // 13 · benefit cards: in over ~1 s, full row held
-  tf($['ov.bfRow'], 'translate(0px,' + px(300) + ')');
-  for (let i = 0; i < 4; i++) {
-    const t0 = T.m.in + i * 0.22, a = seg(t, t0, t0 + 0.55, E.springSoft), out = seg(t, T.m.out[0], T.m.out[1], E.inCubic);
-    op($['ov.bf' + i], Math.min(seg(t, t0, t0 + 0.25), 1 - out));
-    tf($['ov.bf' + i], 'translateY(' + px(40 * (1 - a) - 30 * out) + ') scale(' + r5(lerp(0.95, 1, a)) + ')');
-  }
+  // V9: one fade in and one fade out per beat (6: the red premises; 12: "12 direkodkan…" and the recheck of "premis yang selebihnya")
+  fuGlow($['ov.f6'], win(t, L5.red[0], L5.red[0] + 0.3, L5.marks - 0.3, L5.marks, E.outCubic, E.inOutSine), 'bad');
+  fuGlow($['ov.lf12'], Math.max(win(t, L5.hl12[0], L5.hl12[0] + 0.3, L5.hl12[1] - 0.3, L5.hl12[1], E.outCubic, E.inOutSine),
+    win(t, L5.check[1], L5.check[1] + 0.3, L5.check[1] + 1.3, L5.check[1] + 1.6, E.outCubic, E.inOutSine)), 'warn');
+  // 13 · benefit cards: V9 orbit, one card in focus per phrase (renderBenefits)
+  renderBenefits(t);
   // 14 · closing, fully in by 113.2, held to the last frame
   const cl = $['ov.closing'];
   op(cl, seg(t, T.n.title - 0.05, T.n.title + 0.1)); tf(cl, 'translate(0px,210px)');
@@ -1371,25 +1442,45 @@ function renderOverlays(t) {
   });
 }
 
-/* ---------------------------------------------------------------- subtitles (lower safe area) */
-function renderSubs(t) {
-  let best = null, a = 0;
-  for (const c of CUES) {
-    const w = win(t, c.start - 0.08, c.start + 0.1, c.end - 0.06, c.end + 0.1, E.outQuad, E.inQuad);
-    if (w > a) { a = w; best = c; }
-  }
-  if (!best) {
-    let prev = null, next = null;
-    for (const c of CUES) { if (c.end <= t) prev = c; if (!next && c.start > t) next = c; }
-    if (prev && next && next.start - prev.end < 0.65 && t - prev.end < 0.65) { best = prev; a = 0; }
-  }
-  const show = typeof window === 'undefined' || window.ACD_SUBS !== false;
-  op($['subsBox'], show ? a : 0);
-  if (best) txt($['subsBox'], best.sub);
-  let sh = 0;
-  for (const c of CUES) sh = Math.max(sh, win(t, c.start - 0.4, c.start, c.end, c.end + 0.5, E.inOutSine, E.inOutSine));
-  op($['subShade'], show ? 0.9 * sh : 0);
+/* ---------------------------------------------------------------- V9 · benefit cards on an orbit
+ * After the reference (a Three.js promo: app icons orbiting a floating panel that is then brought into focus): the four
+ * cards float on a slow elliptical orbit around the centre of the frame, counter-clockwise on screen. At the back (top)
+ * a card is smaller, dimmer and softly blurred; in front (bottom) it is larger; each one bobs a little and turns its
+ * face towards the centre. On its phrase in the narration (BENEFIT_BEATS) a card leaves the orbit 0.2 s before the
+ * words and reaches the centre in 0.55 s at full size with a soft glow, while the previous card returns to its moving
+ * place on the orbit. The card in focus holds still at whole-pixel position and scale 1, so its text stays sharp.
+ * Card 1 lifts out as the scene opens. Everything runs on the film clock. */
+const BF = { cx: 960, cy: 540, rx: 680, ry: 330, sBack: 0.42, sFront: 0.62, w: 600, h: 360, period: 18, th0: 112, lead: 0.2, move: 0.55 };
+function benefitOrbit(i, ft) {
+  const th = (BF.th0 + i * 90 - 360 * (ft - SCENES[8].start) / BF.period) * Math.PI / 180;   // decreasing angle: counter-clockwise on screen
+  return { x: BF.cx + BF.rx * Math.cos(th), y: BF.cy + BF.ry * Math.sin(th), d: (Math.sin(th) + 1) / 2, c: Math.cos(th) };
 }
+function benefitFocus(i, ft) {
+  const start = k => (k === 0 ? SCENES[8].start + 0.1 : BENEFIT_BEATS[k] - BF.lead);
+  const rise = seg(ft, start(i), start(i) + BF.move, E.inOutCubic);
+  const fall = i < 3 ? seg(ft, start(i + 1), start(i + 1) + BF.move, E.inOutCubic) : 0;
+  return { f: Math.min(rise, 1 - fall), rising: rise > 0 && rise < 1 };
+}
+function renderBenefits(t) {
+  const ft = filmTime(t), s0 = SCENES[8].start, out = seg(t, T.m.out[0], T.m.out[1], E.inCubic);
+  for (let i = 0; i < 4; i++) {
+    const el = $['ov.bf' + i];
+    if (ft < s0 - 0.05 || ft > SCENES[8].end + 0.05) { op(el, 0); continue; }
+    const o = benefitOrbit(i, ft), { f, rising } = benefitFocus(i, ft), g = 1 - f;
+    const app = i === 0 ? seg(ft, s0 + 0.05, s0 + 0.35, E.outCubic) : seg(ft, s0 + 0.08 * i, s0 + 0.08 * i + 0.4, E.outBack);
+    const bob = 9 * Math.sin(2 * Math.PI * ft / 3.3 + 1.7 * i), rz = 2 * Math.sin(2 * Math.PI * ft / 4.2 + i);
+    const s = lerp(BF.sBack + (BF.sFront - BF.sBack) * o.d, 1, f) * lerp(0.82, 1, app) * (1 - 0.04 * out);
+    const x = lerp(o.x, BF.cx, f), y = lerp(o.y + bob, BF.cy, f);
+    op(el, Math.min(app, 1 - out) * lerp(0.62 + 0.3 * o.d, 1, f));
+    css(el, 'z-index', String(10 + Math.round(10 * o.d) + (f > 0 ? (rising ? 80 : 50) : 0)));   // orbit by depth; leaving card above; arriving card on top
+    css(el, 'filter', g * (1 - o.d) > 0.02 ? 'blur(' + r2(2.4 * g * (1 - o.d)) + 'px)' : 'none');
+    css(el, 'box-shadow', '0 30px 60px -20px rgba(0,0,0,.6)' + (f > 0.001 ? ', 0 0 0 ' + r2(2 * f) + 'px rgba(255,255,255,' + r5(0.75 * f) + '), 0 0 ' + r2(60 * f) + 'px rgba(94,234,212,' + r5(0.35 * f) + ')' : ''));
+    // in focus: a plain 2D translate at whole pixels and scale 1 (no 3D layer), so the text is drawn sharp
+    tf(el, 'translate(' + px(x - BF.w / 2) + ',' + px(y - BF.h / 2) + ')' + (g > 0.0005 || out > 0 ? ' perspective(1400px) rotateY(' + r2(-24 * o.c * g) + 'deg) rotate(' + r2(rz * g) + 'deg) scale(' + r5(s) + ')' : ''));
+  }
+}
+
+/* V9: the film carries no captions (removed at the user's request); CUES remain as narration timing data. */
 
 /* ---------------------------------------------------------------- V6 · WhatsApp insert (2D)
  * u = film time − INSERT.atF (0 .. INSERT.len); the story clock is held at INSERT.at meanwhile.
@@ -1478,6 +1569,18 @@ function renderWa(u) {
  * FRAME
  * ========================================================================== */
 let lastFrame = -1;
+/* V9 (HD): device pixels per stage pixel for the two WebGL canvases (opening globe, 3D view of the outbreak area), so
+ * they are drawn at the screen's own resolution like the rest of the (vector) stage: stage scale × devicePixelRatio,
+ * in quarter steps from 1 to 3 (4K at full screen = 2). Export and checks run at 1920 × 1080, scale 1. */
+let RENDER_SCALE = 1;
+function setRenderScale(rs) {
+  rs = Math.max(1, Math.min(3, Math.round(rs * 4) / 4));
+  if (rs === RENDER_SCALE) return false;
+  RENDER_SCALE = rs;
+  if (GLOBE.ok) { const cv = $['fc.globe']; cv.width = Math.round(GLOBE.box[2] * rs); cv.height = Math.round(GLOBE.box[3] * rs); }
+  if (K3D.ok) kampungScale(rs);
+  return true;
+}
 function renderTime(tf) {
   tf = clamp(tf, 0, DURATION - 1 / FPS);
   // V6: the V5 story runs on its own clock, held at INSERT.at while the WhatsApp segment plays
@@ -1488,12 +1591,12 @@ function renderTime(tf) {
   renderFlowOpening(t, o.flow);
   renderManual(t, o.man);
   renderNadi(t, o.nadi);
+  if (o.nadi > 0.002) renderK3dLayer(t);   // V9 (draft 3): after every NADI transform is set, so the panel is measured in place
   renderSync(t, o.sync);
   renderDesktop(t, o.desk);
   renderPhone(t, o.phone);
   renderOverlays(t);
   renderWa(tf - INSERT.atF);
-  renderSubs(tf);
 }
 function renderFrame(frameIndex) {
   const f = Math.max(0, Math.min(TOTAL_FRAMES - 1, Math.floor(frameIndex)));
@@ -1528,8 +1631,11 @@ function initMeasure() {
   initGlobe();
   const B = T.b, C = T.c;
   const Z0 = { cx: 960, cy: 540, tx: 960, ty: 540, z: 1 }, ZF = { cx: 758, cy: 560, tx: 960, ty: 520, z: 1.24 };
-  const ZL = { cx: M.cell.x, cy: M.cell.y, tx: 960, ty: 470, z: 1.85 }, ZO = Object.assign({}, ZL, { z: 1.85 * 0.9 });
+  /* V9 (draft 3): no dead hold after the re-typing (V8/V9 froze the picture for 1.6 s, which read as a stall). From the
+   * cell the camera keeps easing in — barely moving while the typed "14" is read, then gathering pace — and pushes on
+   * into the screen as the scene dissolves into the title (V9: it used to pull back and cut to black first). */
+  const ZL = { cx: M.cell.x, cy: M.cell.y, tx: 960, ty: 470, z: 1.85 }, ZT = Object.assign({}, ZL, { z: 1.85 * 1.28 });
   MAN_CAM.length = 0;
   MAN_CAM.push([0, Z0], [B.camF[0], Z0], [B.camF[1], ZF, E.inOutCubic], [B.camF[2], ZF], [B.camF[3], Z0, E.inOutCubic],
-    [C.push[0], Z0], [C.push[1], ZL, E.inOutCubic], [C.clear[0], ZL], [C.clear[1], ZO, E.inCubic]);
+    [C.push[0], Z0], [C.push[1], ZL, E.inOutCubic], [T.d.impact, ZT, E.inCubic]);
 }

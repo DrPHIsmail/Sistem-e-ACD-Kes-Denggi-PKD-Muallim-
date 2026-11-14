@@ -1,4 +1,494 @@
-# NADI Muallim — Filem Pertandingan · V7 (137 saat, muzik latar)
+# NADI Muallim — Filem Pertandingan · V9 (141.4 saat, bernarasi ElevenLabs)
+
+Filem 02:21.400 (1920 × 1080, 60 fps, 8,484 bingkai) untuk **Pejabat Kesihatan Daerah Muallim**. V9 ialah V8 dengan enam perubahan yang diminta:
+1. empat ayat pendek pada pembukaan;
+2. "Inilah NADI Muallim." selepas kad tajuk;
+3. tajuk "Rekod ACD pada telefon masing-masing" dengan contoh dua petugas;
+4. ayat baharu untuk Simpan dan jadual;
+5. narasi kad kelebihan;
+6. pembaikan kelipan panel kanan "Ringkasan e-ACD".
+
+**Draf 2 (permintaan seterusnya):**
+7. kad kelebihan terapung dalam orbit dan difokuskan satu demi satu mengikut narasi, berdasarkan analisis bingkai demi bingkai video rujukan (bahagian 9);
+8. sari kata dibuang sepenuhnya daripada filem (bahagian 10).
+
+**Draf 3:**
+9. sentakan pada peralihan babak borang manual → kad tajuk → pengenalan NADI dibaiki (bahagian 11);
+10. latar 3D fotorealistik untuk pengenalan NADI (0:22–0:30): imej Google Earth yang diberi, dengan kubah radius 200 m berdenyut pada pusat wabak dan putaran kamera kanan → kiri (bahagian 12).
+11. pemain HTML berdiri sendiri pada resolusi skrin (HD/4K): kanvas WebGL kini mengikut ketumpatan piksel skrin (bahagian 13).
+
+**Panjang filem:** permintaan asal ialah 02:17. Ayat baharu memerlukan masa tambahan. Atas arahan "proceed accordingly, tak perlu fix mengikut garis masa sedia ada", filem dipanjangkan 4.4 s kepada **02:21.4** (bahagian 7).
+
+Semua rekod, nama dan angka ialah **data simulasi**. Pemain dan MP4 tidak memanggil ElevenLabs, aplikasi langsung, Google Sheets, peta atau WhatsApp. Narasi dijana sekali sahaja dan dibenamkan dalam pemain.
+
+## Fail V9 (untuk dihantar)
+
+| Fail | Kegunaan |
+|---|---|
+| `NADI-Muallim-Pitch-141s-v9.mp4` | Filem akhir V9: H.264 High 1920 × 1080, CFR 60 fps, 8,484 bingkai, 141.400 s; AAC 48 kHz stereo; narasi Ahmad + muzik latar dan kesan bunyi; tanpa sari kata. Saiz 54.6 MB (draf 2). |
+| `video-showcase-v9.html` | Pemain HTML kendiri luar talian, dengan narasi terbenam sebagai FLAC tanpa kehilangan. Kekunci 1–9 dan 0 untuk 10 babak. |
+| `sari-kata-bm-v9.srt` | Fail sari kata berasingan sahaja (29 baris, masa mengikut suara). **Tidak dipaparkan dalam filem** (bahagian 10); boleh dimuat naik sebagai sari kata tertutup (CC) jika perlu. |
+| `narasi-v9/narasi-v9.wav` | Trek narasi 141.400 s (48 kHz mono 16-bit) pada jam filem. |
+| `narasi-v9/penempatan-v9.json` | Take yang dipilih, masa setiap baris dan masa sari kata. |
+| `narasi-v9/takes/`, `narasi-v9/takes-elevenlabs.json` | Take ElevenLabs V8 dan V9 beserta ID penjanaan. Take yang diganti disimpan di bawah `replaced`. |
+| `tools/check-mp4-panel.py` | Ujian kestabilan panel kanan dalam MP4, bingkai demi bingkai (bahagian 6). |
+| `src/kampung3d.js` | Imej udara Google Earth dalam 3D, kubah 200 m dan putaran (bahagian 12); three.js r158 dibenamkan semasa bina (`THREE_JS` atau `node_modules/three`). |
+| `assets/udara-3d.jpg` | Imej Google Earth yang diberi (2000 × 1253, sRGB, tanpa metadata), dibenamkan semasa bina. |
+| `tools/make-aerial-camera.py` | Memulihkan kamera tangkapan Google Earth (padanan SIFT dengan peta V6 → homografi → kamera); menghasilkan pemalar `K3D_CAM`. |
+
+**Disimpan untuk perbandingan (tidak diubah):** V8 (`NADI-Muallim-Pitch-137s-v8.mp4`, `video-showcase-v8.html`, `sari-kata-bm-v8.srt`, `narasi-v8/`), dan V7–V2 seperti dalam dokumentasi di bawah. Sumber V9: `arkib/v9-sumber.tar.gz`.
+
+## Perubahan V9 berbanding V8
+
+### 1. Pembukaan (00:00–00:09): empat ayat pendek pada empat paparan
+
+| Ayat | Suara | Paparan |
+|---|---|---|
+| "Notifikasi denggi diterima." | 0.30–2.37 s | kad 1 "Notifikasi diterima" muncul 0.58 s |
+| "Kes bertambah." | 2.62–3.86 s | kad 2 "Peningkatan kes" muncul 2.19 s |
+| "Wabak diisytiharkan." | 4.11–5.83 s | kad 3 "Isytihar wabak" muncul 3.87 s |
+| "Pasukan turun untuk pengesanan kes aktif." | 6.08–8.70 s | kad 4 "ACD" muncul 5.54 s; borang kertas bermula 7.50 s |
+
+- **Ayat keempat** bersambung 1.2 s ke paparan borang. Ia tamat sebelum "Dalam operasi denggi…" (9.05 s).
+- **Muzik debaran dikekalkan.** Di bawah empat ayat ini, muzik hanya direndahkan 9 dB (bukan 10 dB). Suara kekal 11.8–14.4 LU di atas muzik.
+- **Masa:**
+  - Aliran pembukaan dipanjangkan 1.0 s (0–6.5 s menjadi 0–7.5 s) supaya setiap ayat jatuh pada kadnya.
+  - Babak borang manual dipanjangkan 1.5 s supaya c02 dan c03 muat sebelum hentakan tajuk. Teks c02 dan c03 ialah teks kit, tidak diubah.
+  - Hentakan tajuk kini pada 18.85 s (V8: 16.35 s).
+
+### 2. Kad tajuk dan "Inilah NADI Muallim." (00:19–00:27)
+- **Kad tajuk dan Jata Negara:** hentakan pada 18.85 s, stabil pada 19.30 s.
+- **Ruang muzik dedahan:** 1.0 s. Kemudian "Inilah NADI Muallim." (20.30–22.33 s).
+- **Ayat peta:** "NADI Muallim memaparkan situasi denggi mengikut lokaliti" bermula 22.68 s, sebaik peta mendarat (22.60 s).
+- **Anjakan:** detik ini ≈ 2.5 s lebih lewat daripada 00:17–00:20 dalam permintaan, kerana pembukaan dan babak manual dipanjangkan (bahagian 1).
+
+### 3. Telefon masing-masing (00:33–00:46)
+- **Tajuk skrin:** "Rekod ACD pada telefon masing-masing", dalam dua baris. Kotak tajuk dilebarkan ke 860 px supaya "masing-masing" tidak terputus pada tanda sempang.
+- **Contoh dua petugas:** kad baharu "Pasukan 1 · contoh dua petugas" di bawah tajuk.
+  - Petugas 1 · Premis Contoh 012 · sedang direkod
+  - Petugas 2 · Premis Contoh 027 · direkod serentak
+
+  Kad dipaparkan penuh dari 33.80 s hingga 38.07 s. Telefon pula menunjukkan Pasukan 1, dengan premis Petugas 1 sedang ditaip.
+- **"Setiap petugas boleh merekod dapatan pada telefon masing-masing."** 33.63–37.96 s.
+- **"Bagi premis yang ditugaskan, petugas merekod status lawatan, gejala dan rujukan."** bermula 39.50 s, iaitu 0.3 s sebelum ketikan status (39.80 s). Ayat ini menggantikan ayat kit "…dengan satu telefon".
+
+### 4. Simpan dan jadual (00:54–01:07)
+- **"Selepas rekod disimpan, sistem mengira dapatan pasukan secara automatik."** bermula 54.92 s, tepat pada ketikan Simpan.
+- **"Ringkasan dijana terus daripada rekod yang sama."** bermula 62.95 s, tepat ketika jadual "Hasil ACD" diisi.
+- **Tuntutan:** ayat kit lama "Ini menjimatkan masa menyediakan ringkasan" tidak lagi disuarakan. Ayat baharu menunjukkan dari mana masa dijimatkan, tanpa menyebut angka penjimatan.
+
+### 5. Narasi kelebihan (02:04–02:13)
+- **Teks:** "Rekod di telefon, kiraan liputan automatik, pengesahan dan ringkasan. Sistem membantu merancang lawatan susulan."
+- **Masa:** satu klip, 124.95–133.29 s. Ia bermula ketika kad pertama naik ke tengah (124.63–125.13 s, bahagian 9) dan tamat 1.0 s sebelum narasi penutup (134.30 s).
+- **Sari kata (fail SRT sahaja):** dua bahagian, b1 124.85–130.15 s dan b2 130.17–133.69 s.
+- **Muzik:** direndahkan 10 dB sepanjang bacaan. Suara 13.8–15.7 LU di atas muzik.
+- **Babak kelebihan:** dipanjangkan 1.9 s (kini 124.5–133.75 s) supaya bacaan muat sebelum penutup.
+
+### 6. Kelipan panel kanan "Ringkasan e-ACD" (Kg. Ketoyong, 01:44–02:04)
+
+**Punca dalam V8.** Pratonton sumber dan MP4 V8 menunjukkan perkara yang sama, jadi puncanya pada animasi, bukan pada pengekodan.
+1. **Sorotan kad "12 Berkunci / kosong"** hidup, padam dan hidup semula, setiap kali dalam satu bingkai (V8: 107.30, 109.80 dan 115.32 s). Kad "6 Belum dilawati" juga hidup dalam satu bingkai (104.25 s).
+2. **Senarai "Lawatan susulan dirancang"** membuka ruang 252 px dalam 0.25 s (112.35 s), jadi bahagian bawah panel melompat.
+3. **Pembukaan panel:** panel ditatal 372 px dengan pantas pada permulaan babak. Tatal (transform) dan pembesaran ringkasan (susun atur) dibundarkan secara berasingan. Akibatnya, blok di bawahnya bergerak tidak sekata dan undur ≈ 0.9 px (MP4 V8, 102.58 s). Draf pertama V9 juga melompat 1.84 px ketika panel berhenti, kerana tinggi akhirnya ditukar kepada `auto`.
+4. **Tolakan kamera perlahan 5 %** (V8: 116.5–121.6 s) menggerakkan teks panel secara sub-piksel. Dalam MP4, baris teks melompat satu piksel pada bingkai yang berlainan. Akibatnya panel kelihatan bergetar tepat ketika ia sepatutnya dibaca.
+
+**Pembaikan V9:**
+1. **Sorotan kad 6 dan 12** naik sekali sahaja, dengan pudar 0.3 s, pada detik babak (106.77 s dan 109.77 s). Kedua-duanya kekal hingga babak tamat.
+2. **Ruang senarai disediakan sejak awal babak**, jadi tinggi susun atur tetap. Senarai muncul di tempatnya dengan pudar 0.55 s sahaja; gelongsor 8 px dibuang kerana dalam MP4 ia bergerak selangkah satu piksel. Baris "Semak semula status · 12 premis" (117.4 s) juga mengisi ruang yang sudah disediakan. Tajuk dan kad angka tidak bergerak.
+3. **Pembukaan panel ialah satu gerakan lancar (0.8 s).**
+   - Tatal kini mengikut susun atur (`top`), bukan transform.
+   - Tatal dan pembesaran bergerak bersama dalam piksel penuh, dan berakhir tepat pada tinggi sebenar.
+   - Hasilnya, setiap blok bergerak satu arah sahaja (kad dan butang naik 372 px, blok bawah turun 263 px) dan berhenti tanpa lompatan.
+4. **Tolakan kamera dibuang.** Paparan ditahan pegun dari 105.55 s hingga hujung babak. Titik pasukan masih bergerak di peta, jadi gambar tidak kaku.
+5. **Nod kiri (berkaitan):** "6 belum dilawati" dan "12 berkunci / kosong" kini pudar 0.3 s; dalam V8 ia bertukar dalam satu bingkai. Rupa akhirnya sama dengan V8. Nod 12 masih menyala dua kali, kerana setiap kali mengikut narasi: "12 direkodkan…" dan "premis yang selebihnya".
+6. **Kotak sari kata (berkaitan):** kini kekal legap antara sari kata berturutan. Dalam V8, kotak itu malap kepada 0.60–0.77 kelegapan pada 9 pertukaran, dan berkelip penuh sekali (w2 → w3). V9 mempunyai 18 pertukaran berturutan, jadi tanpa pembaikan ini kelipan kotak akan bertambah. (Draf 2: sari kata dibuang daripada filem, jadi perkara ini tidak lagi kelihatan.)
+
+Bukti ujian ada dalam bahagian "Keputusan semakan V9" (H1–H3 pada pemain, dan `tools/check-mp4-panel.py` pada MP4).
+
+### 7. Jam filem V9 (02:21.4)
+
+| Segmen | V8 | V9 | Sebab |
+|---|---|---|---|
+| Aliran pembukaan | 0–6.5 s | 0–7.5 s | empat ayat pendek (+1.0 s) |
+| Borang manual → hentakan tajuk | 6.5–16.35 s | 7.5–18.85 s | c02/c03 selepas ayat pembukaan (+1.5 s) |
+| Tajuk → NADI → telefon → pengesahan | 16.35–87.95 s | 18.85–90.45 s | sama panjang |
+| Sisipan WhatsApp | 87.95–101.95 s | 90.45–104.45 s | sama panjang |
+| Susulan Kg. Ketoyong | 101.95–122.0 s | 104.45–124.5 s | sama panjang |
+| Kad kelebihan | 122.0–129.35 s | 124.5–133.75 s | narasi kelebihan (+1.9 s) |
+| Penutup | 129.35–137.0 s | 133.75–141.4 s | sama panjang |
+
+### 8. Narasi
+- **Klip baharu:** 10 klip ElevenLabs "Ahmad" (`eleven_v4`), 2 take setiap satu:
+  - a1–a4;
+  - n1 ("Inilah Nadi Muallim.");
+  - p1;
+  - c07n, c09n, c10n;
+  - b1b2.
+- **Klip lain:** 14 klip V8 dikunci pada take yang sama.
+- **Jumlah:** 24 klip untuk 29 sari kata.
+- **Kredit ElevenLabs V9:** ≈ 1,130–1,170 (1,126 aksara dijana, ditambah satu take c02s yang tersekat dan mungkin turut dicaj). Termasuk dalam angka ini ialah versi pendek c02s/c03s yang akhirnya tidak digunakan, kerana filem dipanjangkan.
+- **Jumlah keseluruhan V8 + V9:** ≈ 4,030–4,070 kredit. Angka ini dikira daripada bilangan aksara; ia perlu disahkan pada akaun ElevenLabs.
+
+### 9. Kad kelebihan dalam orbit, fokus satu demi satu (draf 2, 02:04–02:13)
+
+**Analisis rujukan.** Video Threads yang diberi ialah promosi 32.5 s (960 × 720, 24 fps) untuk aplikasi "OneLid", dibina dengan Three.js. Ia dianalisis bingkai demi bingkai: helaian 2, 8 dan 24 bingkai sesaat, serta penjejakan warna untuk mengukur gerakan.
+
+| Elemen terapung | Masa | Gerakan |
+|---|---|---|
+| Kad UI 3D (notifikasi "Claude Code", panel tetapan) | 3.5–6 s, 8.5–17.5 s | terapung di udara, condong 3D, hanyut perlahan (≈ 20 px/s) |
+| Ikon satelit (logo Claude, OpenAI, potret), torus, sfera dan kiub kecil | 14.2–17.4 s | mengorbit panel lawan arah jam: jejari ≈ 35 px, ≈ 4–5 s sepusingan; membesar ≈ 11 % di bahagian depan (orbit condong 3D); objek di luar satah fokus dikaburkan |
+| Fokus panel | 16.8–17.4 s | garis cahaya putih dan zum ≈ 5 % |
+| Lencana "Low Battery", "Too Hot", "Stopped: Battery 10%" dan tanda "?" | 18.0–19.0 s | masuk satu demi satu, ≈ 0.4 s berselang; terbang masuk dalam 0.15–0.25 s, perlahan di hujung, dengan kabur gerakan |
+| Huruf "Z z" | 2–4 s | naik dan berpusing perlahan |
+| Peralihan | 6.5, 12.9, 17.5, 21.5 s | sapuan kamera pantas dengan kabur gerakan |
+
+**Reka bentuk dalam V9:**
+- **Orbit:** empat kad terapung pada orbit elips di sekeliling tengah bingkai, lawan arah jam, satu pusingan setiap 18 s.
+  - Kad di belakang lebih kecil (0.42×), malap dan kabur ≈ 2.3 px.
+  - Kad di depan lebih besar (0.62×) dan tajam.
+  - Setiap kad turun-naik perlahan (±9 px) dan condong menghadap tengah.
+- **Fokus:** pada frasa narasinya, kad meninggalkan orbit 0.2 s sebelum perkataan dan tiba di tengah dalam 0.55 s pada saiz penuh, dengan cahaya putih lembut seperti fokus panel dalam rujukan. Kad sebelumnya kembali ke tempatnya pada orbit pada masa yang sama.
+- **Kad yang difokuskan pegun** pada piksel penuh dan skala 1, supaya teksnya tajam. Gerakan sub-piksel membuat teks bergetar, seperti yang berlaku pada panel dalam draf 1.
+
+| Kad | Frasa narasi (mula) | Ke tengah | Di tengah (pegun) |
+|---|---|---|---|
+| Rekod ACD pada telefon | "Rekod di telefon," 124.95 s | 124.60–125.15 s | 125.15–126.31 s |
+| Kiraan liputan automatik | "kiraan liputan automatik," 126.51 s | 126.31–126.86 s | 126.86–128.13 s |
+| Pengesahan dan ringkasan | "pengesahan dan ringkasan." 128.33 s | 128.13–128.68 s | 128.68–130.37 s |
+| Perancangan lawatan susulan | "Sistem membantu merancang lawatan susulan." 130.57 s | 130.37–130.92 s | 130.92–133.24 s (babak mula pudar) |
+
+- **Masa frasa:** dibaca daripada tenaga jalur frekuensi (bingkai 20 ms) dalam `narasi-v9.wav`.
+  - "Sistem" bermula pada 130.57 s. Suara menarik nafas dahulu (130.18–130.46 s), jadi sempadan sari kata b2 (130.17 s) bukan permulaan perkataan.
+- **Saiz kad:** kad dilukis pada saiz fokus (600 × 360 px, tajuk 46 px) dan dikecilkan pada orbit.
+
+### 10. Sari kata dibuang daripada filem (draf 2)
+- **Yang dibuang:** kotak sari kata dan bayangnya, dalam pemain dan MP4, serta butang "Sari Kata" dan kekunci S.
+- **Yang kekal (sebagai data sahaja):** masa sari kata. Ia digunakan untuk mengukur keseimbangan suara dengan muzik (E4) dan untuk fail `sari-kata-bm-v9.srt` yang berasingan.
+- **Kesan pada gambar:** bahagian bawah bingkai kini kosong. Tiada elemen lain dianjak.
+
+### 11. Peralihan borang manual → kad tajuk → NADI tanpa sentakan (draf 3)
+
+**Punca (diukur pada MP4 draf 2, bingkai demi bingkai):**
+1. **Gambar beku 2 s (16.0–18.0 s):** selepas "14" ditaip, kamera berhenti sepenuhnya sementara narasi masih berjalan. Gambar yang beku sambil bunyi terus berjalan kelihatan seperti video tersekat.
+2. **Dua peralihan bertindih:**
+   - Babak manual undur dan pudar ke gelap (18.55–18.73 s).
+   - Jata dan tajuk muncul di atas latar gelap kira-kira 0.15 s *sebelum* hentakan.
+   - Pada hentakan (18.85 s), latar teal muncul dalam satu bingkai dan kilat 0.9 menyala serta-merta: perubahan 8.2 dalam satu bingkai.
+   - Punca teknikal: animasi ini menggunakan jam cerita, yang menukar kelajuan ×1.66 betul-betul pada hentakan.
+3. **Kad tajuk → peta:** tajuk hilang dahulu dan peta masuk kemudian, jadi skrin hampir hitam selama ≈ 0.1 s (22.25–22.32 s).
+4. **Bingkai berat dalam pemain:** bingkai paling berat ialah semasa babak manual undur sambil pudar (18.1–18.4 s), dan ini boleh menjatuhkan bingkai ketika dimainkan secara langsung.
+
+**Pembaikan (semuanya pada jam filem, jadi tidak terjejas oleh perubahan kelajuan jam cerita):**
+1. **Tiada lagi berhenti mati:** kamera terus menolak perlahan ke sel "14" (laju bertambah perlahan-lahan). Sel itu tidak beranjak sambil dibaca (0 px dari 11.85 hingga 12.33 s cerita).
+2. **Resapan terus ke tajuk:**
+   - Babak manual larut terus ke dalam tajuk (0.45 s sebelum hentakan), sambil kamera terus ke hadapan.
+   - Latar teal masuk di bawahnya lebih awal (0.85–0.4 s sebelum hentakan), jadi tiada bingkai gelap.
+   - Tajuk naik dengan satu lengkung lembut, penuh pada hentakan, dan stabil pada 19.30 s.
+   - Kilat diganti dengan cahaya lembut (puncak 0.35, naik dalam 4 bingkai).
+3. **Cahaya menyapu tajuk:** jalur cahaya menyapu huruf "NADI Muallim" semasa narasi menyebutnya (20.7–21.8 s). Huruf tidak bergerak, jadi tiada getaran teks.
+4. **Tajuk → peta:** peta mula masuk 0.2 s lebih awal dan bertindih dengan tajuk yang keluar. Latar teal kekal sehingga peta hampir penuh.
+
+**Bukti (pemain; semakan V4 dan V13):**
+
+| Ukuran | Draf 2 | Draf 3 |
+|---|---|---|
+| Bingkai beku semasa "tahan" selepas menaip | 100 | **0** |
+| Lompatan terbesar satu bingkai (kilat) | 0.9 | **0.11** |
+| Liputan latar semasa babak manual → tajuk (1 = tiada gelap) | 0.005 | **1.00** |
+| Liputan latar semasa tajuk → peta | 0.23 | **0.99** |
+
+### 12. Latar 3D fotorealistik: imej Google Earth dengan kubah 200 m dan putaran (draf 3, 0:22–0:30)
+
+**Sejarah keputusan:**
+1. Google Earth Studio dipilih pada mulanya.
+2. Pengguna kemudian meminta kampung 3D hipotetikal. Versi prosedural itu siap, tetapi tidak dirender ke MP4; sumbernya disimpan dalam pad kerja (`v9-draf3-prosedural/`).
+3. Pengguna akhirnya memberi tangkapan Google Earth dan meminta putaran "dari kanan ke kiri".
+4. Tangkapan pertama terlalu dekat: bulatan 200 m sebenar melimpah keluar dari tepi imej. Pengguna memberi tangkapan kedua yang lebih luas, dan itulah yang digunakan.
+
+**Lokasi dan skala sebenar.** Kubah tidak diletak dengan mata.
+- Tangkapan dipadankan secara automatik dengan peta satelit V6 (`assets/peta-glob.jpg`, skala 100 m = 106 px):
+  - 568 padanan SIFT;
+  - homografi tanah dengan ralat median 2.3 px.
+- Pusat kubah ialah pusat bulatan wabak peta GIS PKD, sama seperti bulatan 200 m pada pembukaan V6. Ia titik tengah antara kes, bukan rumah kes.
+- Jejari kubah ialah 200 m pada skala tanah sebenar.
+- Pada tangkapan ini, bulatan 200 m meliputi kampung yang berlongkang (garisan gelap itu longkang dalam imejan, seperti dalam V6).
+
+**Kamera dipulihkan daripada foto** (`tools/make-aerial-camera.py`):
+- Homografi diurai menjadi kamera lubang jarum.
+- Titik prinsipal dipilih supaya penguraian tepat: (1182.5, 674), iaitu di kanan dan di bawah pusat imej. Ini konsisten dengan tangkapan yang dipotong butang kawalan dan bar bawah Google Earth.
+- Panjang fokus: f = 2283 px.
+- Kamera: ±783 m di udara, 1.4 km ke timur, memandang ke barat 32.5° di bawah ufuk.
+- Ralat kamera berbanding homografi ≤ 0.26 px dalam ±300 m.
+
+**Cara 3D dibina (`src/kampung3d.js`, three.js r158, MIT):**
+- **Tanah:**
+  - Foto diunjur semula ke satah tanah melalui kamera asalnya.
+  - Pada putaran 0°, kanvas mengulang foto asal dengan korelasi 0.998; bezanya hanyalah gred warna.
+  - Gred: ketepuan −10 % dan sedikit hangat.
+  - Penajaman ringan untuk pembesaran 1.3×.
+  - Vinyet lembut di sekeliling kubah.
+- **Putaran:**
+  - Kamera berputar mengelilingi paksi menegak melalui pusat wabak, −6° → +20° (26°) dalam 8 s, sambil mendekat 4 %.
+  - Bahagian depan bergerak dari kanan ke kiri, dan pusat kubah kekal di tempatnya (610, 640).
+  - Gerakan sudah bermula semasa panel muncul dan masih bergerak semasa panel keluar, jadi tiada hentian.
+  - Untuk arah sebaliknya, terbalikkan `K3D_SHOT.turn`. Liputan foto pada arah itu perlu disemak semula.
+- **Liputan:** foto melitupi setiap piksel yang kelihatan sepanjang putaran.
+  - Hanya jalur ±30 px di sekeliling kad (bucu termasuk) berada di luar foto. Jalur ini diisi foto bercermin di bawah kabus.
+  - Semakan K3 menguji kedua-dua hujung putaran.
+- **Kubah dan elemen 3D:**
+  - Hemisfera kaca jingga 200 m dengan tepi bercahaya.
+  - Denyutan setiap 1.6 s: gelombang terang naik dari tanah ke puncak.
+  - Cakera tanah dengan garis tepi 200 m, dan tiga gelang mengembang.
+  - Label "Kg. Ketoyong · 4 kes" mengikut puncak garis kubah, dan "Kawasan wabak · radius 200 m" mengikut tepi gelang yang dekat.
+  - **Tiada pin rumah kes**, sama seperti V6.
+- **Penyepaduan:**
+  - Kanvas menutup bahagian panel peta NADI yang kelihatan (1708 × 1013 px).
+  - Peta 2D disembunyikan untuk 22.0–29.9 s, dan kembali untuk babak susulan.
+  - Label sistem (atas kiri) menjadi "Kad lokaliti · imej udara".
+  - Kredit "Imej: Google Earth · ©2026 Airbus, CNES / Airbus, Maxar Technologies" di bawah kiri.
+- **Luar talian:**
+  - Foto (`assets/udara-3d.jpg`, 1.0 MB) dan three.js dibenamkan dalam HTML, yang kini 7.8 MB.
+  - Pemain tidak memuatkan apa-apa dari rangkaian.
+  - Adegan dibina semasa pemain dimuat, supaya tiada sangkut pada 0:22.
+- **Kos render:** ±0.4 s tambahan setiap bingkai 3D pada WebGL perisian. Kampung prosedural memerlukan ±1.7 s.
+
+### 13. Pemain HTML berdiri sendiri, resolusi skrin (HD / 4K)
+
+- **Satu fail.** `video-showcase-v9.html` (7.8 MB) memuatkan semua fon, imej, three.js, muzik dan narasi.
+  - Dibuka terus daripada fail (`file://`), tanpa pelayan dan tanpa rangkaian. Semakan A1: 0 permintaan.
+  - Diuji dalam Chromium. Chrome dan Edge terkini disyorkan; Firefox dan Safari belum diuji.
+- **Pentas vektor.** Pentas 1920 × 1080 ialah DOM yang diskalakan mengikut tetingkap. Teks, ikon dan SVG sudah dilukis pada resolusi skrin.
+- **Kanvas WebGL ikut resolusi skrin.** Glob pembukaan dan imej udara 3D kini juga dilukis pada resolusi skrin, bukan pada 1× lalu dibesarkan.
+  - Skala = skala pentas × `devicePixelRatio`, dalam langkah 0.25 dari 1 hingga 3.
+  - TV 4K dalam skrin penuh = 2×. Paparan Retina 1920 × 1080 = 2×.
+  - Skala dikemas kini apabila tetingkap diubah saiz atau dialih ke skrin lain.
+- **Ukuran pada 2×.** Dibandingkan dengan 1× yang dibesarkan, tenaga perincian halus (Laplacian) ialah:
+
+  | Kawasan | Gandaan |
+  |---|---|
+  | Teks DOM (kad aliran, kad lokaliti, label 3D, telefon) | 4.1–5.6× |
+  | Glob WebGL | 5.7× |
+  | Kubah + foto | 1.7× (dihadkan oleh foto sumber) |
+
+  Tangkapan pada 3840 × 2160 dan pada DPR 2 memberi nilai yang sama.
+- **MP4 tidak berubah.** Eksport dan semakan kekal pada 1×. Lapan bingkai ujian (glob, imej 3D, telefon, penutup) sama bait demi bait dengan binaan sebelum HD.
+- **Had resolusi.** Tiga bitmap terhad oleh resolusi sumbernya, jadi pada 4K ia lebih lembut daripada teks:
+  - foto Google Earth (2000 × 1253, dipaparkan 1.3×);
+  - tekstur glob (2048 × 1024);
+  - Jata Negara (176 × 133).
+
+  Untuk imej udara yang lebih tajam, ambil tangkapan Google Earth yang sama pada ≥ 3840 px, kemudian daftar semula dengan `tools/make-aerial-camera.py`. Pemalar `K3D_CAM` akan dikira semula.
+- **Pembentangan:**
+  1. Buka fail.
+  2. Tekan **F** untuk skrin penuh dan **C** untuk mod bersih (tanpa bar kawalan; Esc keluar).
+  3. Klik pertama mengaktifkan bunyi. **Ruang** untuk main atau jeda.
+
+## Keputusan semakan V9
+
+`node tools/check-player.js` menjalankan 87 semakan, dan **87/87 lulus** pada pemain akhir (draf 3, imej Google Earth). Semakan yang baharu atau dikemas kini:
+
+| Semakan | Bukti |
+|---|---|
+| A3 / A4 | 141.4 s × 60 = 8,484 bingkai; segmen 0 · 18.6 · 29.8 · 54.5 · 67.5 · 83.5 · 90.45 · 104.45 · 124.5 · 133.75 · 141.4. |
+| C3 | 29 sari kata: 18 kit (c07/c09/c10/c14/c15 teks baharu), 3 WhatsApp di dalam sisipan, dan 8 baris V9. Semuanya pada masa dalam `penempatan-v9.json`. |
+| V4 | Draf 3: menaip selesai pada 11.85 s cerita; kamera terus menolak perlahan hingga resapan (0 bingkai beku), dan sel "14" kekal di tempatnya (0 px). |
+| V13 | Draf 3: borang manual → tajuk → peta NADI. Setiap lapisan berubah ≤ 0.12 sebingkai (maksimum 0.112), dan liputan latar 1.00 / 0.99 (tiada celah gelap). |
+| K3 | Draf 3: imej Google Earth dalam 3D menutup panel peta yang kelihatan (1708 × 1013 px; foto 2000 × 1253; kredit Google Earth; label "imej udara"). Peta 2D disembunyikan, dan kembali pada 95 s. Kubah 200 m pada pusat wabak kekal pada (610, 640) dari bingkai kelihatan pertama (22.07 s) hingga terakhir (29.83 s). Putaran kelihatan 25.7°, dan titik depan bergerak 294 px ke kiri. Foto melitupi 1,849/1,849 titik sampel yang kelihatan pada kedua-dua hujung. |
+| C5 | Draf 2: tiada sari kata dalam filem. Tiada kotak atau bayang sari kata dalam halaman, dan tiada satu pun daripada 29 baris dipaparkan pada masanya. |
+| F7 | Draf 2: tiada butang "Sari Kata", dan kekunci S tidak mengubah keadaan pemain. |
+| N1 | Fail SRT: setiap kiu meliputi perkataannya, dari sebelum ia diucapkan hingga ≥ 0.2 s selepasnya (≥ 0.1 s jika baris seterusnya menyusul serta-merta). |
+| N2 | Setiap baris bermula pada detiknya atau ≤ 1.5 s kemudian (c02 +1.39 s dan c03 +2.07 s, selepas ayat pembukaan); jarak ≥ 0.25 s; "84 peratus" tepat pada detiknya. |
+| N4 | Ayat baharu tepat pada gambarnya: a1–a4 pada kad 1–4; n1 1.0 s selepas tajuk stabil; c04 0.08 s selepas peta mendarat; p1 dengan kad dua petugas; c07 0.3 s sebelum ketikan status; c09 pada Simpan (0.00 s); c10 pada jadual (0.00 s); b1 bermula ketika kad pertama naik ke tengah (124.63–125.13 s); b2 tamat 1.0 s sebelum penutup. |
+| T1 / T2 | Tajuk dua baris, "masing-masing" utuh, 185 px dari telefon dan 44 px di atas kad contoh. Kad dua petugas (Premis Contoh 012 dan 027) dipaparkan penuh sepanjang ayat p1. |
+| H1 | Panel "Ringkasan e-ACD" (104.45–124.5 s): sorotan 6 dan 12 naik sekali dan tidak pernah turun; senarai dan baris semakan semula pudar masuk sekali; tinggi ruang senarai tetap (139 px CSS); 0.00 px pergerakan selepas panel dibuka. |
+| H2 | Draf 2, orbit: kad yang tidak difokuskan bergerak dalam setiap bingkai (0 bingkai pegun daripada 1,449), lawan arah jam (0 langkah ikut arah jam). Di belakang lebarnya 258 px dan kabur 2.3 px; di depan 361 px dan kabur 0.2 px. |
+| V10 | Draf 2: kad 1–4 masing-masing difokuskan — di tengah, skala 1, tajam dan bercahaya — dari ≤ 0.4 s selepas frasanya bermula hingga frasa seterusnya; keempat-empat kad kekal kelihatan (≥ 0.62) di dalam bingkai; kad 4 bertanda Prototaip Integrasi. |
+| N5 | Draf 2: empat detik fokus ialah permulaan frasa dalam `narasi-v9.wav`. Sebelum detik −64.6 hingga −46.2 dBFS (senyap); dalam 0.25 s selepasnya −18.1 hingga −19.8 dBFS (suara). |
+| H3 | Nod kiri: 6 menyala sekali, 12 dua kali, setiap satu dengan pudar (langkah maksimum 0.15 sebingkai). |
+| H4 | Pembukaan panel: kad dan butang naik 371.8 px, blok bawah turun 263.1 px, 0 langkah undur, 0 px perubahan selepas tamat (V8: 1 langkah undur). |
+| E4 | Muzik direndahkan 9 dB (pembukaan), 14 dB (crescendo) dan 10 dB (lain-lain); 0 dB pada hentakan tajuk; suara 11.8–22.3 LU di atas muzik dalam setiap sari kata. |
+| E3 / E9 | Program −16.0 LUFS, puncak −2.8 dBFS; limiter induk 0 dB. |
+
+**Pengesahan MP4 draf 3** (`NADI-Muallim-Pitch-141s-v9.mp4`, imej Google Earth; render 17 min 49 s):
+- **ffprobe:** H.264 High 1920 × 1080 yuv420p bt709, 60/1, 8,484 bingkai, 141.400 s; AAC 48 kHz 2 saluran, 141.400 s.
+- **Audio:**
+  - −16.0 LUFS, LRA 4.9 LU (tidak berubah).
+  - Narasi hadir dalam semua 29 tetingkap kiu: r = 0.930–0.974, lag 0.00 ms.
+- **0:16–0:31 bingkai demi bingkai** (`mp4-seg-curve`):
+  - Tiada regangan beku ≥ 0.5 s. Draf 3a ada empat (23.05 s selama 1.27 s, 24.33 s selama 1.98 s, dan lain-lain), kerana peta 2D statik.
+  - Tiada lonjakan, dan tiada kelipan A-B-A.
+  - Perubahan dalam 22.5–29.0 s ialah 0.8–1.4 aras kelabu sebingkai (draf 3a: 0.00–0.01), iaitu putaran dan denyutan berterusan.
+  - Puncak pada 22.0 s ialah resapan tajuk → imej udara. Puncak pada 29.5 s ialah peralihan yang disengajakan ke telefon pada 29.80 s.
+- **Denyutan kubah:** kecerahan kawasan kubah pada 23.0–29.4 s berulang setiap **1.600 s** (autokorelasi 0.74), sama seperti reka bentuk.
+
+**Pengesahan MP4** (`NADI-Muallim-Pitch-141s-v9.mp4`, draf 2):
+- **ffprobe:** H.264 High 1920 × 1080 yuv420p bt709, 60/1, 8,484 bingkai, 141.400 s; AAC 48 kHz 2 saluran, 141.400 s.
+- **Kenyaringan:** −16.0 LUFS, LRA 4.9 LU, puncak −2.7 dBFS (sama seperti draf 1; audio tidak diubah).
+- **Kehadiran narasi:** dalam setiap 29 tetingkap kiu, audio MP4 berkorelasi dengan narasi pada r = 0.930–0.996, dengan lag 0.00 ms.
+- **Rangkaian:** 0 permintaan.
+- **Tiada sari kata:** di kawasan sari kata lama, pada titik tengah setiap 29 kiu, draf 1 mempunyai teks sari kata (ketumpatan tepi teks 1.3–6.4 %), manakala draf 2 tidak (0.0–1.9 %).
+  - 10 titik melebihi 1 %, dan kesemuanya disemak dengan mata: ia teks antara muka babak itu sendiri, iaitu panel "Kawalan Kesihatan Awam", medan borang telefon, bar tab telefon dan jadual WhatsApp.
+- **Kad dalam fokus (draf 2):** di kawasan teks kad pada tengah bingkai, setiap tempoh fokus tiada perubahan langsung (64/64, 71/71, 98/98 dan 134/134 bingkai tidak berubah), dan tiada kelipan.
+- **Kestabilan panel** (`tools/check-mp4-panel.py`, babak susulan, 19.45 s pada 60 fps; V8 102.25–121.7 s berbanding V9 104.75–124.2 s):
+
+| Kawasan | Ukuran | V8 MP4 | V9 MP4 |
+|---|---|---|---|
+| Panel kanan, atas | kelipan ketika pegun (A-B-A / A-B-B-A) | 4 | **0** |
+| | perubahan dalam satu bingkai | 145 (sorotan, lompatan senarai, getaran zoom) | **3** (klik butang ×2, bingkai akhir pembukaan panel) |
+| | bingkai tanpa perubahan | 766 / 1,166 | **1,032 / 1,166** |
+| Panel kanan, bawah | kelipan / getaran undur / perubahan satu bingkai | 2 / 1 / 38 | **0 / 0 / 1** |
+| Nod kiri 92 / 12 / 6 | perubahan dalam satu bingkai | 6 | **0** |
+
+  - **Corak A-B-A semasa pembukaan panel (0.6 s) tidak dikira sebagai kelipan.** Ia datang daripada baris teks yang bergerak. Penjejakan jalur menunjukkan setiap blok bergerak satu arah sahaja (semakan H4).
+  - **Kursor penyelia** dikenal pasti sebagai objek bergerak, bukan kelipan.
+- **Sumber berbanding MP4:** PSNR panel antara tangkapan pemain dan bingkai MP4 ialah 45.7–46.8 dB pada 6 titik (105.5–121.7 s), jadi kedua-duanya sama secara visual.
+
+## Perkara untuk perhatian (V9)
+
+- **Ejaan "analisa" (c14):** ejaan baku DBP ialah "analisis". Teks dikekalkan seperti yang diminta dalam V8. Untuk menukarnya, klip c14c15 perlu dijana semula.
+- **Sebutan:** belum disemak secara automatik, kerana tiada ASR setempat. Sila dengar terutamanya "Muallim", "Ketoyong", "diisytiharkan" dan "masing-masing".
+- **Panjang:** 02:21.4, melebihi 02:17 dalam permintaan asal. Semak had masa pertandingan, jika ada.
+- **Tuntutan dalam skrip:**
+  - "Borang kertas tidak perlu dibawa untuk tugas ini" (c08, teks kit) masih disuarakan.
+  - Ayat penjimatan masa (c10 lama) telah diganti.
+  - Tiada angka penjimatan, kadar ralat atau penggantian kertas dalam filem.
+- **Lesen:** seperti V8, semak syarat pelan ElevenLabs untuk suara pustaka, dan sama ada pertandingan mewajibkan pendedahan suara AI. Perkara ini perlu disahkan.
+- **Tanpa sari kata (draf 2):** penonton yang menonton tanpa bunyi tidak akan mendapat narasi. Jika filem dimuat naik ke platform yang menyokong sari kata tertutup (contohnya YouTube), fail SRT boleh dimuat naik berasingan.
+- **Masa bacaan kad (draf 2):** kad 1–3 pegun di tengah selama 1.2–1.7 s, dan kad 4 selama 2.3 s. Tajuk mudah dibaca, tetapi baris keterangan mungkin tidak sempat dibaca sepenuhnya, kerana kad mengikut rentak narasi.
+- **Hak imej Google Earth (draf 3):** pengendalian sama seperti V6.
+  - Kredit pada skrin: "Imej: Google Earth · ©2026 Airbus, CNES / Airbus, Maxar Technologies". Pembekal imejan disalin daripada kredit Google Maps V6 bagi kawasan yang sama, kerana bar atribusi tidak ada dalam tangkapan yang diberi. Sila samakan dengan teks yang tertera di bahagian bawah Google Earth semasa tangkapan dibuat.
+  - Penggunaan awam (contohnya dimuat naik untuk pertandingan) tertakluk kepada syarat Google Maps/Earth. **Ini perlu disahkan.**
+- **Lokasi sebenar (draf 3):** imej menunjukkan pekan sebenar, dan kubah berada pada pusat wabak GIS. Seperti V6, hanya kawasan 200 m ditanda. Tiada pin, label atau garisan rumah kes.
+- **WebGL (draf 3):** pemain HTML memerlukan WebGL untuk imej udara 3D. Tanpa WebGL, peta 2D ditunjukkan; MP4 sentiasa menggunakan imej 3D. Pada komputer tanpa pecutan grafik, 0:22–0:30 mungkin bermain perlahan dalam pemain.
+- **Rangkaian (draf 2):** untuk memuat turun video rujukan, empat hos ditambah pada environment "PKD Muallim denggi": `www.threads.com`, `static.cdninstagram.com`, `scontent-ord5-1.cdninstagram.com` dan `scontent-ord5-2.cdninstagram.com`. Filem sendiri tidak memanggil mana-mana hos, dan keempat-empatnya boleh dibuang jika tidak diperlukan lagi.
+
+## Bina, semak dan render (V9)
+
+```bash
+python3 -I tools/place-narration-v9.py . --take a1=A --take a2=B --take a3=B --take a4=A --take c02=B --take c03=A --take n1=B --take c04=A --take c05c06=A --take p1=B --take c07n=B --take c08=B --take c09n=A --take c10n=A --take c11=A --take c12=B --take c13=B --take w1=B --take w2=B --take w3=A --take c14c15=A --take c16c17=B --take b1b2=A --take c18c19=A
+#   → narasi-v9/narasi-v9.wav + penempatan-v9.json (24 take V9 dikunci; take V8 kekal sama)
+THREE_JS=/path/to/three.min.js TAILWIND_BIN=/path/to/tailwindcss node tools/build-player.js   # → video-showcase-v9.html (narasi + three.js r158 terbenam; enggan menulis atas v2–v8)
+#   THREE_JS boleh ditinggalkan selepas `npm install` (devDependency three 0.158.0 → node_modules/three)
+node tools/make-docs.js                                         # → sari-kata-bm-v9.srt
+node tools/check-player.js                                      # 87 semakan automatik (±15 minit; WebGL perisian)
+node render-video.js                                            # → NADI-Muallim-Pitch-141s-v9.mp4 (+ ffprobe, semakan kehadiran narasi)
+python3 -I tools/check-mp4-panel.py NADI-Muallim-Pitch-141s-v9.mp4 104.75 124.2                                       # panel kanan (atas)
+python3 -I tools/check-mp4-panel.py NADI-Muallim-Pitch-141s-v9.mp4 104.75 124.2 --box 1324,860,352,156 --bands 868:1012  # panel kanan (bawah, di luar sari kata)
+python3 -I tools/check-mp4-panel.py NADI-Muallim-Pitch-141s-v9.mp4 104.75 124.2 --box 48,488,644,152                    # nod kiri 92 / 12 / 6
+```
+
+Jika masa sari kata berubah (contohnya selepas `--take`), salin jadual `captions` daripada `penempatan-v9.json` ke `NARR_CAPTIONS` dalam `src/data.js`. Semakan C3 akan gagal sehingga kedua-duanya sama.
+
+## Dokumentasi V8 (137 s, bernarasi ElevenLabs, disimpan untuk perbandingan)
+
+Filem 02:17.000 (1920 × 1080, 60 fps, 8,220 bingkai) untuk **Pejabat Kesihatan Daerah Muallim**. V8 ialah gambar V7 yang sama, dengan narasi suara ElevenLabs bagi 21 baris sari kata V7. Baris pada 1:44 diolah semula atas permintaan (lihat bahagian 6). Keputusan yang diminta:
+- **Suara:** Ahmad (ElevenLabs, model `eleven_v4`).
+- **Skrip:** sari kata V7. Teks suara diambil daripada medan `say` dalam `src/data.js`, iaitu sari kata yang sama. Angka disebut dalam perkataan seperti skrip suara asal, dan "NADI" ditulis "Nadi" supaya tidak dieja huruf demi huruf.
+- **Masa:** baris dianjak dalam 137 s. Panjang filem, gambar dan masa babak tidak berubah.
+
+Semua rekod, nama dan angka ialah **data simulasi**. Pemain dan MP4 tidak memanggil ElevenLabs, aplikasi langsung, Google Sheets, peta atau WhatsApp. Narasi dijana sekali sahaja dan dibenamkan dalam pemain.
+
+### Fail V8 (untuk dihantar)
+
+| Fail | Kegunaan |
+|---|---|
+| `NADI-Muallim-Pitch-137s-v8.mp4` | Filem akhir V8: H.264 High 1920 × 1080, CFR 60 fps, 8,220 bingkai, 137.000 s; AAC 48 kHz stereo; narasi Ahmad + muzik latar dan kesan bunyi. Saiz 55.3 MB. |
+| `video-showcase-v8.html` | Pemain HTML kendiri luar talian, dengan narasi terbenam sebagai FLAC tanpa kehilangan. Kekunci 1–9 dan 0 untuk 10 babak. |
+| `sari-kata-bm-v8.srt` | 21 baris sari kata, dengan masa mengikut suara. |
+| `narasi-v8/narasi-v8.wav` | Trek narasi 137.000 s (48 kHz mono 16-bit) pada jam filem. |
+| `narasi-v8/penempatan-v8.json` | Take yang dipilih, masa setiap baris dan masa sari kata. |
+| `narasi-v8/takes/`, `narasi-v8/takes-elevenlabs.json` | Take asal ElevenLabs (2 bagi setiap klip; take lama c14/c15 disimpan sebagai `replaced`), beserta suara, model dan ID penjanaan. |
+
+**Disimpan untuk perbandingan (tidak diubah):** V7 (`NADI-Muallim-Pitch-137s-v7.mp4`, `video-showcase-v7.html`, `sari-kata-bm-v7.srt`), dan V6–V2 seperti dalam dokumentasi di bawah.
+
+### Perubahan V8 berbanding V7
+
+#### 1. Narasi ElevenLabs "Ahmad"
+- **17 klip:** baris 5–6, 14–15, 16–17 dan 18–19 dijana sebagai satu ayat setiap satu, supaya intonasinya semula jadi. Setiap klip ada 2 take.
+- **Pemilihan take:** dibuat secara automatik. Take yang dipilih ialah yang kadar bercakapnya paling hampir dengan median (4.8 suku kata sesaat) dan muat dalam ruangnya. Untuk menukar take selepas mendengar: `python3 -I tools/place-narration-v8.py . --take c03=B`.
+- **Rantaian suara bagi setiap klip:**
+  - aras −20 LUFS;
+  - pemampat lembut 2.5:1;
+  - had puncak suara −6 dBFS, jadi nisbah puncak kepada kenyaringan ≈ 14 dB.
+
+  Akibatnya, limiter induk tidak lagi perlu memotong suara.
+- **Kredit ElevenLabs:** 2,106 untuk narasi, 210 untuk ayat baharu 1:44, dan 584 untuk sampel perbandingan suara (jumlah 2,900).
+
+#### 2. Penempatan dalam 137 s
+- **Masa mula:** setiap baris bermula pada masa sari kata V7. Tiga baris dianjak kerana baris sebelumnya masih bercakap:
+  - baris 2: +1.29 s;
+  - baris 4–5: +0.31 s;
+  - WhatsApp 2: +0.18 s.
+
+  Ayat baharu 1:44 pula bermula 0.45 s **lebih awal** (lihat bahagian 6).
+- **Jarak dan sempadan:** jarak minimum antara baris ialah 0.35 s, dan setiap baris tamat sebelum babaknya tamat.
+- **Detik penting:**
+  - "Liputannya lapan puluh empat peratus" tepat pada detik V7.
+  - Tiga baris WhatsApp berada di dalam sisipan.
+- **Jumlah suara:** 77.8 s.
+
+#### 3. Sari kata mengikut suara
+- **Masa paparan:** setiap sari kata muncul 0.10 s sebelum suara dan kekal 0.40 s selepasnya. Ia tidak melepasi hujung babak; contohnya, baris 2 tamat pada 16.10 s, sebelum hentakan tajuk.
+- **Baris gabungan:** sari kata dipecah pada sempadan perkataan, iaitu pada 29.37 s, 108.44 s, 115.35 s dan 131.40 s.
+- **Teks:** sama seperti V7 dan kit, kecuali c14/c15 (bahagian 6). Semakan C8 masih lulus: penyelia memilih "Rancang lawatan susulan" (112.2 s) semasa sari kata "Penyelia menjadualkan…" dipaparkan.
+
+#### 4. Campuran audio
+- **Muzik dan kesan bunyi:** sama seperti V7. Ia direndahkan 10 dB di bawah suara, dan 14 dB semasa crescendo babak manual (degupan jantung, detik dan riser), kerana di situlah muzik paling kuat.
+- **Hentakan tajuk (16.35 s):** jatuh pada kekuatan penuh, kerana pengecilan dilepaskan dalam 0.25 s sebelumnya. Tanpa pembetulan ini, hentakan jatuh ≈ 5 dB lebih perlahan.
+- **Keseimbangan:** suara 11.9–16.4 LU di atas muzik dalam setiap sari kata.
+- **Program:** −16.0 LUFS, puncak −2.8 dBFS, dan limiter induk tidak memotong langsung (0 dB).
+
+#### 5. Dikekalkan seperti V7
+Gambar, animasi, masa babak, glob peta dan radius 200 m, sisipan WhatsApp, babak manual yang diperlahankan, tahanan liputan yang bergerak, dan panjang 137 s.
+
+#### 6. Baris 1:44 diolah semula (permintaan selepas draf pertama V8)
+- **Teks lama (dua baris):** "Enam premis belum dilawati." / "Dua belas direkodkan berkunci atau kosong."
+- **Teks baharu (satu ayat):** "Daripada analisa automatik sistem, enam premis belum dilawati, dua belas direkodkan berkunci atau kosong."
+- **Sari kata:** "Daripada analisa automatik sistem, / 6 premis belum dilawati," (c14) dan "12 direkodkan berkunci / atau kosong." (c15). Angka ditulis dalam digit seperti permintaan, dan disebut dalam perkataan.
+- **Masa:** ayat ini panjangnya 8.2 s, dari 103.45 s hingga 111.65 s. Ia bermula 0.45 s sebelum detik V7, ketika babak susulan sudah dipaparkan. Ini supaya baris "Penyelia menjadualkan…" kekal pada 112.00 s, dan klik penyelia (112.2 s) kekal di bawah sari katanya.
+- **Yang lain tidak berubah:** 16 klip lain dikunci pada take yang sama. Trek narasi sama tepat dengan draf pertama di luar 103.3–111.9 s (0 sampel berbeza).
+
+### Keputusan semakan V8
+
+`node tools/check-player.js` menjalankan 77 semakan, dan **77/77 lulus** pada pemain akhir. Semakan yang baharu atau dikemas kini:
+
+| Semakan | Bukti |
+|---|---|
+| C3 | 18 sari kata kit (teks kit; c14/c15 teks baharu 1:44) + 3 sari kata WhatsApp di dalam sisipan, semuanya pada masa dalam `penempatan-v8.json`. |
+| N1 | Setiap sari kata dipaparkan dari sebelum perkataannya hingga ≥ 0.2 s selepasnya (21 sari kata, 17 klip). |
+| N2 | Setiap baris bermula pada detik V7 atau ≤ 1.5 s kemudian (ayat 1:44: ≤ 0.5 s lebih awal); jarak ≥ 0.35 s; "84 peratus" tepat pada detiknya. |
+| N3 | `narasi-v8.wav` mengandungi suara hanya dalam 17 klip, dan senyap digital di tempat lain. |
+| E2 / E8 | Narasi terbenam sebagai FLAC (sha256 sama dengan fail), dan sampel yang dinyahkod sama tepat dengan `narasi-v8.wav`. |
+| E4 | Muzik direndahkan 10 dB (14 dB semasa crescendo); 0 dB pada hentakan tajuk; suara ≥ 10 LU di atas muzik dalam setiap sari kata. |
+| E9 | Limiter induk ≤ 1 dB (sebenar 0 dB). |
+| F2 / F3 | Pemain melaporkan "narasi narasi-v8.wav", dan klik pertama memainkan campuran bernarasi. |
+
+**Pengesahan MP4** (`NADI-Muallim-Pitch-137s-v8.mp4`):
+- **ffprobe:** H.264 High 1920 × 1080 yuv420p bt709, 60/1, 8,220 bingkai, 137.000 s; AAC 48 kHz 2 saluran, 137.000 s.
+- **Kenyaringan:** −16.0 LUFS, LRA 5.6 LU, puncak sebenar −2.8 dBFS.
+- **Kehadiran narasi:** dalam setiap 21 sari kata, audio MP4 berkorelasi dengan narasi pada r = 0.929–0.982, dengan lag 0.00 ms.
+- **Rangkaian:** 0 permintaan.
+- **Gambar berbanding V7 (35 titik masa):** 14 titik sama bit demi bit. Di titik lain, perbezaan hanya pada kotak sari kata dan bayangnya (sari kata yang dipaparkan mengikut suara), serta hingar pengekodan.
+
+### Perkara untuk perhatian (V8)
+
+- **Sebutan:** belum disemak secara automatik, kerana tiada ASR setempat. Sila dengar terutamanya "Muallim", "Ketoyong", "survelan" dan angka. Mana-mana baris boleh ditukar ke take B atau dijana semula.
+- **Lesen:** semak syarat pelan ElevenLabs (Starter) untuk suara pustaka sebelum filem dihantar. Semak juga sama ada pertandingan mewajibkan pendedahan suara AI. Perkara ini perlu disahkan.
+- **Tuntutan dalam skrip:** dua baris kit kini disuarakan: "Ini menjimatkan masa menyediakan ringkasan" dan "Borang kertas tidak perlu dibawa untuk tugas ini". Teksnya sama seperti V7, tetapi kini lebih menonjol.
+
+### Bina, semak dan render (V8)
+
+```bash
+python3 -I tools/place-narration-v8.py .                       # → narasi-v8/narasi-v8.wav + penempatan-v8.json (daripada narasi-v8/takes)
+TAILWIND_BIN=/path/to/tailwindcss node tools/build-player.js   # → video-showcase-v8.html (narasi terbenam; enggan menulis atas v2–v7)
+node tools/make-docs.js                                         # → sari-kata-bm-v8.srt
+node tools/check-player.js                                      # semakan automatik
+node render-video.js                                            # → NADI-Muallim-Pitch-137s-v8.mp4 (+ ffprobe, semakan kehadiran narasi)
+```
+
+Jika masa sari kata berubah (contohnya selepas `--take`), salin jadual `captions` daripada `penempatan-v8.json` ke `V8_CAPTIONS` dalam `src/data.js`. Semakan C3 akan gagal sehingga kedua-duanya sama.
+
+## Dokumentasi V7 (137 s, muzik latar, disimpan untuk perbandingan)
 
 Filem 02:17.000 (1920 × 1080, 60 fps, 8,220 bingkai) untuk **Pejabat Kesihatan Daerah Muallim**. V7 ialah V6 dengan tiga perubahan yang diminta:
 - tahanan liputan pada 1:13–1:17 (V6) kini bergerak;
@@ -7,7 +497,7 @@ Filem 02:17.000 (1920 × 1080, 60 fps, 8,220 bingkai) untuk **Pejabat Kesihatan 
 
 Setup V6 yang lain dikekalkan. Semua rekod, nama dan angka ialah **data simulasi**. Tiada panggilan ke aplikasi langsung, Google Sheets, peta atau WhatsApp.
 
-## Fail V7 (untuk dihantar)
+### Fail V7 (untuk dihantar)
 
 | Fail | Kegunaan |
 |---|---|
@@ -31,9 +521,9 @@ Setup V6 yang lain dikekalkan. Semua rekod, nama dan angka ialah **data simulasi
 | WhatsApp | 1:24.95–1:38.95 | 1:27.95–1:41.95 |
 | Penutup | 2:06.35 | 2:09.35 |
 
-## Perubahan V7 berbanding V6
+### Perubahan V7 berbanding V6
 
-### 1. Tahanan liputan kini bergerak (V7 1:14–1:21)
+#### 1. Tahanan liputan kini bergerak (V7 1:14–1:21)
 
 - **Punca.** Dari 71.6 s hingga 77.5 s (masa cerita), kamera sengaja kekal pegun. Peraturan "close-up pegun untuk dibaca" diguna sejak V3. Yang berubah hanya sari kata, jadi ia kelihatan seperti dijeda.
 - **Sekarang:**
@@ -44,7 +534,7 @@ Setup V6 yang lain dikekalkan. Semua rekod, nama dan angka ialah **data simulasi
   - **Cahaya** menyapu pil "Capai Sasaran" pada penghujung tahanan.
 - Angka "84%", "92 daripada 110 premis dilawati" dan "Capai Sasaran" kekal di skrin selama V6.
 
-### 2. Babak pengisian manual diperlahankan (6.5–16.35 s)
+#### 2. Babak pengisian manual diperlahankan (6.5–16.35 s)
 
 - Babak ini (cerita 6.5–13.35 s) kini dimainkan **1.44× lebih perlahan**, kira-kira 10 s:
 
@@ -59,7 +549,7 @@ Setup V6 yang lain dikekalkan. Semua rekod, nama dan angka ialah **data simulasi
 - **Muzik.** Degupan jantung, detik dan dron kini membina ketegangan sehingga hentakan tajuk pada 16.35 s. Kord tajuk tetap jatuh tepat pada hentakan.
 - **Selepas babak ini**, semua bahagian beranjak +3.0 s tanpa perubahan rentak.
 
-### 3. Susun atur nod "12 berkunci / kosong"
+#### 3. Susun atur nod "12 berkunci / kosong"
 
 - **Punca.** Kotak 100 px; label dua baris "berkunci / kosong" (48 + 6 + 2 × 22 px) melebihi ruang dalam. Nombor terhimpit ke atas dan "kosong" terkeluar di bawah.
 - **Sekarang:**
@@ -67,11 +557,11 @@ Setup V6 yang lain dikekalkan. Semua rekod, nama dan angka ialah **data simulasi
   - Nod tindakan "Semak semula status" dan "Rancang lawatan susulan" turut dilegakan (fon 17 px), kerana sebelum ini juga sesak.
   - Garisan penyambung dan baris tindakan dianjak 20 px.
 
-### 4. Dikekalkan seperti V6
+#### 4. Dikekalkan seperti V6
 
 Glob peta dan radius 200 m, sisipan WhatsApp, peralihan 1:01–1:03 yang licin (kini 1:04–1:06), dan semua bahagian lain.
 
-## Keputusan semakan V7
+### Keputusan semakan V7
 
 `node tools/check-player.js` menjalankan 72 semakan dan **72/72 lulus** pada pemain akhir. Semua semakan V3–V6 dikekalkan pada jam filem V7. Semakan baharu atau yang dikemas kini:
 
@@ -92,7 +582,7 @@ Glob peta dan radius 200 m, sisipan WhatsApp, peralihan 1:01–1:03 yang licin (
   - Tahanan liputan (73.8–81.05 s): larian pegun terpanjang hanya 2 bingkai (V6: ≈ 6 s).
   - Lonjakan yang tinggal sama seperti V6 (perubahan butang serta-merta dan potongan keras yang disengajakan), beranjak +3 s.
 
-## Bina, semak dan render (V7)
+### Bina, semak dan render (V7)
 
 ```bash
 TAILWIND_BIN=/path/to/tailwindcss node tools/build-player.js   # → video-showcase-v7.html (enggan menulis atas v2–v6)

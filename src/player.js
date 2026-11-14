@@ -26,25 +26,31 @@
   const ready = (async () => {
     await waitAssets();
     initMeasure();
+    // V9 (draft 3): build the 3D kampung before playback (scene, textures, shaders, shadow map), so the NADI
+    // introduction does not stall when it first appears at 0:22; then return to the first frame
+    renderFrame(Math.round(25 * FPS));
     renderFrame(0);
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
     return true;
   })();
-  window.ACD = { ready, FPS, DURATION, TOTAL_FRAMES, TOTALS, CUES, NARRATION, SCENES, renderFrame, audio: AUDIO, soundEvents: () => buildSoundEvents(), version: 'V7' };
+  window.ACD = { ready, FPS, DURATION, TOTAL_FRAMES, TOTALS, CUES, NARRATION, SCENES, renderFrame, audio: AUDIO, soundEvents: () => buildSoundEvents(), version: 'V9' };
 
   function fit() {
     const w = viewport.clientWidth, h = viewport.clientHeight, s = Math.min(w / 1920, h / 1080);
     stage.style.transform = 'translate(' + ((w - 1920 * s) / 2) + 'px,' + ((h - 1080 * s) / 2) + 'px) scale(' + s + ')';
+    // V9 (HD): the WebGL canvases follow the screen's resolution (stage scale × device pixel ratio); export stays at 1×
+    if (!RENDER && setRenderScale(s * (window.devicePixelRatio || 1)) && lastFrame >= 0) renderFrame(lastFrame);
   }
   fit(); window.addEventListener('resize', fit);
+  // a window dragged to a screen with another pixel density fires no resize: watch the ratio itself
+  (function watchDpr() { const mq = matchMedia('(resolution: ' + (window.devicePixelRatio || 1) + 'dppx)'); mq.addEventListener('change', () => { fit(); watchDpr(); }, { once: true }); })();
   if (RENDER) return; // export mode: no UI, no audio playback, the exporter drives renderFrame()
 
   /* ------------------------------------------------------------ state */
   const P = { playing: false, t: 0, startT: 0, startPerf: 0, ctx: null, gain: null, src: null, buffer: null, mix: null,
     audioT0: 0, ctxT0: 0, audioClock: false, muted: params.get('mute') === '1', lastFrame: -1 };
-  window.ACD_SUBS = params.get('subs') !== '0';
   // read-only state for tools/check-player.js
-  window.ACD.player = { get state() { return { playing: P.playing, t: P.playing ? now() : P.t, frame: P.lastFrame, muted: P.muted, gain: P.gain ? P.gain.gain.value : null, ctx: P.ctx ? P.ctx.state : null, audioClock: P.audioClock, audioT0: P.audioT0, buffer: !!P.buffer, narrated: !!(P.mix && P.mix.info.narration), clean: document.body.classList.contains('clean'), subs: window.ACD_SUBS, speechSynthesis: false }; } };
+  window.ACD.player = { get state() { return { playing: P.playing, t: P.playing ? now() : P.t, frame: P.lastFrame, muted: P.muted, gain: P.gain ? P.gain.gain.value : null, ctx: P.ctx ? P.ctx.state : null, audioClock: P.audioClock, audioT0: P.audioT0, buffer: !!P.buffer, narrated: !!(P.mix && P.mix.info.narration), clean: document.body.classList.contains('clean'), speechSynthesis: false }; } };
   const fmt = t => { const m = Math.floor(t / 60), s = t - m * 60; return String(m).padStart(2, '0') + ':' + s.toFixed(2).padStart(5, '0'); };
 
   /* ------------------------------------------------------------ UI */
@@ -57,12 +63,11 @@
       '<span class="ctl-time" id="tTime">00:00.00 / ' + fmt(DURATION) + '</span>' +
       '<div class="ctl-scrub-wrap"><input id="scrub" type="range" min="0" max="' + (TOTAL_FRAMES - 1) + '" step="1" value="0" aria-label="Garis masa"><div class="scene-marks" id="marks"></div></div>' +
       '<button class="ctl-btn" id="bMute" aria-label="Bunyi">🔊 Bunyi: Hidup</button>' +
-      '<button class="ctl-btn" id="bSubs" aria-label="Sari kata">Sari Kata: Hidup</button>' +
       '<button class="ctl-btn" id="bFull" aria-label="Skrin penuh">⛶ Skrin Penuh</button>' +
       '<button class="ctl-btn" id="bClean" aria-label="Mod rakaman bersih">● Mod Rakaman Bersih</button>' +
     '</div>' +
     '<div class="scene-btns" id="scenes">' + SCENES.map(s => '<button class="scene-btn" data-s="' + s.id + '">' + s.id + ' · ' + s.key + '</button>').join('') +
-      '<span class="ctl-hint">Ruang: main/jeda · R: mula semula · ←/→: ±1 s · , / .: satu bingkai · 1–9, 0: babak · F: skrin penuh · M: bunyi · S: sari kata · C: mod bersih (Esc keluar)</span></div>';
+      '<span class="ctl-hint">Ruang: main/jeda · R: mula semula · ←/→: ±1 s · , / .: satu bingkai · 1–9, 0: babak · F: skrin penuh · M: bunyi · C: mod bersih (Esc keluar)</span></div>';
   const $b = id => document.getElementById(id);
   $b('marks').innerHTML = SCENES.slice(1).map(s => '<i style="left:' + (s.start / DURATION * 100) + '%"></i>').join('');
   const startStatus = document.getElementById('startStatus');
@@ -76,7 +81,6 @@
     const sc = SCENES.find(s => t >= s.start && t < s.end) || SCENES[SCENES.length - 1];
     document.querySelectorAll('.scene-btn').forEach(b => b.classList.toggle('on', +b.dataset.s === sc.id));
     $b('bMute').textContent = P.muted ? '🔇 Bunyi: Mati' : '🔊 Bunyi: Hidup';
-    $b('bSubs').textContent = 'Sari Kata: ' + (window.ACD_SUBS ? 'Hidup' : 'Mati');
     $b('bClean').classList.toggle('on', document.body.classList.contains('clean'));
   }
   function renderAt(t, force) {
@@ -162,7 +166,6 @@
   $b('bPlay').addEventListener('click', async () => { await gesture(); P.playing ? pause() : play(); });
   $b('bRestart').addEventListener('click', async () => { await gesture(); restart(); });
   $b('bMute').addEventListener('click', async () => { await gesture(); P.muted = !P.muted; if (P.gain) P.gain.gain.value = P.muted ? 0 : 1; updateUI(P.playing ? now() : P.t); });
-  $b('bSubs').addEventListener('click', () => { window.ACD_SUBS = !window.ACD_SUBS; renderAt(P.playing ? now() : P.t, true); });
   $b('bFull').addEventListener('click', toggleFull);
   $b('bClean').addEventListener('click', () => setClean(true));
   document.querySelectorAll('.scene-btn').forEach(b => b.addEventListener('click', async () => { await gesture(); seek(SCENES[+b.dataset.s - 1].start); }));
@@ -188,7 +191,6 @@
     else if (/^[0-9]$/.test(k) && SCENES[k === '0' ? 9 : +k - 1]) { await gesture(); seek(SCENES[k === '0' ? 9 : +k - 1].start); }   // V6: 10 scenes, 0 = scene 10
     else if (k === 'f' || k === 'F') toggleFull();
     else if (k === 'm' || k === 'M') $b('bMute').click();
-    else if (k === 's' || k === 'S') $b('bSubs').click();
     else if (k === 'c' || k === 'C') setClean(!document.body.classList.contains('clean'));
     else if (k === 'Escape') setClean(false);
     showControls();

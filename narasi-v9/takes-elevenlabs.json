@@ -1,0 +1,547 @@
+{
+ "voice": {
+  "name": "Ahmad - Calm Millennial, Warm, Cinematic & Prestige Storyteller",
+  "voice_id": "TXfZrONKsgH1CoxNoMuO"
+ },
+ "model": "eleven_v4",
+ "flow": "https://elevenlabs.io/app/flows/wvXnctDcjic8d2ZqGQ5f",
+ "units": [
+  {
+   "unit": "a1",
+   "cues": [
+    "a1"
+   ],
+   "text": "Notifikasi denggi diterima.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "II1P7pauIac7HN2UzapU"
+    },
+    {
+     "take": "B",
+     "generation_id": "yDUGX7HaKtUtHfbO7x5b"
+    }
+   ]
+  },
+  {
+   "unit": "a2",
+   "cues": [
+    "a2"
+   ],
+   "text": "Kes bertambah.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "3EY1k0RTsKAwR1pxJjNc"
+    },
+    {
+     "take": "B",
+     "generation_id": "pCrFx2vORSHleCDv1Kj2"
+    }
+   ]
+  },
+  {
+   "unit": "a3",
+   "cues": [
+    "a3"
+   ],
+   "text": "Wabak diisytiharkan.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "vgoOanVqXyNZidycIEQ8"
+    },
+    {
+     "take": "B",
+     "generation_id": "ZpQg3HCppEuPhQ2Q7J56"
+    }
+   ]
+  },
+  {
+   "unit": "a4",
+   "cues": [
+    "a4"
+   ],
+   "text": "Pasukan turun untuk pengesanan kes aktif.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "eiPRoWjLPDkK2qScZzIN"
+    },
+    {
+     "take": "B",
+     "generation_id": "CkdCed0jhzZPGzYBJMcv"
+    }
+   ]
+  },
+  {
+   "unit": "c02",
+   "cues": [
+    "c02"
+   ],
+   "text": "Dalam operasi denggi, borang kertas dan fail perlu dibawa ke lapangan.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "fZ7fbnrfPDDX2forAyx0"
+    },
+    {
+     "take": "B",
+     "generation_id": "OMhhumE2oLaVg03fbdHH"
+    }
+   ]
+  },
+  {
+   "unit": "c03",
+   "cues": [
+    "c03"
+   ],
+   "text": "Dapatan lawatan kemudian dikira dan ditaip semula.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "XrDB6QPAfN8hNdKoBu6T"
+    },
+    {
+     "take": "B",
+     "generation_id": "UW0keDQ7N60CzM5DYvYb"
+    }
+   ]
+  },
+  {
+   "unit": "n1",
+   "cues": [
+    "n1"
+   ],
+   "text": "Inilah Nadi Muallim.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "jFvnDO42eryccHr8Ez69"
+    },
+    {
+     "take": "B",
+     "generation_id": "SUeTOv0AiLesmTTbrSaz"
+    }
+   ]
+  },
+  {
+   "unit": "c04",
+   "cues": [
+    "c04"
+   ],
+   "text": "Nadi Muallim memaparkan situasi denggi mengikut lokaliti.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "GboGw6MqWU4JPm59torw"
+    },
+    {
+     "take": "B",
+     "generation_id": "gu53SFBwZg0cb6WHhTB5"
+    }
+   ]
+  },
+  {
+   "unit": "c05c06",
+   "cues": [
+    "c05",
+    "c06"
+   ],
+   "text": "Dalam prototaip ini, penyelia membuka operasi pengesanan kes aktif di Kampung Ketoyong.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "265Hc8eiZ1VgsW5xk9lr"
+    },
+    {
+     "take": "B",
+     "generation_id": "C6T8py98M2GJDJU4wcI0"
+    }
+   ]
+  },
+  {
+   "unit": "p1",
+   "cues": [
+    "p1"
+   ],
+   "text": "Setiap petugas boleh merekod dapatan pada telefon masing-masing.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "W98ggYrLFhyoi8TQWXLZ"
+    },
+    {
+     "take": "B",
+     "generation_id": "zaAMLaAH76Zh3XbmHpjE"
+    }
+   ]
+  },
+  {
+   "unit": "c07n",
+   "cues": [
+    "c07"
+   ],
+   "text": "Bagi premis yang ditugaskan, petugas merekod status lawatan, gejala dan rujukan.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "9ZbWrfxL7pDP3PoMRzy5"
+    },
+    {
+     "take": "B",
+     "generation_id": "jmzZKMT33gE1oHcwrXQN"
+    }
+   ]
+  },
+  {
+   "unit": "c08",
+   "cues": [
+    "c08"
+   ],
+   "text": "Borang kertas tidak perlu dibawa untuk tugas ini.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "5bHcACDs46J0KGkKPl4f"
+    },
+    {
+     "take": "B",
+     "generation_id": "dat1XbRKbQASWK5CMNPw"
+    }
+   ]
+  },
+  {
+   "unit": "c09n",
+   "cues": [
+    "c09"
+   ],
+   "text": "Selepas rekod disimpan, sistem mengira dapatan pasukan secara automatik.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "Vol5BUVCvnOXKd7V7suI"
+    },
+    {
+     "take": "B",
+     "generation_id": "z9U8WKNrn5XTmyc00njd"
+    }
+   ]
+  },
+  {
+   "unit": "c10n",
+   "cues": [
+    "c10"
+   ],
+   "text": "Ringkasan dijana terus daripada rekod yang sama.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "W4j2Ttx2I9DPPqLbB50V"
+    },
+    {
+     "take": "B",
+     "generation_id": "crdsdNPlQ9LCR5YzTJkZ"
+    }
+   ]
+  },
+  {
+   "unit": "c11",
+   "cues": [
+    "c11"
+   ],
+   "text": "Dalam simulasi ini, enam pasukan melawati sembilan puluh dua daripada seratus sepuluh premis.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "UKt3twXPWwqHUZy8TfqA"
+    },
+    {
+     "take": "B",
+     "generation_id": "OhBJeFKLCPnTiebCrt5R"
+    }
+   ]
+  },
+  {
+   "unit": "c12",
+   "cues": [
+    "c12"
+   ],
+   "text": "Liputannya lapan puluh empat peratus.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "PPkuGfg2jG9dkkvsoKVi"
+    },
+    {
+     "take": "B",
+     "generation_id": "IYBiPDtxpOBKpUD1PpXk"
+    }
+   ]
+  },
+  {
+   "unit": "c13",
+   "cues": [
+    "c13"
+   ],
+   "text": "Pegawai merekodkan pengesahan dapatan.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "WhTrFwQFrjuiIoYiUdTH"
+    },
+    {
+     "take": "B",
+     "generation_id": "0UfavxUM8Z0Qgz0fbrGL"
+    }
+   ]
+  },
+  {
+   "unit": "w1",
+   "cues": [
+    "w1"
+   ],
+   "text": "Ringkasan laporan disalin dengan satu ketikan.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "t1npOwaLvQOfXR8NOy35"
+    },
+    {
+     "take": "B",
+     "generation_id": "hVPtCY9m2bVxbnc4lPHs"
+    }
+   ]
+  },
+  {
+   "unit": "w2",
+   "cues": [
+    "w2"
+   ],
+   "text": "Ringkasan ditampal ke kumpulan WhatsApp pasukan.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "MrNLdCxiFx64Q28uuNjA"
+    },
+    {
+     "take": "B",
+     "generation_id": "1bdhfjVNmSdJdcpqmkSB"
+    }
+   ]
+  },
+  {
+   "unit": "w3",
+   "cues": [
+    "w3"
+   ],
+   "text": "Angka dalam mesej datang terus daripada rekod yang disimpan.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "XmsDI0UI2XoLh7spQp0k"
+    },
+    {
+     "take": "B",
+     "generation_id": "ZqPw7IDbHxhlLOlGnFke"
+    }
+   ]
+  },
+  {
+   "unit": "c14c15",
+   "cues": [
+    "c14",
+    "c15"
+   ],
+   "text": "Daripada analisa automatik sistem, enam premis belum dilawati, dua belas direkodkan berkunci atau kosong.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "z27p50K7mtqrBr3NywtC"
+    },
+    {
+     "take": "B",
+     "generation_id": "zA1vBgObGX3B04I5ndVO"
+    }
+   ]
+  },
+  {
+   "unit": "c16c17",
+   "cues": [
+    "c16",
+    "c17"
+   ],
+   "text": "Penyelia menjadualkan lawatan ke enam premis itu dan menyemak status premis yang selebihnya.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "bjgrB1yeb5w9YSlGpkfj"
+    },
+    {
+     "take": "B",
+     "generation_id": "4rCFAglBVibtXUEFo7lQ"
+    }
+   ]
+  },
+  {
+   "unit": "b1b2",
+   "cues": [
+    "b1",
+    "b2"
+   ],
+   "text": "Rekod di telefon, kiraan liputan automatik, pengesahan dan ringkasan. Sistem membantu merancang lawatan susulan.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "tDvjDXQHwhfsNC1UHp77"
+    },
+    {
+     "take": "B",
+     "generation_id": "sf7yXTnqvgo9XTgk34mA"
+    }
+   ]
+  },
+  {
+   "unit": "c18c19",
+   "cues": [
+    "c18",
+    "c19"
+   ],
+   "text": "Nadi Muallim. Dari survelan denggi kepada tindakan susulan di lapangan.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "V5A4PWCNdAhVyRpaxERx"
+    },
+    {
+     "take": "B",
+     "generation_id": "ytv116crSPLQvqip6qqR"
+    }
+   ]
+  }
+ ],
+ "replaced": [
+  {
+   "unit": "c14",
+   "cues": [
+    "c14"
+   ],
+   "text": "Enam premis belum dilawati.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "MTBQUc4VNfKiVjcC2TSY"
+    },
+    {
+     "take": "B",
+     "generation_id": "x5kqg93pPjWsDl22SUpt"
+    }
+   ],
+   "note": "V8 draf 1; diganti oleh c14c15 atas permintaan pengguna (1:44)"
+  },
+  {
+   "unit": "c15",
+   "cues": [
+    "c15"
+   ],
+   "text": "Dua belas direkodkan berkunci atau kosong.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "h1WGI7DzX4WKbkRud6Jq"
+    },
+    {
+     "take": "B",
+     "generation_id": "mkaFTU3rZQGLrqPcd8A9"
+    }
+   ],
+   "note": "V8 draf 1; diganti oleh c14c15 atas permintaan pengguna (1:44)"
+  },
+  {
+   "unit": "c07",
+   "cues": [
+    "c07"
+   ],
+   "text": "Petugas merekod status premis, saringan gejala dan rujukan dengan satu telefon.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "C3eSuXhBHCxaAZWmpUrs"
+    },
+    {
+     "take": "B",
+     "generation_id": "6rixu9u9TREmkEQKCuV2"
+    }
+   ],
+   "note": "V8; diganti dalam V9 (teks baharu)"
+  },
+  {
+   "unit": "c09",
+   "cues": [
+    "c09"
+   ],
+   "text": "Selepas rekod disimpan, sistem mengira dapatan secara automatik.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "dQ1gz6DlDMZRYJksHJrf"
+    },
+    {
+     "take": "B",
+     "generation_id": "kcBpAo1ShndvWTa3HNOD"
+    }
+   ],
+   "note": "V8; diganti dalam V9 (teks baharu)"
+  },
+  {
+   "unit": "c10",
+   "cues": [
+    "c10"
+   ],
+   "text": "Ini menjimatkan masa menyediakan ringkasan.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "P5ZvzIiummYtDGgRftMX"
+    },
+    {
+     "take": "B",
+     "generation_id": "lMX3IAIj5XOPZ6WvzGod"
+    }
+   ],
+   "note": "V8; diganti dalam V9 (teks baharu)"
+  },
+  {
+   "unit": "c02s",
+   "cues": [
+    "c02"
+   ],
+   "text": "Borang kertas dan fail perlu dibawa ke lapangan.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "groSLMnZ0y2vgaqOk99Q"
+    }
+   ],
+   "note": "V9 draf: versi pendek, tidak digunakan (filem dipanjangkan)"
+  },
+  {
+   "unit": "c03s",
+   "cues": [
+    "c03"
+   ],
+   "text": "Dapatan lawatan dikira dan ditaip semula.",
+   "takes": [
+    {
+     "take": "A",
+     "generation_id": "KPn0GxjHlA48PQ5LLNYq"
+    },
+    {
+     "take": "B",
+     "generation_id": "P292UwGXneXezPebjEeV"
+    }
+   ],
+   "note": "V9 draf: versi pendek, tidak digunakan (filem dipanjangkan)"
+  }
+ ]
+}

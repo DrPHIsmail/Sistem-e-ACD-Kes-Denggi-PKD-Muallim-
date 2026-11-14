@@ -1,0 +1,788 @@
+{
+ "voice": {
+  "name": "Ahmad - Calm Millennial, Warm, Cinematic & Prestige Storyteller",
+  "voice_id": "TXfZrONKsgH1CoxNoMuO"
+ },
+ "model": "eleven_v4",
+ "median_rate_syl_per_s": 4.8,
+ "gap_s": 0.35,
+ "clip_lufs": -20.0,
+ "units": [
+  {
+   "unit": "a1",
+   "cues": [
+    "a1"
+   ],
+   "text": "Notifikasi denggi diterima.",
+   "take": "A",
+   "generation_id": "II1P7pauIac7HN2UzapU",
+   "anchor": 0.3,
+   "start": 0.3,
+   "end": 2.37,
+   "shift": 0.0,
+   "scene_end": 18.596,
+   "speech_s": 2.07,
+   "rate": 5.31,
+   "gain_db": -0.8,
+   "plr_db": 13.9,
+   "split": null,
+   "other_take": [
+    {
+     "take": "B",
+     "speech_s": 2.05,
+     "rate": 5.37
+    }
+   ]
+  },
+  {
+   "unit": "a2",
+   "cues": [
+    "a2"
+   ],
+   "text": "Kes bertambah.",
+   "take": "B",
+   "generation_id": "pCrFx2vORSHleCDv1Kj2",
+   "anchor": 2.192,
+   "start": 2.62,
+   "end": 3.86,
+   "shift": 0.428,
+   "scene_end": 18.596,
+   "speech_s": 1.24,
+   "rate": 3.23,
+   "gain_db": 0.9,
+   "plr_db": 14.1,
+   "split": null,
+   "other_take": [
+    {
+     "take": "A",
+     "speech_s": 1.27,
+     "rate": 3.15
+    }
+   ]
+  },
+  {
+   "unit": "a3",
+   "cues": [
+    "a3"
+   ],
+   "text": "Wabak diisytiharkan.",
+   "take": "B",
+   "generation_id": "ZpQg3HCppEuPhQ2Q7J56",
+   "anchor": 3.865,
+   "start": 4.11,
+   "end": 5.83,
+   "shift": 0.245,
+   "scene_end": 18.596,
+   "speech_s": 1.72,
+   "rate": 3.49,
+   "gain_db": 0.7,
+   "plr_db": 14.2,
+   "split": null,
+   "other_take": [
+    {
+     "take": "A",
+     "speech_s": 1.98,
+     "rate": 3.03
+    }
+   ]
+  },
+  {
+   "unit": "a4",
+   "cues": [
+    "a4"
+   ],
+   "text": "Pasukan turun untuk pengesanan kes aktif.",
+   "take": "A",
+   "generation_id": "eiPRoWjLPDkK2qScZzIN",
+   "anchor": 5.538,
+   "start": 6.08,
+   "end": 8.7,
+   "shift": 0.542,
+   "scene_end": 18.596,
+   "speech_s": 2.62,
+   "rate": 5.34,
+   "gain_db": 0.3,
+   "plr_db": 14.3,
+   "split": null,
+   "other_take": [
+    {
+     "take": "B",
+     "speech_s": 2.84,
+     "rate": 4.93
+    }
+   ]
+  },
+  {
+   "unit": "c02",
+   "cues": [
+    "c02"
+   ],
+   "text": "Dalam operasi denggi, borang kertas dan fail perlu dibawa ke lapangan.",
+   "take": "B",
+   "generation_id": "OMhhumE2oLaVg03fbdHH",
+   "anchor": 7.661,
+   "start": 9.05,
+   "end": 14.01,
+   "shift": 1.389,
+   "scene_end": 18.596,
+   "speech_s": 4.96,
+   "rate": 4.64,
+   "gain_db": 1.0,
+   "plr_db": 14.2,
+   "split": null,
+   "other_take": [
+    {
+     "take": "A",
+     "speech_s": 5.03,
+     "rate": 4.57
+    }
+   ]
+  },
+  {
+   "unit": "c03",
+   "cues": [
+    "c03"
+   ],
+   "text": "Dapatan lawatan kemudian dikira dan ditaip semula.",
+   "take": "A",
+   "generation_id": "XrDB6QPAfN8hNdKoBu6T",
+   "anchor": 12.294,
+   "start": 14.36,
+   "end": 18.21,
+   "shift": 2.066,
+   "scene_end": 18.35,
+   "speech_s": 3.85,
+   "rate": 4.68,
+   "gain_db": 0.3,
+   "plr_db": 14.2,
+   "split": null,
+   "other_take": [
+    {
+     "take": "B",
+     "speech_s": 4.03,
+     "rate": 4.47
+    }
+   ]
+  },
+  {
+   "unit": "n1",
+   "cues": [
+    "n1"
+   ],
+   "text": "Inilah Nadi Muallim.",
+   "take": "B",
+   "generation_id": "SUeTOv0AiLesmTTbrSaz",
+   "anchor": 20.3,
+   "start": 20.3,
+   "end": 22.33,
+   "shift": 0.0,
+   "scene_end": 22.4,
+   "speech_s": 2.03,
+   "rate": 3.45,
+   "gain_db": 0.8,
+   "plr_db": 14.0,
+   "split": null,
+   "other_take": [
+    {
+     "take": "A",
+     "speech_s": 2.13,
+     "rate": 3.29
+    }
+   ]
+  },
+  {
+   "unit": "c04",
+   "cues": [
+    "c04"
+   ],
+   "text": "Nadi Muallim memaparkan situasi denggi mengikut lokaliti.",
+   "take": "A",
+   "generation_id": "GboGw6MqWU4JPm59torw",
+   "anchor": 22.44,
+   "start": 22.68,
+   "end": 26.92,
+   "shift": 0.24,
+   "scene_end": 30.1,
+   "speech_s": 4.24,
+   "rate": 4.72,
+   "gain_db": 2.8,
+   "plr_db": 14.1,
+   "split": null,
+   "other_take": [
+    {
+     "take": "B",
+     "speech_s": 4.32,
+     "rate": 4.63
+    }
+   ]
+  },
+  {
+   "unit": "c05c06",
+   "cues": [
+    "c05",
+    "c06"
+   ],
+   "text": "Dalam prototaip ini, penyelia membuka operasi pengesanan kes aktif di Kampung Ketoyong.",
+   "take": "A",
+   "generation_id": "265Hc8eiZ1VgsW5xk9lr",
+   "anchor": 26.72,
+   "start": 27.27,
+   "end": 33.28,
+   "shift": 0.55,
+   "scene_end": 33.5,
+   "speech_s": 6.01,
+   "rate": 4.99,
+   "gain_db": 2.7,
+   "plr_db": 14.2,
+   "split": 32.11,
+   "other_take": [
+    {
+     "take": "B",
+     "speech_s": 5.85,
+     "rate": 5.13
+    }
+   ]
+  },
+  {
+   "unit": "p1",
+   "cues": [
+    "p1"
+   ],
+   "text": "Setiap petugas boleh merekod dapatan pada telefon masing-masing.",
+   "take": "B",
+   "generation_id": "zaAMLaAH76Zh3XbmHpjE",
+   "anchor": 33.5,
+   "start": 33.63,
+   "end": 37.96,
+   "shift": 0.13,
+   "scene_end": 39.15,
+   "speech_s": 4.33,
+   "rate": 5.08,
+   "gain_db": 0.8,
+   "plr_db": 14.2,
+   "split": null,
+   "other_take": [
+    {
+     "take": "A",
+     "speech_s": 4.18,
+     "rate": 5.26
+    }
+   ]
+  },
+  {
+   "unit": "c07n",
+   "cues": [
+    "c07"
+   ],
+   "text": "Bagi premis yang ditugaskan, petugas merekod status lawatan, gejala dan rujukan.",
+   "take": "B",
+   "generation_id": "jmzZKMT33gE1oHcwrXQN",
+   "anchor": 39.5,
+   "start": 39.5,
+   "end": 45.69,
+   "shift": 0.0,
+   "scene_end": 45.88,
+   "speech_s": 6.19,
+   "rate": 4.36,
+   "gain_db": 3.6,
+   "plr_db": 14.2,
+   "split": null,
+   "other_take": [
+    {
+     "take": "A",
+     "speech_s": 6.34,
+     "rate": 4.26
+    }
+   ]
+  },
+  {
+   "unit": "c08",
+   "cues": [
+    "c08"
+   ],
+   "text": "Borang kertas tidak perlu dibawa untuk tugas ini.",
+   "take": "B",
+   "generation_id": "dat1XbRKbQASWK5CMNPw",
+   "anchor": 46.23,
+   "start": 46.23,
+   "end": 49.37,
+   "shift": 0.0,
+   "scene_end": 54.5,
+   "speech_s": 3.14,
+   "rate": 5.41,
+   "gain_db": 0.0,
+   "plr_db": 14.0,
+   "split": null,
+   "other_take": [
+    {
+     "take": "A",
+     "speech_s": 3.09,
+     "rate": 5.5
+    }
+   ]
+  },
+  {
+   "unit": "c09n",
+   "cues": [
+    "c09"
+   ],
+   "text": "Selepas rekod disimpan, sistem mengira dapatan pasukan secara automatik.",
+   "take": "A",
+   "generation_id": "Vol5BUVCvnOXKd7V7suI",
+   "anchor": 54.92,
+   "start": 54.92,
+   "end": 60.14,
+   "shift": 0.0,
+   "scene_end": 62.6,
+   "speech_s": 5.22,
+   "rate": 4.98,
+   "gain_db": 1.9,
+   "plr_db": 14.2,
+   "split": null,
+   "other_take": [
+    {
+     "take": "B",
+     "speech_s": 5.16,
+     "rate": 5.04
+    }
+   ]
+  },
+  {
+   "unit": "c10n",
+   "cues": [
+    "c10"
+   ],
+   "text": "Ringkasan dijana terus daripada rekod yang sama.",
+   "take": "A",
+   "generation_id": "W4j2Ttx2I9DPPqLbB50V",
+   "anchor": 62.95,
+   "start": 62.95,
+   "end": 66.32,
+   "shift": 0.0,
+   "scene_end": 67.5,
+   "speech_s": 3.37,
+   "rate": 5.04,
+   "gain_db": 0.8,
+   "plr_db": 14.1,
+   "split": null,
+   "other_take": [
+    {
+     "take": "B",
+     "speech_s": 3.15,
+     "rate": 5.4
+    }
+   ]
+  },
+  {
+   "unit": "c11",
+   "cues": [
+    "c11"
+   ],
+   "text": "Dalam simulasi ini, enam pasukan melawati sembilan puluh dua daripada seratus sepuluh premis.",
+   "take": "A",
+   "generation_id": "UKt3twXPWwqHUZy8TfqA",
+   "anchor": 70.43,
+   "start": 70.43,
+   "end": 77.31,
+   "shift": 0.0,
+   "scene_end": 83.5,
+   "speech_s": 6.88,
+   "rate": 5.09,
+   "gain_db": 1.8,
+   "plr_db": 14.1,
+   "split": null,
+   "other_take": [
+    {
+     "take": "B",
+     "speech_s": 6.51,
+     "rate": 5.38
+    }
+   ]
+  },
+  {
+   "unit": "c12",
+   "cues": [
+    "c12"
+   ],
+   "text": "Liputannya lapan puluh empat peratus.",
+   "take": "B",
+   "generation_id": "IYBiPDtxpOBKpUD1PpXk",
+   "anchor": 77.88,
+   "start": 77.88,
+   "end": 80.58,
+   "shift": 0.0,
+   "scene_end": 83.5,
+   "speech_s": 2.7,
+   "rate": 4.81,
+   "gain_db": 0.9,
+   "plr_db": 14.2,
+   "split": null,
+   "other_take": [
+    {
+     "take": "A",
+     "speech_s": 2.81,
+     "rate": 4.63
+    }
+   ]
+  },
+  {
+   "unit": "c13",
+   "cues": [
+    "c13"
+   ],
+   "text": "Pegawai merekodkan pengesahan dapatan.",
+   "take": "B",
+   "generation_id": "0UfavxUM8Z0Qgz0fbrGL",
+   "anchor": 84.42,
+   "start": 84.42,
+   "end": 87.08,
+   "shift": 0.0,
+   "scene_end": 90.45,
+   "speech_s": 2.66,
+   "rate": 5.26,
+   "gain_db": 0.3,
+   "plr_db": 14.1,
+   "split": null,
+   "other_take": [
+    {
+     "take": "A",
+     "speech_s": 2.63,
+     "rate": 5.32
+    }
+   ]
+  },
+  {
+   "unit": "w1",
+   "cues": [
+    "w1"
+   ],
+   "text": "Ringkasan laporan disalin dengan satu ketikan.",
+   "take": "B",
+   "generation_id": "hVPtCY9m2bVxbnc4lPHs",
+   "anchor": 91.05,
+   "start": 91.05,
+   "end": 94.33,
+   "shift": 0.0,
+   "scene_end": 104.45,
+   "speech_s": 3.28,
+   "rate": 4.88,
+   "gain_db": 1.6,
+   "plr_db": 14.1,
+   "split": null,
+   "other_take": [
+    {
+     "take": "A",
+     "speech_s": 3.27,
+     "rate": 4.89
+    }
+   ]
+  },
+  {
+   "unit": "w2",
+   "cues": [
+    "w2"
+   ],
+   "text": "Ringkasan ditampal ke kumpulan WhatsApp pasukan.",
+   "take": "B",
+   "generation_id": "1bdhfjVNmSdJdcpqmkSB",
+   "anchor": 94.5,
+   "start": 94.68,
+   "end": 97.81,
+   "shift": 0.18,
+   "scene_end": 104.45,
+   "speech_s": 3.13,
+   "rate": 4.79,
+   "gain_db": 2.6,
+   "plr_db": 14.3,
+   "split": null,
+   "other_take": [
+    {
+     "take": "A",
+     "speech_s": 3.1,
+     "rate": 4.84
+    }
+   ]
+  },
+  {
+   "unit": "w3",
+   "cues": [
+    "w3"
+   ],
+   "text": "Angka dalam mesej datang terus daripada rekod yang disimpan.",
+   "take": "A",
+   "generation_id": "XmsDI0UI2XoLh7spQp0k",
+   "anchor": 98.5,
+   "start": 98.5,
+   "end": 102.73,
+   "shift": 0.0,
+   "scene_end": 104.45,
+   "speech_s": 4.23,
+   "rate": 4.73,
+   "gain_db": 3.1,
+   "plr_db": 14.1,
+   "split": null,
+   "other_take": [
+    {
+     "take": "B",
+     "speech_s": 4.3,
+     "rate": 4.65
+    }
+   ]
+  },
+  {
+   "unit": "c14c15",
+   "cues": [
+    "c14",
+    "c15"
+   ],
+   "text": "Daripada analisa automatik sistem, enam premis belum dilawati, dua belas direkodkan berkunci atau kosong.",
+   "take": "A",
+   "generation_id": "z27p50K7mtqrBr3NywtC",
+   "anchor": 106.4,
+   "start": 105.95,
+   "end": 114.15,
+   "shift": -0.45,
+   "scene_end": 114.15,
+   "speech_s": 8.2,
+   "rate": 4.63,
+   "gain_db": 1.1,
+   "plr_db": 14.1,
+   "split": 110.94,
+   "other_take": [
+    {
+     "take": "B",
+     "speech_s": 8.21,
+     "rate": 4.63
+    }
+   ]
+  },
+  {
+   "unit": "c16c17",
+   "cues": [
+    "c16",
+    "c17"
+   ],
+   "text": "Penyelia menjadualkan lawatan ke enam premis itu dan menyemak status premis yang selebihnya.",
+   "take": "B",
+   "generation_id": "4rCFAglBVibtXUEFo7lQ",
+   "anchor": 114.5,
+   "start": 114.5,
+   "end": 120.44,
+   "shift": 0.0,
+   "scene_end": 124.5,
+   "speech_s": 5.94,
+   "rate": 5.05,
+   "gain_db": 0.1,
+   "plr_db": 14.1,
+   "split": 117.85,
+   "other_take": [
+    {
+     "take": "A",
+     "speech_s": 5.9,
+     "rate": 5.08
+    }
+   ]
+  },
+  {
+   "unit": "b1b2",
+   "cues": [
+    "b1",
+    "b2"
+   ],
+   "text": "Rekod di telefon, kiraan liputan automatik, pengesahan dan ringkasan. Sistem membantu merancang lawatan susulan.",
+   "take": "A",
+   "generation_id": "tDvjDXQHwhfsNC1UHp77",
+   "anchor": 124.953,
+   "start": 124.953,
+   "end": 133.293,
+   "shift": 0.0,
+   "scene_end": 133.3,
+   "speech_s": 8.34,
+   "rate": 4.44,
+   "gain_db": 2.0,
+   "plr_db": 14.2,
+   "split": 130.173,
+   "other_take": [
+    {
+     "take": "B",
+     "speech_s": 8.36,
+     "rate": 4.43
+    }
+   ]
+  },
+  {
+   "unit": "c18c19",
+   "cues": [
+    "c18",
+    "c19"
+   ],
+   "text": "Nadi Muallim. Dari survelan denggi kepada tindakan susulan di lapangan.",
+   "take": "A",
+   "generation_id": "V5A4PWCNdAhVyRpaxERx",
+   "anchor": 134.3,
+   "start": 134.3,
+   "end": 139.49,
+   "shift": 0.0,
+   "scene_end": 140.9,
+   "speech_s": 5.19,
+   "rate": 4.62,
+   "gain_db": 0.7,
+   "plr_db": 14.2,
+   "split": 135.8,
+   "other_take": [
+    {
+     "take": "B",
+     "speech_s": 5.21,
+     "rate": 4.61
+    }
+   ]
+  }
+ ],
+ "captions": [
+  {
+   "id": "a1",
+   "start": 0.2,
+   "end": 2.48
+  },
+  {
+   "id": "a2",
+   "start": 2.52,
+   "end": 3.97
+  },
+  {
+   "id": "a3",
+   "start": 4.01,
+   "end": 5.94
+  },
+  {
+   "id": "a4",
+   "start": 5.98,
+   "end": 8.91
+  },
+  {
+   "id": "c02",
+   "start": 8.95,
+   "end": 14.22
+  },
+  {
+   "id": "c03",
+   "start": 14.26,
+   "end": 18.57
+  },
+  {
+   "id": "n1",
+   "start": 20.2,
+   "end": 22.54
+  },
+  {
+   "id": "c04",
+   "start": 22.58,
+   "end": 27.13
+  },
+  {
+   "id": "c05",
+   "start": 27.17,
+   "end": 32.09
+  },
+  {
+   "id": "c06",
+   "start": 32.11,
+   "end": 33.49
+  },
+  {
+   "id": "p1",
+   "start": 33.53,
+   "end": 38.36
+  },
+  {
+   "id": "c07",
+   "start": 39.4,
+   "end": 46.09
+  },
+  {
+   "id": "c08",
+   "start": 46.13,
+   "end": 49.77
+  },
+  {
+   "id": "c09",
+   "start": 54.82,
+   "end": 60.54
+  },
+  {
+   "id": "c10",
+   "start": 62.85,
+   "end": 66.72
+  },
+  {
+   "id": "c11",
+   "start": 70.33,
+   "end": 77.71
+  },
+  {
+   "id": "c12",
+   "start": 77.78,
+   "end": 80.98
+  },
+  {
+   "id": "c13",
+   "start": 84.32,
+   "end": 87.48
+  },
+  {
+   "id": "w1",
+   "start": 90.95,
+   "end": 94.54
+  },
+  {
+   "id": "w2",
+   "start": 94.58,
+   "end": 98.21
+  },
+  {
+   "id": "w3",
+   "start": 98.4,
+   "end": 103.13
+  },
+  {
+   "id": "c14",
+   "start": 105.85,
+   "end": 110.92
+  },
+  {
+   "id": "c15",
+   "start": 110.94,
+   "end": 114.36
+  },
+  {
+   "id": "c16",
+   "start": 114.4,
+   "end": 117.83
+  },
+  {
+   "id": "c17",
+   "start": 117.85,
+   "end": 120.84
+  },
+  {
+   "id": "b1",
+   "start": 124.85,
+   "end": 130.15
+  },
+  {
+   "id": "b2",
+   "start": 130.17,
+   "end": 133.69
+  },
+  {
+   "id": "c18",
+   "start": 134.2,
+   "end": 135.78
+  },
+  {
+   "id": "c19",
+   "start": 135.8,
+   "end": 139.89
+  }
+ ]
+}

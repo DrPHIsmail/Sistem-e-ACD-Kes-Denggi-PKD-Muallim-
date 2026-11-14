@@ -2,20 +2,22 @@
 
 Projek filem pertandingan **NADI Muallim + e-ACD Denggi** untuk Pejabat Kesihatan Daerah Muallim: pemain HTML luar talian, eksport MP4 deterministik, sumber dan dokumentasi. Semua rekod, nama dan angka dalam filem ialah **data simulasi**. Dokumentasi penuh setiap versi ada dalam [`README-VIDEO.md`](README-VIDEO.md).
 
-## Versi terkini: V7 (137 saat)
+## Versi terkini: V9 muktamad (141.4 saat)
 
 | Fail | Kegunaan |
 |---|---|
-| `NADI-Muallim-Pitch-137s-v7.mp4` | Filem akhir: 1920 × 1080, 60 fps, 137 s, muzik latar tanpa narasi |
-| `video-showcase-v7.html` | Pemain luar talian; buka terus dalam pelayar |
-| `sari-kata-bm-v7.srt` | Sari kata Bahasa Melayu (21 baris) |
+| `NADI-Muallim-Pitch-141s-v9.mp4` | Filem akhir: 1920 × 1080, 60 fps, 141.4 s, narasi ElevenLabs (suara "Ahmad") dan muzik latar, tanpa sari kata dalam gambar |
+| `video-showcase-v9.html` | Pemain HTML berdiri sendiri (7.8 MB, luar talian). Dilukis pada resolusi skrin, hingga 4K / Retina. Untuk pembentangan: F = skrin penuh, C = mod bersih |
+| `sari-kata-bm-v9.srt` | Sari kata Bahasa Melayu (29 baris), untuk dimuat naik berasingan, contohnya ke YouTube |
 
 ## Versi terdahulu (untuk perbandingan)
 
-Repositori ini hanya menyimpan video terkini (MP4 V7). Versi terdahulu boleh ditonton melalui pemain HTML masing-masing. Jika perlu, MP4-nya boleh dirender semula daripada sumber dalam `arkib/vN-sumber.tar.gz`; setiap arkib ada `render-video.js` sendiri. Begitu juga filem e-ACD Denggi: pemainnya `e-acd-video/video-showcase.html` masih ada, dan MP4-nya boleh dirender semula dengan `e-acd-video/render-video.js`.
+Repositori ini hanya menyimpan video terkini (MP4 V9). Versi terdahulu boleh ditonton melalui pemain HTML masing-masing. Jika perlu, MP4-nya boleh dirender semula daripada sumber dalam `arkib/vN-sumber.tar.gz`; setiap arkib ada `render-video.js` sendiri. Begitu juga filem e-ACD Denggi: pemainnya `e-acd-video/video-showcase.html` masih ada, dan MP4-nya boleh dirender semula dengan `e-acd-video/render-video.js`.
 
 | Versi | Fail |
 |---|---|
+| V8 (137 s, bernarasi ElevenLabs) | `video-showcase-v8.html`, `sari-kata-bm-v8.srt` |
+| V7 (137 s, muzik sahaja) | `video-showcase-v7.html`, `sari-kata-bm-v7.srt` |
 | V6 (134 s) | `video-showcase-v6.html`, `sari-kata-bm-v6.srt` |
 | V5 (120 s) | `video-showcase-v5.html`, `sari-kata-bm-v5.srt` |
 | V4 (120 s) | `video-showcase-v4.html` |
@@ -27,11 +29,12 @@ Repositori ini hanya menyimpan video terkini (MP4 V7). Versi terdahulu boleh dit
 | Folder / fail | Isi |
 |---|---|
 | `src/` | Sumber pemain: data simulasi, markup, enjin garis masa, audio, pemain |
-| `tools/` | Bina pemain, semakan automatik, sari kata, penjana tekstur glob peta |
+| `tools/` | Bina pemain, semakan automatik (87 semakan), sari kata, penempatan narasi, penjana tekstur glob, pemulihan kamera imej Google Earth, semakan kestabilan panel MP4 |
 | `render-video.js`, `package.json` | Eksport MP4 (Playwright + FFmpeg) |
-| `assets/` | Fon (lesen OFL), Jata Negara, tekstur peta glob |
+| `assets/` | Fon (lesen OFL), Jata Negara, tekstur peta glob, imej Google Earth untuk latar 3D (`udara-3d.jpg`) |
+| `narasi-v8/`, `narasi-v9/` | Narasi ElevenLabs: semua take, take terpilih, penempatan dan WAV narasi |
 | `kit-suara/`, `narration-bm.wav`, `skrip-narasi-bm.md`, `narasi/` | Kit suara: suara TTS "Osman", digunakan dalam V3 sahaja |
-| `arkib/` | Sumber setiap versi (v2–v7) dan README V2 |
+| `arkib/` | Sumber setiap versi (v2–v9) dan README V2 |
 | `e-acd-video/` | Projek filem e-ACD Denggi yang terdahulu (asas filem ini) |
 | `rujukan/` | Borang ACD dan Lampiran 1 (PDF kosong), brief V3, tangkapan skrin maklum balas |
 | `rujukan/sumber-sebenar/` | **Data sebenar:** peta GIS wabak, tangkapan skrin WhatsApp, tangkapan skrin Google Maps, fail aplikasi e-ACD operasi (HTML dan Apps Script) |
@@ -39,11 +42,11 @@ Repositori ini hanya menyimpan video terkini (MP4 V7). Versi terdahulu boleh dit
 ## Bina semula
 
 ```bash
-npm install             # playwright 1.63.0, tailwindcss 3.4.17
-npm run build:player    # → video-showcase-v7.html
-npm run docs            # → sari-kata-bm-v7.srt
-npm run check           # semakan automatik
-npm run render          # → NADI-Muallim-Pitch-137s-v7.mp4 (perlukan FFmpeg)
+npm install             # playwright 1.63.0, tailwindcss 3.4.17, three 0.158.0
+npm run build:player    # → video-showcase-v9.html (perlu TAILWIND_BIN; three.js daripada node_modules)
+npm run docs            # → sari-kata-bm-v9.srt
+npm run check           # 87 semakan automatik
+npm run render          # → NADI-Muallim-Pitch-141s-v9.mp4 (perlukan FFmpeg)
 ```
 
 ## Privasi: repositori ini mesti kekal PERIBADI
@@ -59,4 +62,4 @@ Filem dan pemainnya hanya menggunakan data simulasi. Tetapi repositori ini juga 
 
 Jangan jadikan repositori ini awam dan jangan kongsi fail di atas di luar pasukan. Hanya fail filem (MP4, pemain HTML, sari kata) yang selamat untuk dikongsi.
 
-Imej peta glob menggunakan imejan Google (Airbus/CNES/Maxar) dengan atribusi pada skrin. Penggunaan awam tertakluk kepada syarat Google.
+Imej peta glob dan latar 3D V9 menggunakan imejan Google (Google Maps dan Google Earth; Airbus/CNES/Maxar), dengan atribusi pada skrin. Penggunaan awam tertakluk kepada syarat Google, dan **perlu disahkan**. Latar 3D menunjukkan pekan sebenar, dengan kubah 200 m pada pusat wabak GIS. Seperti V6, tiada rumah kes ditanda.
