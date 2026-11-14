@@ -12,13 +12,15 @@ Projek filem pertandingan **NADI Muallim + e-ACD Denggi** untuk Pejabat Kesihata
 
 ## Versi terdahulu (untuk perbandingan)
 
+Repositori ini hanya menyimpan video terkini (MP4 V7). Versi terdahulu boleh ditonton melalui pemain HTML masing-masing. Jika perlu, MP4-nya boleh dirender semula daripada sumber dalam `arkib/vN-sumber.tar.gz`; setiap arkib ada `render-video.js` sendiri. Begitu juga filem e-ACD Denggi: pemainnya `e-acd-video/video-showcase.html` masih ada, dan MP4-nya boleh dirender semula dengan `e-acd-video/render-video.js`.
+
 | Versi | Fail |
 |---|---|
-| V6 (134 s) | `NADI-Muallim-Pitch-134s-v6.mp4`, `video-showcase-v6.html`, `sari-kata-bm-v6.srt` |
-| V5 (120 s) | `NADI-Muallim-Pitch-120s-v5.mp4`, `video-showcase-v5.html`, `sari-kata-bm-v5.srt` |
-| V4 (120 s) | `NADI-Muallim-Pitch-120s-v4.mp4`, `video-showcase-v4.html` |
-| V3 (bernarasi) | `NADI-Muallim-Pitch-120s-v3.mp4`, `NADI-Muallim-V3-pratonton-00-30s.mp4`, `video-showcase-v3.html`, `sari-kata-bm-v3.srt` |
-| V2 | `NADI-Muallim-120s.mp4`, `video-showcase.html`, `sari-kata-bm.srt` |
+| V6 (134 s) | `video-showcase-v6.html`, `sari-kata-bm-v6.srt` |
+| V5 (120 s) | `video-showcase-v5.html`, `sari-kata-bm-v5.srt` |
+| V4 (120 s) | `video-showcase-v4.html` |
+| V3 (bernarasi) | `video-showcase-v3.html`, `sari-kata-bm-v3.srt` |
+| V2 | `video-showcase.html`, `sari-kata-bm.srt` |
 
 ## Isi repositori
 
