@@ -710,5 +710,5 @@ function buildStage() {
     '<div class="world"' + R('w.desk') + '>' + desktop() + '</div>' +
     '<div class="world"' + R('w.phone') + '>' + phone() + '</div>' +
     overlays() + waSet() +
-    '<div class="vignette"></div>';   // V9: no caption box or caption shade (captions removed from the film)
+    '<div class="vignette"></div>' + heroLayer();   // V10: hero layer above the vignette (src/hero.js)   // V9: no caption box or caption shade (captions removed from the film)
 }

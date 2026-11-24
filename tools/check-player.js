@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/* Automated checks for the V9 player video-showcase-v9.html (run: node tools/check-player.js).
+/* Automated checks for the V10 player video-showcase-v10.html (run: node tools/check-player.js).
+ * V10: hero elements (HR1–HR3), scans (SC1–SC2) and no still camera (ST1); V9 checks kept, V7 save card retimed.
  * V9 (draft 2): no captions in the film (C5, F7); the benefit cards float on an orbit and come into focus one by one on
  *     the narration (V10 focus per phrase, H2 orbit motion, N5 the beats are phrase onsets in the audio).
  * V9: 141.4 s film (opening 0–6.5 story → film 0–7.5 for four short lines; title impact at film 18.85);
@@ -27,7 +28,7 @@ const { pathToFileURL } = require('url');
 const { chromium } = require('playwright');
 
 const ROOT = path.resolve(__dirname, '..');
-const HTML = path.resolve(ROOT, process.argv[2] || 'video-showcase-v9.html');
+const HTML = path.resolve(ROOT, process.argv[2] || 'video-showcase-v10.html');
 const URL = pathToFileURL(HTML).href;
 // V9: the narration track and its placement (tools/place-narration-v9.py)
 const NARR_WAV = path.join(ROOT, 'narasi-v9', 'narasi-v9.wav');
@@ -227,8 +228,8 @@ function bannedHits(text) {
     check('C7 Sheets: "Hasil ACD!C8:H13" written after the save (P1 19/16 → 20/17), one-way arrows, write conditional on connectivity, no live call',
       sheet.before.join() === '19,16' && sheet.after.join() === '20,17' && sheet.write > sheet.saved && sheet.selAfter > 0.9 && sheet.range && sheet.line && sheet.demo &&
       sheet.paths.every(p => /flArrow/.test(p.end) && !p.start), JSON.stringify({ before: sheet.before, after: sheet.after, save: sheet.saved, write: sheet.write, range: sheet.range, line: sheet.line }));
-    const sup = await R.page.evaluate(() => { const c16 = CUES.find(c => c.id === 'c16'); window.__at(T.l.click - 0.05); const cur = window.__eff(window.__ref('na.cursor')); window.__at(T.l.click + 0.03); const press = window.__ref('na.decBtn').classList.contains('press'); window.__at(T.l.plan[1] + 0.6); const dec = window.__eff(window.__ref('ov.dec')); return { cur, press, dec, click: filmTime(T.l.click), c16: [c16.start, c16.end] }; });
-    check('C8 the supervisor visibly selects "Rancang lawatan susulan" while the narration says "Penyelia menjadualkan…"', sup.cur > 0.9 && sup.press && sup.dec > 0.98 && sup.click >= sup.c16[0] && sup.click < sup.c16[1], JSON.stringify(sup));
+    const sup = await R.page.evaluate(() => { const c16 = CUES.find(c => c.id === 'c16'); window.__at(T.l.click - 0.05); const cur = Math.max(window.__eff(window.__ref('na.cursor')), window.__eff(window.__ref('hero.cursor')));   /* V10: on the lifted button the hero pointer clicks */ window.__at(T.l.click + 0.03); const press = window.__ref('na.decBtn').classList.contains('press'); window.__at(T.l.plan[1] + 0.6); const dec = window.__eff(window.__ref('ov.dec')); return { cur, press, dec, click: filmTime(T.l.click), c16: [c16.start, c16.end] }; });
+    check('C8 the supervisor visibly selects "Rancang lawatan susulan" while the narration says "Penyelia menjadualkan…" (V10: on the lifted button, HR3)', sup.cur > 0.9 && sup.press && sup.dec > 0.98 && sup.click >= sup.c16[0] && sup.click < sup.c16[1], JSON.stringify(sup));
 
     /* ---------------- N. V8 narration: lines on the V7 beats, captions carry the voice */
     const spans = [];   // spoken span of every caption on the film clock (merged units split for the captions)
@@ -397,6 +398,67 @@ function bannedHits(text) {
       k3.ok && k3.visible && k3.svgHidden && k3.svgBack && k3.credit && k3.sys && k3.domeR === 200 && k3.labelsRight < k3.cardLeft && k3.photo && k3.photo[0] === 2000 && k3.photo[1] === 1253 &&
       k3.canvas.every((v, i) => Math.abs(v - k3.panelVisible[i]) <= 1) && k3.centre.every(c => Math.abs(c[0] - at[0]) <= 2 && Math.abs(c[1] - at[1]) <= 2) &&
       k3.turn >= 20 && k3.nearMoves < -40 && k3.coverStart.startsWith('0/') && k3.coverEnd.startsWith('0/') && k3.pixelChange > 1, JSON.stringify(k3));
+    // V10 (src/hero.js): hero elements — lifted out of the screen, used in front of a blurred scene, put back exactly
+    const hero = await R.page.evaluate(() => {
+      const q = r => window.__ref(r), H = heroTimes(), out = {}, F = t => Math.round(t * 60);
+      const box = el => { const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, w: r.width, h: r.height }; };
+      const off = (a, b) => +Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y), Math.abs(a.w - b.w), Math.abs(a.h - b.h)).toFixed(2);
+      const blurOf = l => { const m = /blur\(([\d.]+)px\)/.exec(getComputedStyle(q(l)).filter); return m ? +m[1] : 0; };
+      const unit = (key, src, body, w, peakT) => {
+        const r = {}; let f = F(w.lift[0]) - 1; do { window.renderFrame(++f); } while (!window.__eff(q(key)) && f <= F(w.lift[1])); r.startOff = off(box(q(body).firstElementChild || q(body)), box(q(src)));
+        window.renderFrame(F(peakT)); const hb = box(q(body).firstElementChild || q(body)), sb = box(q(src));
+        r.grow = +(hb.w / sb.w).toFixed(2); r.blur = blurOf(key === 'hero.dec' ? 'w.nadi' : 'w.phone'); r.heroFilter = getComputedStyle(q('hero')).filter; r.eff = +window.__eff(q(key)).toFixed(2);
+        if (w.back) { let g = F(w.back[1]); window.renderFrame(g); while (!window.__eff(q(key)) && g > f) window.renderFrame(--g); r.endOff = off(box(q(body).firstElementChild || q(body)), box(q(src))); window.renderFrame(g + 1); r.goneAfter = !window.__eff(q(key)); }
+        return r;
+      };
+      out.status = unit('hero.status', 'ph.pills', 'hero.statusBody', H.status, H.status.lift[1] + 0.3);
+      window.__atF(H.status.tap + 0.05); out.status.tapOn = q('hero.statusBody').querySelector('[data-hero="ph.pill1"]').classList.contains('on');
+      out.dec = unit('hero.dec', 'na.decBtn', 'hero.decBody', H.dec, H.dec.lift[1] + 0.02);
+      window.__atF(H.dec.click); const cb = box(q('hero.decBody')), cr = q('hero.cursor').getBoundingClientRect();
+      out.dec.cursorOnButton = cr.left >= cb.x - cb.w / 2 && cr.left <= cb.x + cb.w / 2 && cr.top >= cb.y - cb.h / 2 - 8 && cr.top <= cb.y + cb.h / 2;
+      out.dec.panelCursor = +getComputedStyle(q('na.cursor')).opacity;
+      // the save chain: starts on the button, becomes a circle, ✓, lands on the card's icon, the card unrolls from there
+      const V = H.save; let f = F(V.lift[0]) - 1; do { window.renderFrame(++f); } while (!window.__eff(q('hero.save')) && f <= F(V.lift[1]));
+      out.save = { startOff: off(box(q('hero.pill')), box(q('ph.saveBtn'))) };
+      window.__atF(V.morph[1] + 0.02); const pb = box(q('hero.pill')); out.save.circle = +Math.abs(pb.w - pb.h).toFixed(1);
+      window.__atF(V.tick[1]); out.save.tick = +q('hero.tick').getAttribute('stroke-dashoffset');
+      window.renderFrame(F(V.fly[1])); const lb = box(q('hero.pill')), ib = box(q('ov.saved').querySelector('.sv-ico'));
+      out.save.land = off(lb, ib); out.save.cardBefore = (() => { window.__atF(V.unroll[0] - 0.05); return window.__eff(q('ov.saved')); })();
+      window.__atF(V.unroll[1] + 0.02); out.save.cardAfter = +window.__eff(q('ov.saved')).toFixed(2); out.save.clip = getComputedStyle(q('ov.saved')).clipPath;
+      return out;
+    });
+    const hs = hero.status, hd = hero.dec, hv = hero.save;
+    check('HR1 V10 hero: the visit-status choice lifts out of the phone from its own place (≤ 1.5 px), ≥ 1.35× larger and sharp in front of a blurred scene (≥ 5 px), is tapped there ("1 - Dilawati"), and goes back to its place (≤ 1.5 px)',
+      hs.startOff <= 1.5 && hs.endOff <= 1.5 && hs.goneAfter && hs.grow >= 1.35 && hs.blur >= 5 && hs.heroFilter === 'none' && hs.eff >= 0.98 && hs.tapOn, JSON.stringify(hs));
+    check('HR2 V10 save chain: the Save button lifts from its place (≤ 1.5 px), turns into a circle, the ✓ is drawn, the ring lands on the "Rekod disimpan" icon (≤ 2 px) and the card unrolls from it (hidden before, whole after)',
+      hv.startOff <= 1.5 && hv.circle <= 1 && hv.tick <= 0.01 && hv.land <= 2 && hv.cardBefore === 0 && hv.cardAfter >= 0.98 && hv.clip === 'none', JSON.stringify(hv));
+    check('HR3 V10 hero: "Rancang lawatan susulan" lifts from its place (≤ 1.5 px), ≥ 1.35× larger in front of the blurred panel; the pointer clicks it there (the panel pointer hidden), and it goes back (≤ 1.5 px)',
+      hd.startOff <= 1.5 && hd.endOff <= 1.5 && hd.goneAfter && hd.grow >= 1.35 && hd.blur >= 5 && hd.cursorOnButton && hd.panelCursor === 0, JSON.stringify(hd));
+    // V10: scans — the band reaches each record line and the tally as it changes; the radar finds each premise as it crosses it
+    const scan = await R.page.evaluate(() => {
+      const q = r => window.__ref(r), A = SCAN_A(), out = {};
+      const lead = () => { const b = q('scan.aBand').getBoundingClientRect(); return b.bottom; };
+      out.lines = M.recLineY.map((y, i) => { const tc = scanCross(A.band, 160, M.savedCountY, y); window.__at(tc); const d = Math.abs(lead() - y); window.__at(tc + 0.06); const bg = getComputedStyle(q('ov.rl' + i)).backgroundColor; return { d: +d.toFixed(1), half: q('ov.rl' + i).offsetHeight / 2, lit: /rgba\(45, 212, 191/.test(bg) }; });
+      window.__at(T.h.count - 1 / 120); const before = q('ov.savedCount').textContent, dCount = Math.abs(lead() - M.savedCountY);
+      window.__at(T.h.count + 1 / 120); out.count = { before, after: q('ov.savedCount').textContent, d: +dCount.toFixed(1) };
+      const rad = (pos, tf, mk) => pos.map((p, i) => { const t = tf(i), F = s => Math.round(filmTime(s) * 60);
+        window.renderFrame(F(t) - 1); const o0 = +mk[i].getAttribute('opacity'); window.renderFrame(F(t) + 1); const o1 = +mk[i].getAttribute('opacity'); return o0 === 0 && o1 > 0; });
+      out.red = rad(FOLLOW_POS, redT, MAP.rd); out.amber = rad(LOCKED_POS, amberT, MAP.lk);
+      window.__at(RADAR.sweeps[0][0] + 1.2); out.radarOn = window.__eff(q('scan.radar')) > 0.9 && window.__eff(q('scan.b')) > 0.9;
+      const ev = window.ACD.soundEvents().filter(e => e.k === 'blip').map(e => e.t);   // film time
+      out.blips = FOLLOW_POS.every((p, i) => ev.some(x => Math.abs(x - filmTime(redT(i))) < 0.002)) && LOCKED_POS.every((p, i) => ev.some(x => Math.abs(x - filmTime(amberT(i))) < 0.002));
+      return out;
+    });
+    check('SC1 V10 record scan: the band\'s edge is on each of the 5 record lines as it lights it and reaches the tally (≤ 3 px) in the frame its count changes 16 / 19 → 17 / 20',
+      scan.lines.every(l => l.d <= l.half && l.lit) && scan.count.d <= 3 && scan.count.before === '16 / 19' && scan.count.after === '17 / 20', JSON.stringify({ lines: scan.lines, count: scan.count }));
+    check('SC2 V10 radar over Kg. Ketoyong: each of the 6 premises not visited, then each of the 12 locked / empty ones, appears in the frame the sweep crosses it, with its blip',
+      scan.red.every(Boolean) && scan.amber.every(Boolean) && scan.radarOn && scan.blips, JSON.stringify(scan.red) + ' ' + JSON.stringify(scan.amber) + ' radar ' + scan.radarOn + ' blips ' + scan.blips);
+    // V10: no still camera — the WhatsApp camera and the follow-up map change in every frame (≤ 2 equal frames in a row)
+    const still = await R.page.evaluate(() => {
+      const run = (a, b, ref) => { let prev = null, cur = 0, best = 0, at = null; for (let f = Math.round(a * 60); f <= Math.round(b * 60); f++) { window.renderFrame(f); const v = window.__ref(ref).style.transform; if (v === prev) { cur++; if (cur > best) { best = cur; at = f / 60; } } else cur = 0; prev = v; } return { best, at }; };
+      return { wa: run(INSERT.atF + 0.05, INSERT.atF + INSERT.len - 0.05, 'wa.camera'), map: run(INSERT.atF + INSERT.len + 0.05, filmTime(T.l.out[1]) - 0.05, 'na.mapSvg') };   // the follow-up plays after the insert
+    });
+    check('ST1 V10 no still camera: the WhatsApp camera and the follow-up map move in every frame (longest run of equal frames ≤ 2; V9 held 0.6–2 s)', still.wa.best <= 2 && still.map.best <= 2, JSON.stringify(still));
     check('V5 title on screen at the impact (story 13.35 = film 18.85; the riser ends there), settled by story 13.80', typing.title > 0.98 && typing.impact && typing.riserEnd === 18.85 && typing.settled, JSON.stringify({ title: typing.title, impact: typing.impact, riserEnd: typing.riserEnd, settled: typing.settled }));
     const ang = await R.page.evaluate(() => {
       const at = t => { window.__at(t); return { ph: window.__yaw('phone'), dk: window.__yaw('desktop') }; };
@@ -410,7 +472,7 @@ function bannedHits(text) {
     const vis = r => 'return window.__eff(window.__ref("' + r + '")) >= 0.98;';
     let h = await longestRun(R.page, 49, 56, vis('ov.saved'));
     const cnt = await R.page.evaluate(() => { window.__at(50.5); const a = window.__ref('ov.savedCount').textContent; window.__at(52.5); return a + ' → ' + window.__ref('ov.savedCount').textContent; });
-    check('V7 "Rekod disimpan" held ≥ 4 s from the 49.32 cue; the count updates', h.sec >= 4 && h.from <= 49.95 && cnt === '16 / 19 → 17 / 20', h.sec.toFixed(2) + ' s (' + h.from.toFixed(2) + '–' + h.to.toFixed(2) + '), ' + cnt);
+    check('V7 "Rekod disimpan" held ≥ 4 s; the count updates (V10: the card unrolls from the ✓ ring at 50.24, 0.92 s after the save tap at 49.32)', h.sec >= 4 && h.from <= 50.3 && cnt === '16 / 19 → 17 / 20', h.sec.toFixed(2) + ' s (' + h.from.toFixed(2) + '–' + h.to.toFixed(2) + '), ' + cnt);
     h = await longestRun(R.page, 62, 78, 'const r = window.__ref("ov.res"); return window.__eff(r) >= 0.98 && /Liputan ACD/i.test(r.textContent) && /84%/.test(r.textContent) && /92 daripada 110 premis dilawati/.test(r.textContent);');
     const pillRun = await longestRun(R.page, 70, 78, 'return window.__eff(window.__ref("ov.capai")) >= 0.98;');
     const camStill = await longestRun(R.page, 70.9, 77.9, 'const v = window.__ref("w.phone").style.transform; const same = v === window.__p; window.__p = v; return same;');
@@ -439,16 +501,16 @@ function bannedHits(text) {
       pace.maxGap <= 2.2 && pace.occGap >= 0.4 && pace.first > 33.3 && pace.last > 49, JSON.stringify(pace));
     /* ---------------- S. follow-up step flow (V5) */
     const flow = await R.page.evaluate(() => {
-      const L = T.l, ev = [L.q, L.n110, L.branch[0], L.n92, L.n12, L.n6, L.red[0], L.red[1], L.amber[0], L.amber[1], L.cursor[0], L.click, L.plan[1], L.marks, L.route[0], L.route[1], L.check[1], L.rings[1], L.dot[0]].sort((a, b) => a - b);
+      const L = T.l, ev = [L.q, L.n110, L.branch[0], L.n92, L.n12, L.n6, ...RADAR.sweeps[0], ...RADAR.sweeps[1], L.cursor[0],   /* V10: the markers come with the radar sweeps */ L.click, L.plan[1], L.marks, L.route[0], L.route[1], L.check[1], L.rings[1], L.dot[0]].sort((a, b) => a - b);
       let maxGap = 0; for (let i = 1; i < ev.length; i++) maxGap = Math.max(maxGap, ev[i] - ev[i - 1]);
       const dotAt = t => { window.__at(t); return window.__ref('na.mapSvg').querySelector('[data-mk="dot"] > g').getAttribute('transform'); };
       const moving = dotAt(101.0) !== dotAt(103.0);
       window.__at(97.5); const route = window.__ref('na.mapSvg').querySelector('[data-mk="route"]').children[1].getAttribute('opacity') === '1';
       window.__at(92.5); const amber = Array.from(window.__ref('na.mapSvg').querySelectorAll('[data-lk]')).filter(g => +g.getAttribute('opacity') > 0.9).length;
-      window.__at(89.5); const red = Array.from(window.__ref('na.mapSvg').querySelectorAll('[data-rd]')).filter(g => +g.getAttribute('opacity') > 0.9).length;
+      window.__at(RADAR.sweeps[0][1] + 0.2); const red = Array.from(window.__ref('na.mapSvg').querySelectorAll('[data-rd]')).filter(g => +g.getAttribute('opacity') > 0.9).length;
       return { maxGap: +maxGap.toFixed(2), moving, route, amber, red };
     });
-    check('S1 follow-up flows step by step (no gap > 2.5 s): 6 red and 12 amber premises on the map, planned route drawn, the team dot moves to the end',
+    check('S1 follow-up flows step by step (no gap > 2.5 s): 6 red and 12 amber premises on the map (V10: after each radar sweep), planned route drawn, the team dot moves to the end',
       flow.maxGap <= 2.5 && flow.red === 6 && flow.amber === 12 && flow.route && flow.moving, JSON.stringify(flow));
     // V9: the benefit cards orbit; each one is in focus (centred, scale 1, sharp, glowing) while its phrase is spoken
     const orb = await R.page.evaluate(() => {

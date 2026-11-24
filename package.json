@@ -1,6 +1,6 @@
 {
   "name": "nadi-muallim-120s-film",
-  "version": "9.0.0",
+  "version": "10.0.0",
   "private": true,
   "description": "Filem pertandingan NADI Muallim + e-ACD Denggi (PKD Muallim), V9 muktamad: 141.4 saat, narasi ElevenLabs (suara \"Ahmad\", 29 baris), tanpa sari kata dalam filem (SRT berasingan), kad kelebihan beredar, latar 3D imej Google Earth dengan kubah 200 m pada pusat wabak; pemain HTML luar talian berdiri sendiri pada resolusi skrin (HD/4K) dan eksport MP4 deterministik. Data simulasi.",
   "license": "UNLICENSED",
@@ -9,12 +9,13 @@
     "narration:place": "python3 -I tools/place-narration-v9.py .",
     "docs": "node tools/make-docs.js",
     "check": "node tools/check-player.js",
-    "render": "node render-video.js --out NADI-Muallim-Pitch-141s-v9.mp4",
-    "render:preview": "node render-video.js --start 0 --end 1799 --out NADI-Muallim-V9-pratonton-00-30s.mp4",
+    "render": "node render-video.js --out NADI-Muallim-Pitch-141s-v10.mp4",
+    "render:preview": "node render-video.js --start 0 --end 1799 --out NADI-Muallim-V10-pratonton-00-30s.mp4",
+    "render:v9": "node render-video.js --html video-showcase-v9.html --out NADI-Muallim-Pitch-141s-v9.mp4",
     "render:v8": "node render-video.js --html video-showcase-v8.html --out NADI-Muallim-Pitch-137s-v8.mp4",
     "render:v7": "node render-video.js --html video-showcase-v7.html --no-narration --out NADI-Muallim-Pitch-137s-v7.mp4",
     "render:v3": "node render-video.js --html video-showcase-v3.html --voiceover narration-bm.wav --out NADI-Muallim-Pitch-120s-v3.mp4",
-    "probe": "node render-video.js --probe NADI-Muallim-Pitch-141s-v9.mp4"
+    "probe": "node render-video.js --probe NADI-Muallim-Pitch-141s-v10.mp4"
   },
   "dependencies": {
     "playwright": "1.63.0"

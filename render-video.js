@@ -2,13 +2,13 @@
 /* ==========================================================================
  * render-video.js (V3/V4) — deterministic MP4 export of the film player
  *
- *   node render-video.js                                   # V9: narration (ElevenLabs "Ahmad") + ducked score → NADI-Muallim-Pitch-141s-v9.mp4
+ *   node render-video.js                                   # V10: narration (ElevenLabs "Ahmad") + ducked score → NADI-Muallim-Pitch-141s-v10.mp4
  *   node render-video.js --start 0 --end 1799 --out pratonton-0-30s.mp4     # partial (frames)
  *   node render-video.js --voiceover narasi.wav --out filem-bernarasi.mp4   # add a narration WAV (ducked mix)
  *   node render-video.js --probe NADI-Muallim-Pitch-141s-v9.mp4             # verify an MP4
  *   node render-video.js --audio-only campuran.wav                          # the final mix as WAV
  *
- * Options: --out <file>  --html <file> (video-showcase-v9.html)  --voiceover <wav>
+ * Options: --out <file>  --html <file> (video-showcase-v10.html)  --voiceover <wav>
  *          --no-narration  --workers <n>  --start <frame>  --end <frame>
  *          --crf <n> (17)  --preset <x264 preset> (medium)  --fast (JPEG frames)
  *          --keep-temp  --probe <file>  --audio-only <wav>
@@ -37,13 +37,13 @@ const ROOT = __dirname;
 // film length comes from the timeline itself (src/data.js): V9 141.4 s × 60 fps = 8,484 frames
 const DATA = require(path.join(ROOT, 'src', 'data.js'));
 const FPS = DATA.FPS, TOTAL = DATA.TOTAL_FRAMES, DUR = DATA.DURATION, W = 1920, H = 1080, SR = 48000;
-let HTML = path.join(ROOT, 'video-showcase-v9.html');
+let HTML = path.join(ROOT, 'video-showcase-v10.html');
 const FFMPEG = process.env.FFMPEG_PATH || 'ffmpeg';
 const FFPROBE = process.env.FFPROBE_PATH || 'ffprobe';
 
 /* ---------------------------------------------------------------- args */
 function parseArgs(argv) {
-  const o = { out: path.join(ROOT, 'NADI-Muallim-Pitch-141s-v9.mp4'), html: HTML, voiceover: null, noNarration: false, workers: Math.max(1, Math.min(4, os.cpus().length)),
+  const o = { out: path.join(ROOT, 'NADI-Muallim-Pitch-141s-v10.mp4'), html: HTML, voiceover: null, noNarration: false, workers: Math.max(1, Math.min(4, os.cpus().length)),
     start: 0, end: TOTAL - 1, crf: 17, preset: 'medium', fast: false, keepTemp: false, probe: null, audioOnly: null };
   for (let i = 2; i < argv.length; i++) {
     const a = argv[i], v = () => { if (i + 1 >= argv.length) throw new Error('missing value for ' + a); return argv[++i]; };

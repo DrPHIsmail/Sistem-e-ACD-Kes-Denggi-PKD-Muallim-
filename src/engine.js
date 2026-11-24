@@ -109,7 +109,8 @@ const T = {
   g: { tapStatus: 34.3, hlStatus: [34.4, 35.7], hlOcc: [35.8, 38.0], occ: [36.0, 36.45, 36.9, 37.35], toB: [38.2, 38.8], toggle: 39.3, chips: [40.0, 40.7], hlSymp: 41.0, hlRef: 41.9,
        toC: [43.2, 43.8], cb0: 44.3, cb1: 44.9, hlRis: 45.5, hlAct: 46.3, hlSave: 47.9, rec: [33.4, 37.6, 42.1, 45.7, 46.9], recWin: [32.9, 33.3, 54.75, 55.05] },
   // 8 · 00:49–00:55 save near the 49.32 cue; "Rekod disimpan" ≥ 4 s; count updates on "sistem mengira…"
-  h: { save: 49.42, saved: 49.55, count: 51.3, pull: [49.95, 50.75], savedWin: [49.6, 49.9, 54.75, 55.05] },
+  // V10: Save → ring → ✓ (tick 49.92) → the ring flies onto the card, which unrolls from its icon (50.24–50.55, src/hero.js)
+  h: { save: 49.42, saved: 49.55, tick: 49.92, count: 51.3, pull: [49.95, 50.75], savedWin: [50.23, 50.24, 54.75, 55.05] },
   // 9 · 00:55–01:02 phone → Apps Script → Sheets, one way, then hold
   i: { move: [54.85, 55.75], actorsIn: [55.4, 55.85], dots1: [55.9, 56.75], dots2: [56.75, 57.6], write: 57.45, synced: 57.7, line: [55.6, 56.0, 61.5, 61.9], out: [61.45, 62.0] },
   // 10 · 01:02–01:18 phone + monitor reveal, move complete by 64.5, coverage held past 74.86
@@ -247,7 +248,7 @@ function buildSoundEvents() {
   // 6–8 · phone (the reveal sound is gated with the phone layer: never before 24.30)
   add(T.f.gate + 0.02, 'whoosh'); add(T.f.one[0] + 0.15, 'swell');
   T.g.rec.forEach(t => add(t, 'pop', { soft: 1, f: 620 }));
-  add(T.h.saved, 'confirm'); add(T.h.count, 'blip', { f: 1500 }); add(T.h.pull[0] + 0.05, 'whooshSoft');
+  add(T.h.tick, 'confirm');   // V10: on the ✓ add(T.h.count, 'blip', { f: 1500 }); add(T.h.pull[0] + 0.05, 'whooshSoft');
   // 9 · one-way write to Sheets
   add(T.i.move[0] + 0.1, 'whooshSoft');
   for (let i = 0; i < 5; i++) add(T.i.dots1[0] + i * 0.11, 'blip', { f: 1500 + i * 120 });
@@ -261,8 +262,8 @@ function buildSoundEvents() {
   // 12 · NADI follow-up
   add(T.l.in[0] + 0.1, 'whoosh'); add(T.l.expand[0], 'pop', { soft: 1 }); add(T.l.n110, 'pop', { f: 600 });
   [T.l.n92, T.l.n12, T.l.n6].forEach((t0, i) => add(t0, 'pop', { soft: 1, f: [700, 520, 460][i] }));
-  for (let i = 0; i < 6; i++) add(T.l.red[0] + i * 0.3, 'blip', { f: 1300 + i * 70, soft: 1 });
-  for (let i = 0; i < 12; i++) add(T.l.amber[0] + i * 0.15, 'blip', { f: 900 + (i % 4) * 60, soft: 1 });
+  for (let i = 0; i < 6; i++) add(redT(i), 'blip', { f: 1300 + i * 70, soft: 1 });   // V10: as the radar finds each premise
+  for (let i = 0; i < 12; i++) add(amberT(i), 'blip', { f: 900 + (i % 4) * 60, soft: 1 });   // V10: as the second sweep finds each
   add(T.l.click, 'click'); add(T.l.planned[0], 'confirm');
   for (let i = 0; i < 6; i++) add(T.l.marks + i * 0.12, 'blip', { f: 1500 + i * 90, soft: 1 });
   add(T.l.route[0], 'whooshSoft'); add(T.l.check[1], 'pop', { soft: 1, f: 480 });
@@ -1103,14 +1104,14 @@ function renderNadi(t, o) {
     attr(MAP.fu[i], 'opacity', String(r2(late ? seg(t, tf0, tf0 + 0.12) : 0)));
     attr(MAP.fu[i], 'transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ') scale(' + r5(Math.max(0.01, a)) + ')');
     // not yet visited: red, pulsing, until the plan replaces it
-    const tr0 = L5.red[0] + i * 0.3, ar = late ? seg(t, tr0, tr0 + 0.35, E.outBack) : 0, gone = late ? seg(t, tf0, tf0 + 0.2) : 0;
+    const tr0 = redT(i), ar = late ? seg(t, tr0, tr0 + 0.35, E.outBack) : 0, gone = late ? seg(t, tf0, tf0 + 0.2) : 0;
     attr(MAP.rd[i], 'opacity', String(r2(late ? seg(t, tr0, tr0 + 0.1) * (1 - gone) : 0)));
     attr(MAP.rd[i], 'transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ') scale(' + r5(Math.max(0.01, ar)) + ')');
     const pp = late && t >= tr0 ? ((t - tr0) % 1.2) / 1.2 : 0;
     attr(MAP.rdPulse[i], 'r', String(r2(10 + 13 * pp))); attr(MAP.rdPulse[i], 'fill-opacity', String(r2(0.38 * (1 - pp))));
   }
   for (let i = 0; i < LOCKED_POS.length; i++) {
-    const p = LOCKED_POS[i], t0 = L5.amber[0] + i * 0.15, a = late ? seg(t, t0, t0 + 0.3, E.outBack) : 0;
+    const p = LOCKED_POS[i], t0 = amberT(i), a = late ? seg(t, t0, t0 + 0.3, E.outBack) : 0;
     attr(MAP.lk[i], 'opacity', String(r2(late ? seg(t, t0, t0 + 0.08) : 0)));
     attr(MAP.lk[i], 'transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ') scale(' + r5(Math.max(0.01, a)) + ')');
     const rt0 = L5.rings[0] + i * ((L5.rings[1] - L5.rings[0]) / LOCKED_POS.length);
@@ -1134,7 +1135,7 @@ function renderCursor(t) {
   if (!ev) { op(c, 0); op(rip, 0); return; }
   const tg = ev.target(t), p = seg(t, ev.t0, ev.t1, E.inOutCubic);
   const x = lerp(ev.from[0], tg.x, p), y = lerp(ev.from[1], tg.y, p);
-  op(c, Math.min(seg(t, ev.t0 - 0.3, ev.t0, E.outCubic), 1 - seg(t, ev.out[0], ev.out[1], E.inCubic)));
+  op(c, Math.min(seg(t, ev.t0 - 0.3, ev.t0, E.outCubic), 1 - seg(t, ev.out[0], ev.out[1], E.inCubic)) * (1 - heroCursorTake(filmTime(t))));
   const press = 1 - 0.12 * win(t, ev.click - 0.06, ev.click, ev.click + 0.02, ev.click + 0.12, E.outQuad, E.inQuad);
   tf(c, 'translate(' + px(x) + ',' + px(y) + ') scale(' + r5(press) + ')');
   const rp = seg(t, ev.click, ev.click + 0.5, E.outCubic);
@@ -1384,9 +1385,9 @@ function renderOverlays(t) {
     tf($['ov.rlv' + i], 'translateX(' + px(-14 * (1 - a)) + ')');
     cls($['ov.rl' + i], 'fresh', filled && t < Math.min(G.rec[i] + 1.8, i < 4 ? G.rec[i + 1] : 1e9) && t < T.h.saved);
   }
-  op($['ov.recSaved'], seg(t, T.h.saved, T.h.saved + 0.25));
-  const sv2 = ovWin($['ov.saved'], t, T.h.savedWin, E.outBack);
-  tf($['ov.saved'], 'translate(100px,' + px(170 + M.recH + 20 + 14 * (1 - sv2)) + ')');
+  op($['ov.recSaved'], seg(t, T.h.tick, T.h.tick + 0.25));   // V10: with the ✓
+  ovWin($['ov.saved'], t, T.h.savedWin);
+  tf($['ov.saved'], 'translate(100px,' + px(170 + M.recH + 20) + ')');   // V10: in place (the ring lands on its icon)
   txt($['ov.savedCount'], t < T.h.count ? '16 / 19' : '17 / 20');
   tf($['ov.savedCount'], 'scale(' + r5(1 + 0.18 * win(t, T.h.count, T.h.count + 0.12, T.h.count + 0.2, T.h.count + 0.5)) + ')');
   // 9 · sync line
@@ -1419,7 +1420,8 @@ function renderOverlays(t) {
   // 12 · follow-up
   // V5: question → 110 → 92 / 12 / 6 → plan the 6, re-check the 12
   const L5 = T.l, lw = ovWin($['ov.left'], t, L5.left);
-  tf($['ov.left'], 'translate(60px,' + px(112 + 14 * (1 - lw)) + ')');
+  const fl = floatXY(t, L5.left[0]);   // V10: the question tree floats gently (never a still frame; the card on the right stays still)
+  tf($['ov.left'], 'translate(' + px(60 + fl[0]) + ',' + px(112 + 14 * (1 - lw) + fl[1]) + ')');
   const pop = (ref, t0) => { const a = seg(t, t0, t0 + 0.45, E.outBack); op($[ref], seg(t, t0, t0 + 0.15)); tf($[ref], 'scale(' + r5(lerp(0.85, 1, a)) + ')'); };
   const fq = seg(t, L5.q, L5.q + 0.35, E.outCubic);
   op($['ov.fq'], fq); tf($['ov.fq'], 'translateY(' + px(12 * (1 - fq)) + ')');
@@ -1524,6 +1526,7 @@ function measureWa() {
   WA_CAM.length = 0;
   WA_CAM.push([-0.3, CA], [2.1, CA], [2.85, C1, E.inOutCubic], [WA.zoomIn[0], C1], [WA.zoomIn[1], CZ1, E.inOutCubic],
     [WA.pan[0], CZ1], [WA.pan[1], CZ2, E.inOutSine], [WA.zoomOut[0], CZ2], [WA.zoomOut[1], CZo, E.inOutCubic]);
+  driftHolds(WA_CAM, 0.025, 3, INSERT.len + 0.3);   // V10: no still camera (V9 held 0.6–0.75 s at four points)
 }
 function waRef(ref, ax, ay) {
   const m = M.wa[ref];
@@ -1597,6 +1600,7 @@ function renderTime(tf) {
   renderPhone(t, o.phone);
   renderOverlays(t);
   renderWa(tf - INSERT.atF);
+  renderHero(t, tf);   // V10 (src/hero.js): after every scene layer is set, so the heroes are measured in place
 }
 function renderFrame(frameIndex) {
   const f = Math.max(0, Math.min(TOTAL_FRAMES - 1, Math.floor(frameIndex)));
@@ -1622,6 +1626,10 @@ function initMeasure() {
   // record card height in its final state (values shown, placeholders hidden)
   for (let i = 0; i < 5; i++) { vis($['ov.rlp' + i], false); vis($['ov.rlv' + i], true); }
   M.recH = $['ov.rec'].offsetHeight;
+  // V10: the record scan's stops — each record line and the tally's count, in stage px
+  M.recLineY = [0, 1, 2, 3, 4].map(i => { const o = offsetWithin($['ov.rl' + i], $['ov.rec']); return 170 + o.y + o.h / 2; });
+  M.savedH = $['ov.saved'].offsetHeight;
+  { const o = offsetWithin($['ov.savedCount'], $['ov.saved']); M.savedCountY = 170 + M.recH + 20 + o.y + o.h / 2; }
   M.decH = $['ov.dec'].offsetHeight;
   M.resW = $['ov.res'].offsetWidth;
   M.resH = $['ov.res'].offsetHeight;
@@ -1638,4 +1646,5 @@ function initMeasure() {
   MAN_CAM.length = 0;
   MAN_CAM.push([0, Z0], [B.camF[0], Z0], [B.camF[1], ZF, E.inOutCubic], [B.camF[2], ZF], [B.camF[3], Z0, E.inOutCubic],
     [C.push[0], Z0], [C.push[1], ZL, E.inOutCubic], [T.d.impact, ZT, E.inCubic]);
+  initHero();   // V10 (src/hero.js)
 }
