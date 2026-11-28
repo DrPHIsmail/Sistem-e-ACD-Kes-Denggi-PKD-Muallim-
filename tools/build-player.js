@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-/* Builds the self-contained V10 player video-showcase-v10.html from src/ (141.4 s; music and effects
- * + the ElevenLabs narration narasi-v9/narasi-v9.wav, unchanged since V9; the V2–V9 players are left untouched):
+/* Builds the self-contained V11 player video-showcase-v11.html from src/ (141.4 s; music and effects
+ * + the ElevenLabs narration narasi-v9/narasi-v9.wav, unchanged since V9; the V2–V10 players are left untouched):
  *   1. compiles Tailwind 3.4.17 utilities used by the mockups (offline),
  *   2. inlines Inter, Plus Jakarta Sans, JetBrains Mono, Caveat (woff2, OFL), the
  *      Jata Negara PNG and the opening map background (JPEG) as data URIs,
@@ -11,7 +11,7 @@
  *   5. refuses to write the file if live URLs, the spreadsheet ID, map
  *      coordinates or real staff names from the source apps leak into it
  *      (V6: those identifiers are checked by hash, not stored in clear).
- * Usage: node tools/build-player.js [--voiceover narasi.wav | --no-narration] [--out video-showcase-v10.html]
+ * Usage: node tools/build-player.js [--voiceover narasi.wav | --no-narration] [--out video-showcase-v11.html]
  *        (needs tailwindcss: npm install, or TAILWIND_BIN=/path/to/tailwindcss; ffmpeg for the narration)
  */
 'use strict';
@@ -25,11 +25,11 @@ const SRC = path.join(ROOT, 'src');
 const ASSETS = path.join(ROOT, 'assets');
 const ARGS = process.argv.slice(2);
 const argVal = (k, d) => { const i = ARGS.indexOf(k); return i >= 0 && i + 1 < ARGS.length ? ARGS[i + 1] : d; };
-const OUT = path.resolve(ROOT, argVal('--out', 'video-showcase-v10.html'));
+const OUT = path.resolve(ROOT, argVal('--out', 'video-showcase-v11.html'));
 // V8: the ElevenLabs narration (film clock) is embedded by default; --no-narration builds a music-only player
 const VOICE = ARGS.includes('--no-narration') ? null : path.resolve(ROOT, argVal('--voiceover', path.join('narasi-v9', 'narasi-v9.wav')));
 const FFMPEG = process.env.FFMPEG_PATH || 'ffmpeg';
-if (['video-showcase.html', 'video-showcase-v3.html', 'video-showcase-v4.html', 'video-showcase-v5.html', 'video-showcase-v6.html', 'video-showcase-v7.html', 'video-showcase-v8.html', 'video-showcase-v9.html'].includes(path.basename(OUT))) throw new Error(path.basename(OUT) + ' is an earlier export kept for comparison; choose another --out name');
+if (['video-showcase.html', 'video-showcase-v3.html', 'video-showcase-v4.html', 'video-showcase-v5.html', 'video-showcase-v6.html', 'video-showcase-v7.html', 'video-showcase-v8.html', 'video-showcase-v9.html', 'video-showcase-v10.html'].includes(path.basename(OUT))) throw new Error(path.basename(OUT) + ' is an earlier export kept for comparison; choose another --out name');
 
 function tailwindBin() {
   const cands = [process.env.TAILWIND_BIN, path.join(ROOT, 'node_modules', '.bin', 'tailwindcss')].filter(Boolean);
@@ -70,7 +70,7 @@ function threeSource() {
   if (!/\* @license/.test(s)) throw new Error('three.js licence banner missing');
   return s;
 }
-const order = ['data.js', 'markup.js', 'kampung3d.js', 'engine.js', 'hero.js', 'audio.js', 'player.js'];
+const order = ['data.js', 'markup.js', 'kampung3d.js', 'engine.js', 'hero.js', 'v11.js', 'audio.js', 'player.js'];
 let js = '/* ---- three.min.js (r158, MIT) ---- */\n' + threeSource() + '\n' + order.map(f => '/* ---- ' + f + ' ---- */\n' + fs.readFileSync(path.join(SRC, f), 'utf8')).join('\n');
 // V9: 29 captions timed to the narration (src/data.js NARR_CAPTIONS)
 console.log('cues: ' + (js.match(/\{ id: '[a-z]\d+'/g) || []).length + ' from src/data.js (NARR_CAPTIONS, timed to narasi-v9/narasi-v9.wav)');

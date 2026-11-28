@@ -55,7 +55,7 @@ function nadiCard() {
   const c = NADI_CARD, T = TOTALS;
   const box = (label, value, sub, cls) => '<div class="bg-[#F8FAFC] border border-[#DDE5EC] rounded-[8px] p-2.5"><span class="text-slate-500 block text-[11px]">' + label + '</span>' +
     '<span class="' + cls + '">' + value + '</span><span class="text-[10px] text-slate-500 mt-0.5 block">' + sub + '</span></div>';
-  const kpi = (n, l, ref, cls) => '<div class="na-kpi ' + (cls || '') + '"' + R(ref) + '><span class="na-kpi-n">' + n + '</span><span class="na-kpi-l">' + l + '</span></div>';
+  const kpi = (n, l, ref, cls) => '<div class="na-kpi ' + (cls || '') + '"' + R(ref) + '><span class="na-kpi-n"' + R(ref + 'N') + '>' + n + '</span><span class="na-kpi-l">' + l + '</span></div>';
   return '<div class="na-card"' + R('na.card') + '>' +
     '<div class="na-card-head border-b border-slate-200 pb-2.5">' +
       '<div class="flex items-center justify-between gap-2">' +
@@ -87,7 +87,7 @@ function nadiCard() {
         kpi(T.locality, 'Sasaran premis', 'na.kTarget') + kpi(T.visited, 'Dilawati', 'na.kVisited', 'ok') +
         kpi(T.locked, 'Berkunci / kosong', 'na.kLocked', 'warn') + kpi(T.unvisited, 'Belum dilawati', 'na.kLeft', 'left') +
       '</div>' +
-      '<div class="text-[11px] text-slate-600 mt-2">Liputan ACD <b class="font-mono text-[#102A43]">' + T.pct + '%</b> (' + T.visited + '/' + T.locality + ') · sasaran KKM ≥ ' + TARGET_PCT + '%</div>' +
+      '<div class="text-[11px] text-slate-600 mt-2">Liputan ACD <b class="font-mono text-[#102A43]"' + R('na.pct') + '>' + T.pct + '%</b> (' + T.visited + '/' + T.locality + ') · sasaran KKM ≥ ' + TARGET_PCT + '%</div>' +
       '<div class="na-decision">' +
         '<span class="na-dec-k">Keputusan<br>penyelia</span>' +
         '<span class="na-dec-btn"' + R('na.decBtn') + '><i class="na-ico">' + ICON.calendar + '</i><span' + R('na.decText') + '>Rancang lawatan susulan</span></span>' +
@@ -624,7 +624,8 @@ function overlays() {
     '<div class="bf-row"' + R('ov.bfRow') + '>' + BENEFITS.map((b, i) => '<div class="bf"' + R('ov.bf' + i) + '><span class="bf-ico">' + ICON[b.icon] + '</span><b>' + esc(b.title) + '</b><span>' + esc(b.text) + '</span>' +
       (b.proto ? protoBadge('bf-proto') : '') + '</div>').join('') + '</div>' +
     '<div class="closing"' + R('ov.closing') + '><div class="cl-jata"><img src="' + JATA_SRC + '" alt="Jata Negara"/></div>' +
-      '<div class="cl-title"><span class="cl-nadi">NADI</span> Muallim</div><div class="cl-tag">Dari Survelan ke Respons Denggi</div><div class="cl-line"></div><div class="cl-org">Pejabat Kesihatan Daerah Muallim</div></div>' +
+      '<div class="cl-title"><span class="cl-nadi">NADI</span> Muallim</div><div class="cl-tag">Dari Survelan ke Respons Denggi</div>' + closingTriad() +
+      '<div class="cl-line"' + R('cl.line') + '></div><div class="cl-org">Pejabat Kesihatan Daerah Muallim</div></div>' + closingRing() +
     '<div class="dip"' + R('ov.dip') + '></div>' +
   '</div>';
 }
@@ -655,6 +656,10 @@ function waReportLines() {
     let h = esc(l).replace(/\*(.+?)\*/g, '<b>$1</b>');
     for (const e in WA_EMO) h = h.replace(e, '<i class="we">' + WA_ICON[WA_EMO[e]] + '</i>');
     const kind = /^\d\./.test(l) ? ' num' : /^•/.test(l) ? ' bul' : '';
+    // V11: the figures that fly to the NADI summary (src/v11.js) — 110, 92, 12 and 84%
+    const fig = { '1.': [TOTALS.locality, 0], '2.': [TOTALS.visited, 1], '3.': [TOTALS.locked, 2] }[l.slice(0, 2)];
+    if (fig) h = h.replace(': ' + fig[0] + ' buah', ': <span' + R('wa.n' + fig[1]) + '>' + fig[0] + '</span> buah');
+    if (l.indexOf('Pencapaian') >= 0) h = h.replace(TOTALS.pct + '%</b>', '<span' + R('wa.n3') + '>' + TOTALS.pct + '%</span></b>');
     return '<div class="wl' + kind + '"' + (l.indexOf('Pencapaian') >= 0 ? R('wa.pct') : '') + '>' + h + '</div>';
   }).join('');
 }

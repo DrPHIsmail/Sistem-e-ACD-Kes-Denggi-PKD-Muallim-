@@ -283,6 +283,7 @@ function buildSoundEvents() {
   add(W(WA.bubble[0] + 0.1), 'pop', { f: 760 }); add(W(WA.zoomIn[0] + 0.1), 'whooshSoft'); add(W(WA.hl[0]), 'blip', { f: 1500, soft: 1 });
   add(W(WA.read), 'blip', { f: 1900, soft: 1 }); add(W(WA.react), 'pop', { f: 820 }); add(W(WA.zoomOut[0] + 0.1), 'whooshSoft');
   for (const tp of WA_TAPS) add(W(tp.t), 'tap');
+  v11Sounds(add);   // V11 (film time): the figures landing in NADI, the ring unrolling
   ev.sort((a, b) => a.t - b.t);
   return ev;
 }
@@ -1435,13 +1436,9 @@ function renderOverlays(t) {
     win(t, L5.check[1], L5.check[1] + 0.3, L5.check[1] + 1.3, L5.check[1] + 1.6, E.outCubic, E.inOutSine)), 'warn');
   // 13 · benefit cards: V9 orbit, one card in focus per phrase (renderBenefits)
   renderBenefits(t);
-  // 14 · closing, fully in by 113.2, held to the last frame
-  const cl = $['ov.closing'];
-  op(cl, seg(t, T.n.title - 0.05, T.n.title + 0.1)); tf(cl, 'translate(0px,210px)');
-  CLOSING.forEach((el, i) => {
-    const t0 = T.n.title + [0, 0.08, 0.18, 0.26, 0.34][i], a = seg(t, t0, t0 + 0.4, E.outCubic);
-    op(el, a); tf(el, 'translateY(' + px(20 * (1 - a)) + ')' + (i === 0 ? ' scale(' + r5(lerp(0.88, 1, seg(t, t0, t0 + 0.5, E.springSoft))) + ')' : ''));
-  });
+  // 14 · closing — V11: the 200 m ring unrolls into the divider; title, tagline, triad and organisation build on the
+  // narration (src/v11.js); the whole lockup is in by 138.95 (film) and held to the last frame
+  renderClosing(t, filmTime(t));
 }
 
 /* ---------------------------------------------------------------- V9 · benefit cards on an orbit
@@ -1601,6 +1598,7 @@ function renderTime(tf) {
   renderOverlays(t);
   renderWa(tf - INSERT.atF);
   renderHero(t, tf);   // V10 (src/hero.js): after every scene layer is set, so the heroes are measured in place
+  renderV11(t, tf);    // V11 (src/v11.js): the figures that fly to NADI (read from the laid-out page, like the heroes)
 }
 function renderFrame(frameIndex) {
   const f = Math.max(0, Math.min(TOTAL_FRAMES - 1, Math.floor(frameIndex)));
@@ -1647,4 +1645,5 @@ function initMeasure() {
   MAN_CAM.push([0, Z0], [B.camF[0], Z0], [B.camF[1], ZF, E.inOutCubic], [B.camF[2], ZF], [B.camF[3], Z0, E.inOutCubic],
     [C.push[0], Z0], [C.push[1], ZL, E.inOutCubic], [T.d.impact, ZT, E.inCubic]);
   initHero();   // V10 (src/hero.js)
+  initV11();    // V11 (src/v11.js)
 }

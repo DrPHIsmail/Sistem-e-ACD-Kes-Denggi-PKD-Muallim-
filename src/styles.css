@@ -716,3 +716,20 @@ body.render #controls, body.render #startOverlay { display: none !important; }
 .scan-radar { position: absolute; border-radius: 50%; opacity: 0;
   -webkit-mask-image: radial-gradient(circle, #000 0, #000 60%, transparent 71%); mask-image: radial-gradient(circle, #000 0, #000 60%, transparent 71%); }
 .na-map-svg { will-change: transform; }   /* V10: the follow-up map breathes behind the still panel (composited, no re-raster shimmer) */
+
+/* V11 · the figures that fly from the WhatsApp report to the NADI summary (src/v11.js) */
+.fly { position: absolute; inset: 0; }
+.fly-chip { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-origin: 0 0; }
+.fly-chip > * { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); white-space: nowrap; line-height: normal; }
+.fly-ping { position: absolute; display: block; border-radius: 10px; border: 2.5px solid rgba(45,212,191,.95); box-shadow: 0 0 18px rgba(45,212,191,.55), inset 0 0 12px rgba(45,212,191,.25); }
+.fly-pill { display: block; border-radius: 999px; background: #fff; box-shadow: 0 0 0 2.5px rgba(20,184,166,.9), 0 10px 24px -8px rgba(2,6,23,.55), 0 0 26px rgba(45,212,191,.5); }
+/* V11 · closing: the triad and the 200 m ring that unrolls into the divider */
+.closing .cl-line { width: 1px; height: 3px; background: none; margin: 30px 0 26px; }
+.cl-triad { margin-top: 26px; font-size: 34px; font-weight: 700; color: #d1fae5; letter-spacing: -.005em; display: flex; justify-content: center; gap: 0 .85em; }
+.cl-g { white-space: nowrap; }
+.cl-w { display: inline-block; }
+.cl-wn { font-weight: 800; color: #34d399; }
+.cl-ring { overflow: visible; pointer-events: none; }
+.cl-path { fill: none; stroke: #34d399; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1 1; }
+.cl-dot { fill: #34d399; }
+.cl-pulse { fill: none; stroke: #34d399; stroke-width: 2; }

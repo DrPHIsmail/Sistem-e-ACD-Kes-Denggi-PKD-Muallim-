@@ -1,4 +1,83 @@
-# NADI Muallim — Filem Pertandingan · V10 (141.4 saat, bernarasi ElevenLabs)
+# NADI Muallim — Filem Pertandingan · V11 (141.4 saat, bernarasi ElevenLabs)
+
+V11 ialah V10 dengan dua lagi teknik daripada video rujukan `website_after_effect.mp4` (cadangan 4 dan 5):
+
+4. **Angka bergerak.** Di hujung sisipan WhatsApp, empat angka laporan (110, 92, 12, 84%) terangkat keluar dari mesej semasa telefon kabur dan pudar. Angka itu terbang dalam lengkung pendek dengan jejak gema ke tempat masing-masing dalam blok "Ringkasan e-ACD" NADI. Setiap pendaratan ditandai dengan riak "ping" yang mengembang dan pudar di atas jubin. Angka keenam (6 belum dilawati) tiada dalam mesej; ia hanya muncul dalam NADI selepas tiga angka lain mendarat.
+5. **Penutup triad.** Cincin 200 m dilukis sebagai garis di sekeliling titik tengah yang berdenyut, lalu terbuka menjadi garis pemisah lockup. Panjangnya sama, iaitu 2πr. Lockup dibina mengikut narasi: tajuk (c18), tagline (c19), kemudian "Rekod di lapangan. Terus ke NADI. Susulan terancang." perkataan demi perkataan, dan akhir sekali nama organisasi.
+
+Narasi, fail SRT, babak lain dan panjang filem tidak berubah. Semua rekod dan angka ialah **data simulasi**. Pemain tidak memanggil sebarang perkhidmatan langsung.
+
+**MP4 V11 tidak dirender**, atas permintaan pengguna untuk menjimatkan token. Fail yang dihantar ialah pemain HTML berdiri sendiri. Untuk menghasilkan MP4 kemudian, jalankan `npm run render` (±15 min, output `NADI-Muallim-Pitch-141s-v11.mp4`). Kemudian jalankan `tools/check-mp4-freeze.py` dan `tools/check-mp4-panel.py` padanya, kerana semakan MP4 itu belum dibuat untuk V11.
+
+## Fail V11
+
+| Fail | Kegunaan |
+|---|---|
+| `video-showcase-v11.html` | Pemain HTML berdiri sendiri (luar talian, ±8 MB). Kanvas WebGL dilukis pada skala pentas × devicePixelRatio (1–3; disemak pada DPR 2: `RENDER_SCALE` = 2). Elemen V11 ialah DOM/SVG vektor, jadi tajam pada sebarang DPI. F = skrin penuh, C = mod bersih. |
+| `src/v11.js` | Angka bergerak dan penutup triad (baharu). |
+| `arkib/v11-sumber.tar.gz` | Sumber V11 (src, tools, assets, narasi, README). |
+
+V10 kekal untuk perbandingan: `NADI-Muallim-Pitch-141s-v10.mp4`, `video-showcase-v10.html` dan `arkib/v10-sumber.tar.gz`.
+
+## Perubahan V11 (masa filem)
+
+### 4. Angka bergerak: WhatsApp → NADI
+
+| Detik | Apa berlaku |
+|---|---|
+| 103.98–104.45 s | Angka terangkat satu demi satu, berselang 0.05 s. Setiap angka bermula tepat di tempatnya dalam mesej, naik 10 px, membesar 14 %, dan mendapat pil putih bergelang teal. Telefon dikaburkan (7 px) dan pudar pada 104.25–104.53 s, dan angka asal hilang dari mesej. |
+| 104.30–104.75 s | Angka terapung perlahan semasa latar WhatsApp bertukar ke NADI (tiada bingkai pegun). |
+| 104.75–105.63 s | Angka terbang selama 0.7 s setiap satu, berselang 0.06 s. Laluannya lengkung kuadratik setinggi 60–150 px, dengan tiga gema kabur (lewat 0.035/0.07/0.105 s). Di pertengahan laluan, rupa huruf bertukar daripada teks WhatsApp kepada fon jubin NADI. Sasaran dibaca daripada halaman pada setiap bingkai, kerana blok sedang terbuka dan panel menatal. |
+| 105.45 / 105.51 / 105.57 / 105.63 s | Setiap angka mendarat: 110, 92, 12, kemudian 84% dalam "Liputan ACD". Angka itu muncul di tempatnya (sebelum itu tersembunyi). Riak ping teal mengembang 12 % dan pudar dalam 0.55 s di atas jubin, dan bunyi blip lembut dimainkan. "110" mendarat serentak dengan "110" pada pokok soalan di kiri (105.5 s). Ping ialah lapisan atas sahaja; kad panel sendiri tidak digayakan semula. Ini mematuhi peraturan V9 bagi kelipan panel: setiap kad menyala sekali sahaja dan kekal (semakan H1). |
+| 105.82 s | "6 Belum dilawati" muncul dalam NADI, iaitu angka yang dikira oleh sistem. Kemudian c14 berkata "…enam premis belum dilawati" (105.85 s). |
+
+### 5. Penutup triad
+
+| Detik | Apa berlaku |
+|---|---|
+| 133.78–134.32 s | Cincin (r 56 px) dilukis di sekeliling titik tengah: titik muncul pada 133.80 s dan berdenyut sekali pada 134.00–134.75 s, bersama sting penutup. |
+| 134.05 / 134.20 s | Jata Negara, kemudian "NADI Muallim" muncul dengan kabur yang hilang, serentak dengan c18 "Nadi Muallim." (134.20 s). |
+| 134.85–135.55 s | Cincin terbuka menjadi garis pemisah sepanjang 352 px (2π × 56), dan warnanya bertukar daripada teal kepada emas. |
+| 135.80 s | Tagline "Dari Survelan ke Respons Denggi" muncul serentak dengan c19, yang bermula pada 135.80 s. |
+| 136.50 / 137.10 / 137.70 s | "Rekod di lapangan." / "Terus ke NADI." / "Susulan terancang." muncul perkataan demi perkataan, berselang 0.12 s. Setiap perkataan bermula kabur 10 px dan naik 12 px; warnanya bermula ambar muda lalu bertukar ke warna akhir. "NADI" berwarna hijau, sama seperti tajuk. |
+| 138.45–138.95 s | Nama organisasi muncul. Lockup lengkap kekal hingga bingkai akhir (141.4 s). |
+
+## Semakan V11 (`node tools/check-player.js`)
+
+**Keputusan: 98/98 semakan lulus** (93 semakan V10, termasuk H1 kestabilan panel, dan 5 semakan baharu).
+
+Semakan baharu:
+- **DM1:** setiap angka terangkat dari tempatnya sendiri dalam mesej (≤ 1.5 px, saiz dalam 5 %) dan meninggalkan mesej. Angka kekal tajam di hadapan telefon yang kabur (≥ 5 px).
+- **DM2:** setiap angka mendarat tepat di tempatnya dalam blok NADI (≤ 1 px). Angka tersembunyi sebelum mendarat dan kelihatan selepasnya, ping muncul di atas jubinnya, dan cip hilang. Angka 6 muncul hanya selepas angka terakhir mendarat. Ada satu blip bagi setiap pendaratan.
+- **DM3:** gema kelihatan semasa terbang dan tiada semasa diam, dan apungan sebelum penerbangan sentiasa bergerak.
+- **TR1:** cincin ialah bulatan penuh (jejari ± 0.5 px), dan menjadi garis lurus pada slot susun aturnya (≤ 0.5 px), sama panjang (2πr ± 1 px) dan berwarna emas.
+- **TR2:** tajuk muncul pada c18, tagline pada c19, dan perkataan triad mengikut tertib. Semua elemen kelihatan dan tajam menjelang 139.0 s.
+
+Semakan "lockup penutup" lama diubah: lockup kini lengkap menjelang 139.0 s filem (V10: 134.6 s) dan kekal hingga akhir.
+
+## Perlu perhatian (V11)
+
+- **Tafsiran aliran data** [keyakinan sederhana]. Angka terbang dari mesej WhatsApp ke NADI, jadi sebahagian penonton mungkin faham WhatsApp yang menghantar data ke NADI. Langkah yang diambil untuk mengurangkannya:
+  - telefon dan mesej hilang sebelum angka terbang;
+  - angka 6 dikira dalam NADI;
+  - blok NADI kekal berlabel PROTOTAIP INTEGRASI dan DATA SIMULASI.
+  
+  Untuk penonton teknikal (IT/sistem maklumat kesihatan), pertimbangkan sama ada peralihan ini perlu.
+- **Lockup penutup kini dibina selama ±5 s**, dan lockup lengkap kelihatan 2.45 s pada hujung filem (V10: 7 s). Jika juri perlukan kad akhir yang lebih lama, filem perlu dipanjangkan atau organisasi dipaparkan lebih awal.
+- **Teks triad tidak sama dengan ayat c19** ("Dari survelan denggi kepada tindakan susulan di lapangan"), walaupun maknanya bertindih ("susulan", "lapangan"). Triad menerangkan aliran kerja, bukan hasil; tiada dakwaan penjimatan atau ralat.
+- **MP4 tidak dirender**, jadi semakan khusus MP4 (bingkai beku, kelipan panel, korelasi narasi) belum dijalankan untuk V11.
+
+## Bina V11
+
+```
+npm install          # tailwindcss@3.4.17, three@0.158.0, playwright
+node tools/build-player.js        # → video-showcase-v11.html (atau TAILWIND_BIN=… THREE_JS=… jika node_modules tiada)
+node tools/check-player.js        # semua semakan pemain
+npm run render                    # pilihan: MP4 V11
+```
+
+## Dokumentasi V10
+
 
 Filem 02:21.400 (1920 × 1080, 60 fps, 8,484 bingkai) untuk **Pejabat Kesihatan Daerah Muallim**. V10 ialah V9 muktamad dengan tiga teknik daripada video rujukan `website_after_effect.mp4`. Video itu dianalisis bingkai demi bingkai, dan pengguna memilih cadangan 1–3:
 

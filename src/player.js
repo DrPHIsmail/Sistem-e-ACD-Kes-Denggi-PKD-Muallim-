@@ -33,7 +33,7 @@
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
     return true;
   })();
-  window.ACD = { ready, FPS, DURATION, TOTAL_FRAMES, TOTALS, CUES, NARRATION, SCENES, renderFrame, audio: AUDIO, soundEvents: () => buildSoundEvents(), version: 'V10' };
+  window.ACD = { ready, FPS, DURATION, TOTAL_FRAMES, TOTALS, CUES, NARRATION, SCENES, renderFrame, audio: AUDIO, soundEvents: () => buildSoundEvents(), version: 'V11' };
 
   function fit() {
     const w = viewport.clientWidth, h = viewport.clientHeight, s = Math.min(w / 1920, h / 1080);
